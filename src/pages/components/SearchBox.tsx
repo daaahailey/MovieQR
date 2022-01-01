@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
+import { Movies } from "./Movies";
 import { SearchResult } from "./SearchResult";
+
 
 export const SearchBox = () => {
 
@@ -24,6 +26,7 @@ export const SearchBox = () => {
                 onChange={(event) => setInitialValue(event.target.value)} />
             <button type="submit" onClick={handleClick}>Search</button>
             {click && <SearchResult searchValue={value} isClicked={click} />}
+            <Movies input={value} />
         </div>
     )
 }

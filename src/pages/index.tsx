@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head'
 import { SearchBox } from './components/SearchBox';
 
+
+
 const Home: NextPage = () => {
   return (
     <div>
