@@ -1,8 +1,5 @@
-import React from "react"
-import axios from "axios";
-import useSWR from "swr";
-
-const MOVIE_SEARCH_URL = "https://api.themoviedb.org/3/search/movie?";
+import React from "react";
+import { useData } from "../../hooks/useData";
 
 interface MovieType {
     "genre_ids": [number],
@@ -16,11 +13,6 @@ interface MovieType {
     title: string,
     "vote_average": number,
     "vote_count": number,
-}
-
-const fetcher = (url: string) => axios.get(url).then(res => res.data);
-const useData = (apiKey: string, path: string) => {
-    return useSWR(`${MOVIE_SEARCH_URL}${apiKey}${path}`, fetcher)
 }
 
 export const Movies = ({ input }: any) => {
