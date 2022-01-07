@@ -1,5 +1,7 @@
 import React from "react";
 import { useData } from "../../hooks/useData";
+import { Error } from "./Error";
+import { Loading } from "./Loading";
 
 interface MovieType {
     "genre_ids": [number],
@@ -26,21 +28,31 @@ export const Movies = ({ input }: any) => {
         )
     } else {
         const { data, error } = useData(process.env.NEXT_PUBLIC_API_KEY as string, searchQuery);
-        if (error) return <div>Error</div>
-        if (!data) return <div>Loading</div>
+        if (error) return <Error/>
+        if (!data) return <Loading />
         const receivedData = data.results;
-        console.log(receivedData);
-
+        console.log("data:",receivedData);
+        // when there isn't search result
+        if (receivedData.length === 0) {
+          return (
+            <div>Nothing Found</div>
+          )
+        }
+          
         return (
             <div>
                 {
                     receivedData.map((item: MovieType) => {
+                      // console.log(`${ item["poster_path"]}`);
                         return (
-
                             <div key={`movie-data-${item.id}`}>
                                 <p>{item.title}</p>
-                                <p>{item.overview}</p>
-                                <img src={`https://image.tmdb.org/t/p/w500/${item["poster_path"]}`} alt="item.title" />
+                                <p>{item.overview}</p>                            
+                                {/* give default img if it doesn't have poster picture */}
+                                {item["poster_path"] === null ? <img src="../images/movie_fallback.png" alt={`${item.title}`} />
+                              : <img src={`https://image.tmdb.org/t/p/original${item["poster_path"]}`}
+                                alt={`${item.title}`}
+                              />}                   
                                 <p>Rating: {item.vote_average}</p>
                             </div>
                         )
