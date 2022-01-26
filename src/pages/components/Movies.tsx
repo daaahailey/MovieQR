@@ -2,6 +2,7 @@ import React from "react";
 import { useData } from "../../hooks/useData";
 import { Error } from "./Error";
 import { Loading } from "./Loading";
+import Image from 'next/image'
 
 interface MovieType {
     "genre_ids": [number],
@@ -19,6 +20,7 @@ interface MovieType {
 
 export const Movies = ({ input }: any) => {
     const searchQuery = `&query=${input}`;
+    const BASE_URL = "https://image.tmdb.org/t/p/original"
     if (input === "") {
         // if there isn't search input
         return (
@@ -31,7 +33,7 @@ export const Movies = ({ input }: any) => {
         if (error) return <Error/>
         if (!data) return <Loading />
         const receivedData = data.results;
-        console.log("data:",receivedData);
+        // console.log("data:",receivedData);
         // when there isn't search result
         if (receivedData.length === 0) {
           return (
@@ -43,17 +45,16 @@ export const Movies = ({ input }: any) => {
             <div>
                 {
                     receivedData.map((item: MovieType) => {
-                      // console.log(`${ item["poster_path"]}`);
+                    //   console.log(`${ item["poster_path"]}`);
                         return (
-                            <div key={`movie-data-${item.id}`}>
+                            <div key={`movie-data-${item.id}`} style={{width: '100%'}}>
                                 <p>{item.title}</p>
-                                <p>{item.overview}</p>                            
+                                <p>Rating: {item.vote_average}</p>                       
                                 {/* give default img if it doesn't have poster picture */}
-                                {item["poster_path"] === null ? <img src="../images/movie_fallback.png" alt={`${item.title}`} />
-                              : <img src={`https://image.tmdb.org/t/p/original${item["poster_path"]}`}
-                                alt={`${item.title}`}
-                              />}                   
-                                <p>Rating: {item.vote_average}</p>
+                                
+                                { item["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${item.title}`} width={360} height={540} />
+                                : <Image src={`${BASE_URL}${item["poster_path"]}`} alt={`${item.title}`} width={360} height={540}/> }                         
+                                <p>{item.overview}</p>    
                             </div>
                         )
                     })
