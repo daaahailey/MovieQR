@@ -1,5 +1,5 @@
 import React from "react";
-import { useData } from "../../hooks/useData";
+import { useData } from "../hooks/useData";
 import { Error } from "./Error";
 import { Loading } from "./Loading";
 import Image from 'next/image'
@@ -45,7 +45,7 @@ export const Movies = ({ input }: any) => {
             <div>
                 {
                     receivedData.map((item: MovieType) => {
-                    //   console.log(`${ item["poster_path"]}`);
+                      console.log(`${ item["poster_path"]}`);
                         return (
                             <div key={`movie-data-${item.id}`} style={{width: '100%'}}>
                                 <p>{item.title}</p>
