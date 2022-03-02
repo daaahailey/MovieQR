@@ -5,17 +5,18 @@ import { Loading } from "./Loading";
 import MovieCard from "./MovieCard";
 
 
-export const Movies = ({ input }: any) => {
+export const Movies = ({title}: any) => {
     let searchQuery;
-    input === "" ? searchQuery = "" : searchQuery = `&query=${input}`;
+    title === "" ? searchQuery = "" : searchQuery = `&query=${title}`;
     const { data, error }: any = useData(searchQuery);
     let receivedData;
+    
     if (error) return <Error/>
     if(data) {
         receivedData = data.results;
         return receivedData.map((item:any) => <MovieCard key={`movie-data${item.id}`} movieData={item}  />)
     } else if(!data) {
-        if(input !== "") {
+        if(title !== "") {
             return <Loading />
         }
         return <div>default display</div>

@@ -16,11 +16,12 @@ const MovieCard = (movieData: MovieType) => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setClick(true);
+        // console.log(movieId)
     }
 
     return (
     <article key={`movie-data-${item.id}`} onClick={handleClick}>
-        <p>{item.title}</p>
+        <h2>{item.title}</h2>
         <p>Rating: {item.vote_average}</p>                       
         {/* give default img if it doesn't have poster picture */}        
         { item["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${item.title}`} width={360} height={540} />
