@@ -1,20 +1,41 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 export const Navigation = () => {
     
     return (
-        <nav>
-            <ul>
-                <li>Movies</li>
-                <li>Quotes</li>
-                <li>Suggestions</li>
-                <li>Review</li>
-            </ul>
-            <ul>
-                <li>Login</li>
-                <li>Join</li>
-            </ul>
-        </nav>
+        <StyledNav>
+            <MenuSection>
+                <List>Movies</List>
+                <List>Quotes</List>
+                <List>Suggestions</List>
+                <List>Reviews</List>
+            </MenuSection>
+            <MenuSection>
+                <List>Login</List>
+                <List>Join</List>
+            </MenuSection>
+        </StyledNav>
     )
 };
 
+const StyledNav = styled.nav`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #272643;
+    color: #ffffff;
+`
+
+const  MenuSection = styled.ul`
+    display: flex;
+    flex-direction: row;
+`
+
+const List = styled.li`
+    list-style: none;
+    padding: 1rem;
+    font-size: 1.15rem;
+    font-weight: 500;
+    cursor: pointer;
+`
