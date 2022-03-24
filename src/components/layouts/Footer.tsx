@@ -7,7 +7,7 @@ export const Footer = () => {
         <StyledFooter>
             <FooterStrong>Built and designed by @daaahailey</FooterStrong>
             <FooterUl>
-                <FooterList>About Movie QR</FooterList>
+                <FooterList>About Movie QR</FooterList> 
                 <FooterList>Contact Us</FooterList>
             </FooterUl>
         </StyledFooter>
@@ -16,11 +16,14 @@ export const Footer = () => {
 
 
 const StyledFooter = styled.footer`
+    z-index: 40;
+    width: 100%;
+    position: static;
     display: flex;
     flex-direction: column;
     text-align: center;
     padding: 2rem;
-    background-color: #272643;
+    background-color: #141010;
     color: #ffffff;
 `
 
