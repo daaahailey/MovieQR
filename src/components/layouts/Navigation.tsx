@@ -20,11 +20,14 @@ export const Navigation = () => {
 };
 
 const StyledNav = styled.nav`
+
+    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    background-color: #272643;
-    color: #ffffff;
+    justify-content: space-between;    
+    color: white;
+    z-index: 10;
+    background-color: #000000;
 `
 
 const  MenuSection = styled.ul`
@@ -35,7 +38,7 @@ const  MenuSection = styled.ul`
 const List = styled.li`
     list-style: none;
     padding: 1rem;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 500;
     cursor: pointer;
 `
