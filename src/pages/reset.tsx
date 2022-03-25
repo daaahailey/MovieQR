@@ -49,6 +49,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+.text-hide {
+	position: absolute;
+	left: -9999px;
+	top: auto;
+	width: 1px;
+	height: 1px
+}
 `
 
 export default reset;
