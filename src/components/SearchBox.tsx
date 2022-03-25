@@ -3,38 +3,54 @@ import { useState } from "react";
 import { Movies } from "./Movies";
 import { SearchResult } from "./SearchResult";
 import Link from "next/link";
+import styled from "@emotion/styled";
 
 export const SearchBox = () => {
-
     const [initialValue, setInitialValue] = useState("");
-    // const [value, setValue] = useState("");
-    // const [click, setClick] = useState(false);
-
-    // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //     event.preventDefault();
-    //     setValue(initialValue);
-    //     setClick(true);
-    //     setInitialValue("");
-    //     return value;
-    // }
-    
-    // console.log(value);
-    // console.log(initialValue);
 
     return (
-        <div>
-            <label htmlFor="search">Search Contents</label>
-            <input type="search" id="search" value={initialValue} placeholder="Search contents"
+        <SearchInputContainer>
+            <label htmlFor="search" className="text-hide">Search Movies</label>
+            <MovieSearchInput type="search" id="search" value={initialValue} placeholder="Search Movies"
                 onChange={(event) => setInitialValue(event.target.value)} />
             <Link href={{
-              pathname: '/movie',
-              query: { title: initialValue },
-            }}>
-                <a>Search</a>
+                pathname: '/movie',
+                query: { title: initialValue },
+            }} passHref>
+                <SearchBtn>Search</SearchBtn>
             </Link>
-            {/* <button type="submit" onClick={handleClick}>Search</button> */}
-            {/* {click && <SearchResult searchValue={value} isClicked={click} />}
-            <Movies input={value} /> */}
-        </div>
+        </SearchInputContainer>
     )
 }
+
+const SearchInputContainer = styled.div`
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`
+
+const MovieSearchInput = styled.input`
+    width: 60%;
+    height: 3rem;
+    padding: 0.75rem;
+    z-index: 10;
+    border-radius: 0.5rem;
+    border: none;
+    font-size: 1rem;
+`
+
+const SearchBtn = styled.a`
+    padding: 0.85rem 2rem;
+    height: 3rem;
+    background-color: #f70776;
+    margin-left: 0.5rem;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+`
