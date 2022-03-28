@@ -14,7 +14,6 @@ const MovieCard = (movieData: MovieType) => {
     const movieId = item.id;
 
     const [click, setClick]: any = useState(false);
-    const [focus, setFocus]: any = useState(false);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -22,10 +21,6 @@ const MovieCard = (movieData: MovieType) => {
         // console.log(movieId)
     }
     
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        setFocus(true);
-    }
 
     return (
     <MovieCardArticle key={`movie-data-${item.id}`} onClick={handleClick}>
@@ -52,8 +47,6 @@ export default MovieCard;
 const MovieCardArticle = styled.article`
     max-width: 20rem;
     max-height: 30rem;
-    // height: 20rem;
-    // min-height: 20rem;
     position: relative;
     margin: 1rem;
     border-radius: 0.8rem;
