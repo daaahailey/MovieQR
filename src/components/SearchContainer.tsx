@@ -8,19 +8,23 @@ export const SearchContainer = () => {
 
     const baseURL = "https://api.themoviedb.org/3/movie/popular";
     const {data, error} : any = useRandomMovie(baseURL);
-    let randomMovieUrl;
+    let randomMovieUrl;  
 
     if(data) {
         const movieLength : number = data.results.length;
-        const randomNum = Math.floor(Math.random() * movieLength);
+        const randomNum = Math.floor(Math.random() * movieLength);  
         randomMovieUrl = data.results[randomNum].backdrop_path;
     }
     if(error) {
         return <Error/>
     }
 
+    const background = randomMovieUrl ? 
+        `linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://image.tmdb.org/t/p/original/${randomMovieUrl})`
+        : ""; 
+    
     return (
-        <SearchBoxContainer style={{backgroundImage:`linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://image.tmdb.org/t/p/original/${randomMovieUrl})`}}>
+        <SearchBoxContainer style={{ backgroundImage: `${background}` }}>
             <Heading>Welcome to Movie QR</Heading>
             <SubHeading>Search movies you are interested!</SubHeading>
             <SearchBox />
@@ -32,8 +36,9 @@ const SearchBoxContainer = styled.div`
     background-repeat: no-repeat;
     width: 100%;
     height:40rem;
-    background-size: cover;
+    background-size: cover; 
     background-position: top center;
+    background-color: #000000;
     padding: 5rem;
     text-align: center;
     display: flex;
