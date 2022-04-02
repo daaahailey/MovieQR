@@ -45,15 +45,16 @@ export default MovieCard;
 
 
 const MovieCardArticle = styled.article`
-    max-width: 20rem;
-    max-height: 30rem;
     position: relative;
-    margin: 1rem;
     border-radius: 0.8rem;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     color: #ffffff;
     overflow: hidden;
     cursor: pointer;
+    & > span:first-of-type {
+        min-width: 100%;
+        min-height: 100%;
+    }
     &:after {
         content: "";
         position: absolute;
