@@ -16,7 +16,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
     const genreArr:any = [];
     genres.map((genre:any) => genreArr.push(genre["name"]));
     const genreStr = genreArr.join(", ");
-    console.log("genres:",genreStr)
+    // console.log("genres:",genreStr)
 
     // console.log(movieData)
     // console.log(genres)
@@ -32,8 +32,8 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                     </ImageContainer>
                     <ContentArticle>
                     <MovieTitle>{title}</MovieTitle>
-                    <p>Rate: {vote_average}/10</p>
-                    <RateChart rate={vote_average} />
+                    <RateChart rate={vote_average}/>
+
 
                     <p>Runtime: {runtime} min</p>
                     <p>Release Date: {release_date}</p>
