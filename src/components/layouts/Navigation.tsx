@@ -20,7 +20,6 @@ export const Navigation = () => {
 };
 
 const StyledNav = styled.nav`
-
     width: 100%;
     display: flex;
     flex-direction: row;

@@ -3,8 +3,8 @@ import { Movies } from "../../components/Movies";
 import styled from "@emotion/styled";
 
 const Movie = ({ movieId, clicked }: any) => {
-    console.log("searched movie list")
-    console.log("clicked", clicked)
+    // console.log("searched movie list")
+    // console.log("clicked", clicked)
 
     const router = useRouter();
     const { title } = router.query;
