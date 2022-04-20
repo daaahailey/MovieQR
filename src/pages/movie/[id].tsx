@@ -18,7 +18,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
     const genreStr = genreArr.join(", ");
     // console.log("genres:",genreStr)
 
-    // console.log(movieData)
+    console.log(movieData)
     // console.log(genres)
 
     return (
@@ -27,7 +27,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
             <MovieDetailContainer>
 
                     <ImageContainer>
-                        <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover"/>
+                        <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={movieData.original_title} />
                                 
                     </ImageContainer>
                     <ContentArticle>
