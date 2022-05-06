@@ -2,18 +2,12 @@ import { useRouter } from "next/router";
 import { Movies } from "../../components/Movies";
 import styled from "@emotion/styled";
 
-const Movie = ({ movieId, clicked }: any) => {
-    // console.log("searched movie list")
-    // console.log("clicked", clicked)
-
+const Movie = () => {
+    console.log("searched movie list")
     const router = useRouter();
+    // console.log(router);
     const { title } = router.query;
-    // console.log(router)
-    // console.log(title)
-    if(movieId) {
-        // console.log("movieid:",movieId)
-        router.push({pathname: `movie/${movieId}`})
-    };
+    // console.log(title);
 
 
     return (
@@ -24,7 +18,6 @@ const Movie = ({ movieId, clicked }: any) => {
             </StyledSectionForMovieCard>
         </main>
     )
-
 }
 
 export default Movie;
