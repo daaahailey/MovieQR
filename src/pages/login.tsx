@@ -7,6 +7,7 @@ import { magic } from '../../lib/magic-client';
 const Login = () => {
     const [userMessage, setUserMessage] = useState("");
     const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const handleEmailInput = (event:any) => {
@@ -18,8 +19,7 @@ const Login = () => {
 
     const handleLogin = async (event:any) => {
         event.preventDefault();
-        console.log("login button clicked")
-
+        // console.log("login button clicked")
         const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
         const isValid = emailRegex.test(email);
 
@@ -27,20 +27,23 @@ const Login = () => {
             // route to dashboard
             if(isValid) {
                 console.log("route to dashboard");
-                setUserMessage("");
                 // console.log(magic);
-
+                setUserMessage("");
+                setIsLoading(true);
+    
                 // log in a user by their email
                 try {
                     const didToken = await magic.auth.loginWithMagicLink({ email, });
                     console.log({ didToken });
                     if(didToken) {
                         router.push("/");
+                        setIsLoading(false);
                     }
                 } catch(error) {
                     // Handle errors if required!
                     console.log("something went wrong", error);
                     setEmail("");
+                    setIsLoading(false);
                 }
                 
             } else {
@@ -64,7 +67,9 @@ const Login = () => {
                         <SignInText>Sign In</SignInText>
                         <EmailInput type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
                         <p>{userMessage}</p>
-                        <SignInButton onClick={(handleLogin)}>Sign In</SignInButton>
+                        <SignInButton onClick={(handleLogin)}>
+                            {isLoading? "Loading..." : "Sign In"}
+                        </SignInButton>
                     </SignInContainer>
                 </StyledMain>
             </>
