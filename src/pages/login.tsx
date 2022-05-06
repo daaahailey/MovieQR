@@ -2,37 +2,12 @@ import Head from 'next/head';
 import styled from "@emotion/styled";
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
+import { magic } from '../../lib/magic-client';
 
 const Login = () => {
-
     const [userMessage, setUserMessage] = useState("");
-    const [value, setValue] = useState("Email Address");
     const [email, setEmail] = useState("");
     const router = useRouter();
-
-    const handleLogin = (event:any) => {
-        event.preventDefault();
-
-
-        console.log("button clicked")
-        if(email) {
-            // route to dashboard
-            if(email === "hailey1@gmail.com") {
-                console.log("route to dashboard");
-                setUserMessage("");
-                router.push("/");
-
-            } else {
-                setUserMessage("something went wrong")
-            }
-        } else {
-            // show a message
-            setUserMessage("Enter a valid email address")
-            setEmail("");
-        }
-        setValue("Email Address");
-    }
 
     const handleEmailInput = (event:any) => {
         // event.preventDefault();
@@ -41,6 +16,45 @@ const Login = () => {
         setEmail(email);
     }
 
+    const handleLogin = async (event:any) => {
+        event.preventDefault();
+        console.log("login button clicked")
+
+        const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+        const isValid = emailRegex.test(email);
+
+        if(email) {
+            // route to dashboard
+            if(isValid) {
+                console.log("route to dashboard");
+                setUserMessage("");
+                // console.log(magic);
+
+                // log in a user by their email
+                try {
+                    const didToken = await magic.auth.loginWithMagicLink({ email, });
+                    console.log({ didToken });
+                    if(didToken) {
+                        router.push("/");
+                    }
+                } catch(error) {
+                    // Handle errors if required!
+                    console.log("something went wrong", error);
+                    setEmail("");
+                }
+                
+            } else {
+                setUserMessage("Enter a valid email address")
+                setEmail("");
+            }
+        } else {
+            // show a message
+            setUserMessage("Enter a valid email address")
+            setEmail("");
+        }
+    }
+
+
     return <>
                 <Head>
                 <title>Movie QR Sign In</title>
@@ -48,7 +62,7 @@ const Login = () => {
                 <StyledMain>
                     <SignInContainer >
                         <SignInText>Sign In</SignInText>
-                        <EmailInput type="text" placeholder={value} onChange={handleEmailInput}/>
+                        <EmailInput type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
                         <p>{userMessage}</p>
                         <SignInButton onClick={(handleLogin)}>Sign In</SignInButton>
                     </SignInContainer>
