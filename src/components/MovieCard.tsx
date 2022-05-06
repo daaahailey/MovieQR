@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from 'next/image'
 import { movieDataType } from "../types/MovieDataType";
-import Movie from "../pages/movie";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 
 interface MovieType {
     movieData: movieDataType;
@@ -13,16 +13,19 @@ const MovieCard = (movieData: MovieType) => {
     const item = movieData.movieData;
     const movieId = item.id;
 
-    const [click, setClick]: any = useState(false);
+    const router = useRouter();
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        setClick(true);
+        const { title } = router.query;
+        // console.log(router)
+        // console.log(title)
+        router.push({pathname: `movie/${movieId}`})
+
     }
 
     const overviewEllipsis = () => {
         const overview = item.overview;
-
         if(overview.length > 260) {
             return `${overview.substring(0,260)}...`;
         } else {
@@ -43,7 +46,6 @@ const MovieCard = (movieData: MovieType) => {
             </p>
             <MoreAboutTheMovie>More</MoreAboutTheMovie>
         </MovieSummary>
-        {click && <Movie movieId={movieId} clicked={click} />}
      </MovieCardArticle>
     )
 }
