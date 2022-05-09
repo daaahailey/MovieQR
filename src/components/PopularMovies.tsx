@@ -3,7 +3,6 @@ import { Error } from "./Error";
 import { PopularMovieCard } from "./PopularMovieCard";
 import styled from "@emotion/styled";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { movieDataType } from "../types/MovieDataType";
 
 // Import Swiper styles
 import "swiper/css";
@@ -71,7 +70,7 @@ export const PopularMovies = () => {
                         <PopularMovieCard key={`movie-data${item.id}`} movieItems={item} />
                     </SwiperSlide> 
                 )}
-                </div>
+            </div>
             </Swiper> 
         </PopularMovieSection>
     )
@@ -79,8 +78,6 @@ export const PopularMovies = () => {
 
 
 const PopularMovieSection = styled.section`
-    display: flex;
-    flex-direction: column;
     padding: 1.2rem;
 `
 
