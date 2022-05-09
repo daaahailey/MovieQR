@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { MOVIE_DETAIL_URL } from "../../constants";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { RateChart } from "../../components/RateChart";
+import { Trailer } from "../../components/Trailer";
+import { stat } from "fs";
 
 const MovieDetail = ({ movieData, movieCredits } :any) => {
     // console.log("clicked movie card")
@@ -17,9 +19,17 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
     genres.map((genre:any) => genreArr.push(genre["name"]));
     const genreStr = genreArr.join(", ");
     // console.log("genres:",genreStr)
-
-    console.log(movieData)
+       // console.log(movieData)
     // console.log(genres)
+    const [watchTrailer, setWatchTrailer] = useState(false);
+
+    const handleWatchTrailer = (isClicked: boolean) => {
+        setWatchTrailer(isClicked);
+    }
+
+    console.log(watchTrailer)
+
+ 
 
     return (
 
@@ -28,13 +38,13 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
 
                     <ImageContainer>
                         <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={movieData.original_title} />
-                                
+                        <WatchTrailerBtn type="button" onClick={() => handleWatchTrailer(true)}>Watch Trailer</WatchTrailerBtn>     
+                        {watchTrailer && <Trailer handleTrailer={setWatchTrailer}/>}
+        
                     </ImageContainer>
                     <ContentArticle>
                     <MovieTitle>{title}</MovieTitle>
                     <RateChart rate={vote_average}/>
-
-
                     <p>Runtime: {runtime} min</p>
                     <p>Release Date: {release_date}</p>
                     { genreStr ? <p>Genres: {genreStr}</p> : ""}
@@ -63,7 +73,7 @@ export const getServerSideProps = async ({ params }: any) => {
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
-    // console.log(movieData)
+    console.log(movieData)
 
     return {
         props: { 
@@ -100,6 +110,13 @@ const ImageContainer = styled.div`
     // }
 `
 
+const WatchTrailerBtn = styled.button`
+    position: absolute;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%, 0);
+`
+
 const ContentArticle = styled.article`
     // position: static;
     // z-index: 20;
@@ -116,6 +133,8 @@ const MovieTitle = styled.h2`
     font-weight: 700;
     margin: 2rem 0;
 `
+
+
 
 
 
