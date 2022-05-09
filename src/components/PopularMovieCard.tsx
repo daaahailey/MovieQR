@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router';
 import styled from "@emotion/styled";
 
-
 export const PopularMovieCard = (movieItems : any) => {
 
     const { original_title, release_date, poster_path, id} = movieItems.movieItems;
