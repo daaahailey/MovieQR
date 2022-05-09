@@ -1,18 +1,40 @@
 import styled from "@emotion/styled";
-import { css, keyframes } from "@emotion/react";
-import { useState } from "react";
+import { keyframes } from "@emotion/react";
+import { useMovieTrailer } from "../hooks/useMovieTrailer";
+
 
 export const Trailer = (props:any) => {
+    // console.log(props);
+    const { data, error } = useMovieTrailer(props.movieId);
+
+    let trailerData;
+    if(data) {
+        trailerData = data.results[0];
+        console.log(trailerData)
+    }
   
     return (
-        <TrailerContainer>
-            <TrailerContent>
-                <button onClick={ () => props.handleTrailer(false) }>Close</button>
-                pop up modal for trailer
-            </TrailerContent>
-        </TrailerContainer>
+        <TrailerLayer>
+            <TrailerContainer>
+                <TrailerContent>
+                    <button onClick={ () => props.handleTrailer(false) }>Close</button>
+                    pop up modal for trailer
+        
+                </TrailerContent>
+            </TrailerContainer>
+        </TrailerLayer>
     )
 }
+
+const TrailerLayer = styled.div`
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    z-index: 10;
+    opacity: 0.7;
+`
 
 const move = keyframes`
     0% {
