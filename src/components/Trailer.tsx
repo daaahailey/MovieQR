@@ -5,14 +5,12 @@ import YouTube, { YouTubeProps } from 'react-youtube';
 
 
 export const Trailer = (props:any) => {
-    // console.log(props);
+    console.log(props.movieId, "movie Id")
     const { data, error } = useMovieTrailer(props.movieId);
+    let movieKey;
 
-    let trailerData;
     if(data) {
-        trailerData = data.results[0];
-        // console.log(trailerData)
-        // console.log(movieKey )
+        movieKey = data.results[0].key;
     }
     if(error) {
         console.log(error);
@@ -42,7 +40,7 @@ export const Trailer = (props:any) => {
                 <TrailerContent>
                     <button onClick={() => props.handleTrailer(false)}>Close</button>
                     pop up modal for trailer
-                    {trailerData ? <YouTube videoId={`${trailerData.key}`} opts={opts} onReady={onPlayerReady} />
+                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} />
                     : "There isn't available video"}
                 </TrailerContent>
             </TrailerContainer>
