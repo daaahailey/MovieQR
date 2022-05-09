@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { useMovieTrailer } from "../hooks/useMovieTrailer";
+import YouTube, { YouTubeProps } from 'react-youtube';
 
 
 export const Trailer = (props:any) => {
@@ -10,8 +11,30 @@ export const Trailer = (props:any) => {
     let trailerData;
     if(data) {
         trailerData = data.results[0];
-        console.log(trailerData)
+        // console.log(trailerData)
+        // console.log(movieKey )
     }
+    if(error) {
+        console.log(error);
+    }
+
+    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+        // access to player in all event handlers via event.target
+        event.target.pauseVideo();
+    }
+    
+    const opts: YouTubeProps['opts'] = {
+    height: '500',
+    width: '900',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    playerVars: {
+        // https://developers.google.com/youtube/player_parameters
+        autoplay: 1,
+        origin: window.location.href,
+    },
+    };
   
     return (
         <>
@@ -19,7 +42,8 @@ export const Trailer = (props:any) => {
                 <TrailerContent>
                     <button onClick={() => props.handleTrailer(false)}>Close</button>
                     pop up modal for trailer
-        
+                    {trailerData ? <YouTube videoId={`${trailerData.key}`} opts={opts} onReady={onPlayerReady} />
+                    : "There isn't available video"}
                 </TrailerContent>
             </TrailerContainer>
             <TrailerLayer onClick={() => props.handleTrailer(false)}>
@@ -51,16 +75,32 @@ const TrailerContainer = styled.div`
     position: absolute;
     left: 50%;
     top: 15%;
-    width: 80vh;
-    height: 50vh;
+    width: 100%;
+    // width: 80vh;
+    // height: 50vh;
     transform: translate(-50%,0);
     z-index: 20;
+
 `
 
 const TrailerContent = styled.div`
-    width: 100%;
-    height: 100%; 
-    background-color: #ffffff;
+    // width: 100%;
+    // height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: "relative",
+    paddingBottom: "56.25%" /* 16:9 */,
+    paddingTop: 25,
+    height: 0
+
 
     animation: ${move} 0.3s ease-in
+
+    & > iframe {
+        width: 80%;
+    }
 `
