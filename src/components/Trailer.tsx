@@ -14,15 +14,17 @@ export const Trailer = (props:any) => {
     }
   
     return (
-        <TrailerLayer>
+        <>
             <TrailerContainer>
                 <TrailerContent>
-                    <button onClick={ () => props.handleTrailer(false) }>Close</button>
+                    <button onClick={() => props.handleTrailer(false)}>Close</button>
                     pop up modal for trailer
         
                 </TrailerContent>
             </TrailerContainer>
-        </TrailerLayer>
+            <TrailerLayer onClick={() => props.handleTrailer(false)}>
+            </TrailerLayer>
+        </>
     )
 }
 
@@ -52,6 +54,7 @@ const TrailerContainer = styled.div`
     width: 80vh;
     height: 50vh;
     transform: translate(-50%,0);
+    z-index: 20;
 `
 
 const TrailerContent = styled.div`
