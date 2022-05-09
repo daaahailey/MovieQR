@@ -8,7 +8,7 @@ export const PopularMovieCard = (movieItems : any) => {
     const orderedDate = release_date.split("-").reverse().join("-");
     const BASE_URL = "https://image.tmdb.org/t/p/original";
     const router = useRouter();
-
+    const movie = movieItems.movieItems;
     // console.log(movieItems)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -18,8 +18,9 @@ export const PopularMovieCard = (movieItems : any) => {
     return (
         <PopularMovieCardItem  onClick={handleClick}>
             {/* <h2>Popular Now</h2> */}
-            { movieItems.movieItems["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${movieItems.title}`} width={200} height={300} />
-            : <Image src={`${BASE_URL}${poster_path}`} alt={`${movieItems.title}`} width={200} height={300}/> } 
+            {/* {console.log(movie)} */}
+            { movie["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${movie.title}`} width={200} height={300} />
+            : <Image src={`${BASE_URL}${poster_path}`} alt={`${movie.title}`} width={200} height={300}/> } 
             {/* <h3>{original_title}</h3>
             <p>{orderedDate}</p> */}
         </PopularMovieCardItem>
