@@ -4,6 +4,7 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import { RateChart } from "../../components/RateChart";
 import { Trailer } from "../../components/Trailer";
+import { BsPlayBtnFill } from "react-icons/bs";
 
 
 const MovieDetail = ({ movieData, movieCredits } :any) => {
@@ -40,7 +41,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
 
                     <ImageContainer>
                         <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={movieData.original_title} />
-                        <WatchTrailerBtn type="button" onClick={() => handleWatchTrailer(true)}>Watch Trailer</WatchTrailerBtn>     
+                        <WatchTrailerBtn type="button" onClick={() => handleWatchTrailer(true)}><BsPlayBtnFill style={{marginRight: "10px"}} />Watch Trailer</WatchTrailerBtn>     
                         {watchTrailer && <Trailer handleTrailer={setWatchTrailer} movieId={movieId} />}
         
                     </ImageContainer>
@@ -103,20 +104,34 @@ const ImageContainer = styled.div`
     position: relative;
     height: 100%;
     max-height: 600px;
-
-    // top: 0;
-    // opacity: 0.8;
-    // &:span {
-    //     position: absolute;
-    //     top: 20px;
-    // }
 `
 
 const WatchTrailerBtn = styled.button`
     position: absolute;
-    left: 50%;
-    top: 4%;
-    transform: translate(-50%, 0);
+    left: 2rem;
+    top: 1.5rem;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 5px 10px;
+        background-color: #000000;
+        opacity: 0.7;
+        z-index: -10;
+        border-radius: 10px;
+    }
 `
 
 const ContentArticle = styled.article`

@@ -1,13 +1,12 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { useMovieTrailer } from "../hooks/useMovieTrailer";
-import YouTube, { YouTubeProps } from 'react-youtube';
+import YouTube, { YouTubeProps } from "react-youtube";
+import { MdOutlineClose } from "react-icons/md";
 
 
 export const Trailer = (props:any) => {
-    console.log(props.movieId, "movie Id")
     const { data, error } = useMovieTrailer(props.movieId);
-
     let movieKey;
 
     if(data) {
@@ -34,15 +33,14 @@ export const Trailer = (props:any) => {
         origin: window.location.href,
     },
     };
+
   
     return (
         <>
             <TrailerContainer>
                 <TrailerContent>
-                    <button onClick={() => props.handleTrailer(false)}>Close</button>
-                    pop up modal for trailer
-                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} />
-                    : "There isn't available video"}
+                    <CloseBtn onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "10px"}} /></CloseBtn>
+                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} /> : <p>There isn't available video</p>}   
                 </TrailerContent>
             </TrailerContainer>
             <TrailerLayer onClick={() => props.handleTrailer(false)}>
@@ -75,31 +73,48 @@ const TrailerContainer = styled.div`
     left: 50%;
     top: 15%;
     width: 100%;
-    // width: 80vh;
-    // height: 50vh;
     transform: translate(-50%,0);
     z-index: 20;
-
 `
 
 const TrailerContent = styled.div`
-    // width: 100%;
-    // height: 100%;
-
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    position: "relative",
-    paddingBottom: "56.25%" /* 16:9 */,
-    paddingTop: 25,
+    // padding-bottom: 56.25%;
+    // padding-top: 25;
     height: 0
+    animation: ${move} 0.2s ease-in;
+`
 
-
-    animation: ${move} 0.3s ease-in
-
-    & > iframe {
-        width: 80%;
+const CloseBtn = styled.button`
+    background: transparent;
+    color: white;
+    display: flex;
+    font-size: 1.3rem;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 20;
+    margin-bottom: 0.8rem;
+    & > * {
+        font-size: 1.8em;
+    }
+    &:after {
+        content: "";
+        background-color: black;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        align-items: center;
+        background: black;
+        opacity: 0.7;
+        padding: 2px 10px;
+        border-radius: 10px;
+        z-index: -10;
     }
 `
