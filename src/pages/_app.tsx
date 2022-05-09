@@ -3,9 +3,7 @@ import type { AppProps } from 'next/app'
 import { Layout } from '../components/layouts'
 import { Global } from "@emotion/react";
 import reset from '../styles/reset';
-
 import "swiper/css/bundle";
-import "../styles/style.css"
 
 
 function MyApp({ Component, pageProps }: AppProps) {

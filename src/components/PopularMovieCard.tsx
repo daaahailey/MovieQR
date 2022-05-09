@@ -19,10 +19,12 @@ export const PopularMovieCard = (movieItems : any) => {
         <PopularMovieCardItem  onClick={handleClick}>
             {/* <h2>Popular Now</h2> */}
             {/* {console.log(movie)} */}
-            { movie["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${movie.title}`} width={200} height={300} />
-            : <Image src={`${BASE_URL}${poster_path}`} alt={`${movie.title}`} width={200} height={300}/> } 
-            {/* <h3>{original_title}</h3>
-            <p>{orderedDate}</p> */}
+            {/* <div style={{backgroundColor: "black"}}> */}
+                { movie["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${movie.title}`} width={200} height={300} />
+                : <Image src={`${BASE_URL}${poster_path}`} alt={`${movie.title}`} width={200} height={300}/> } 
+                {/* <h3>{original_title}</h3>
+                <p>{orderedDate}</p> */}
+            {/* </div> */}
         </PopularMovieCardItem>
     )
 }
@@ -33,4 +35,8 @@ const PopularMovieCardItem = styled.article`
     // width: 11rem;
     // height: 16rem;
     // padding: 0.5rem;
+    transition: transform 0.3s ease-in-out;
+    &: hover {
+        transform: scale(1.08)
+    }
 `

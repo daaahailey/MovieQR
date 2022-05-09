@@ -27,7 +27,7 @@ export const PopularMovies = () => {
     return (
         <PopularMovieSection>
             <PopularSectionTitle>Popular Now</PopularSectionTitle>
-            <Swiper
+            <Swiper 
                 modules={[Pagination, Navigation]}
                 slidesPerView={1}
                 spaceBetween={30}
@@ -79,12 +79,13 @@ export const PopularMovies = () => {
 
 const PopularMovieSection = styled.section`
     padding: 1.2rem;
+    background-color: #000000;
 `
 
 const PopularSectionTitle =styled.p`
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 900;
     margin-top: 1.2rem;
-    margin-bottom: 0.8rem;
+    color: white;
 `
 
