@@ -4,16 +4,16 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import { RateChart } from "../../components/RateChart";
 import { Trailer } from "../../components/Trailer";
-import { stat } from "fs";
+
 
 const MovieDetail = ({ movieData, movieCredits } :any) => {
     // console.log("clicked movie card")
-    // const id = movieId;
-    // console.log(movieData)
     // console.log(movieCredits)
     const BASE_URL = "https://image.tmdb.org/t/p/original/"
     const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } = movieData;
     const { cast }  = movieCredits;
+    const movieId = movieData.id;
+    // console.log(movieId);
     
     const genreArr:any = [];
     genres.map((genre:any) => genreArr.push(genre["name"]));
@@ -21,6 +21,8 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
     // console.log("genres:",genreStr)
        // console.log(movieData)
     // console.log(genres)
+
+    // console.log(id)
     const [watchTrailer, setWatchTrailer] = useState(false);
 
     const handleWatchTrailer = (isClicked: boolean) => {
@@ -39,7 +41,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                     <ImageContainer>
                         <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={movieData.original_title} />
                         <WatchTrailerBtn type="button" onClick={() => handleWatchTrailer(true)}>Watch Trailer</WatchTrailerBtn>     
-                        {watchTrailer && <Trailer handleTrailer={setWatchTrailer}/>}
+                        {watchTrailer && <Trailer handleTrailer={setWatchTrailer} movieId={movieId} />}
         
                     </ImageContainer>
                     <ContentArticle>

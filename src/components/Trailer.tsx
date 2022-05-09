@@ -7,6 +7,7 @@ import YouTube, { YouTubeProps } from 'react-youtube';
 export const Trailer = (props:any) => {
     console.log(props.movieId, "movie Id")
     const { data, error } = useMovieTrailer(props.movieId);
+
     let movieKey;
 
     if(data) {
