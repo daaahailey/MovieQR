@@ -40,7 +40,7 @@ export const Trailer = (props:any) => {
             <TrailerContainer>
                 <TrailerContent>
                     <CloseBtn onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "10px"}} /></CloseBtn>
-                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} /> : <p>There isn't available video</p>}   
+                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} /> : <p>There is not available trailer video</p>}   
                 </TrailerContent>
             </TrailerContainer>
             <TrailerLayer onClick={() => props.handleTrailer(false)}>
@@ -84,9 +84,6 @@ const TrailerContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // padding-bottom: 56.25%;
-    // padding-top: 25;
-    height: 0
     animation: ${move} 0.2s ease-in;
 `
 
@@ -106,12 +103,11 @@ const CloseBtn = styled.button`
     }
     &:after {
         content: "";
-        background-color: black;
+        background-color: #000000;
         width: 100%;
         height: 100%;
         position: absolute;
         align-items: center;
-        background: black;
         opacity: 0.7;
         padding: 2px 10px;
         border-radius: 10px;
