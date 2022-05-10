@@ -1,4 +1,3 @@
 import { Magic } from 'magic-sdk';
 
-export const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_API_KEY as string); 
-
+export const m = new Magic(process.env.NEXT_PUBLIC_MAGIC_API_KEY as string);
