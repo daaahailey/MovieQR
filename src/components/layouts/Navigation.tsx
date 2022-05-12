@@ -5,16 +5,18 @@ import Image from 'next/image'
 import { useRouter } from 'next/router';
 import { magic } from "../../../lib/magic-client";
 
-
 export const Navigation = () => {
     const [userName, setUserName] = useState("");
     const router = useRouter();
 
-    useEffect(() => {
+    useEffect( () => {
         // Assumes a user is already logged in
-        async function fetchData() {
+        const fetchData = async () => {
             try {
-                const { email } = await magic.user.getMetadata();
+                const { email, issuer } = await magic.user.getMetadata();
+                const didToken = await magic.user.getIdToken();
+                console.log({ didToken });
+
                 if(email) {
                     setUserName(email)
                 }
@@ -24,7 +26,6 @@ export const Navigation = () => {
             }
         }
         fetchData();
-
     }, [router]);
 
     const handleSignOut = async(e:any) => {
