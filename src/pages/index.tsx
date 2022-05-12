@@ -1,12 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head'
-// import { SearchBox } from '../components/SearchBox';
 import { SearchContainer } from '../components/SearchContainer';
-import styled from "@emotion/styled";
 import { PopularMovies } from '../components/PopularMovies';
 
-
 const Home: NextPage = () => {
+
   return (
     <>
       <Head>
