@@ -131,7 +131,7 @@ const SignInButton = css`
     border-radius: 0.5rem;
     cursor: pointer;
     &:hover {
-        background-color: ${Common.colors.backgroundBlack};s
+        background-color: ${Common.colors.backgroundBlack};
     }
     &:active {
         transform: scale(0.98);
