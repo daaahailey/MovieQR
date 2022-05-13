@@ -1,9 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useState } from "react";
-import { InputBox } from "./InputBox";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
+import { InputBox } from "./InputBox";
 
 
 export const QuotesAndReviews = () => {
@@ -19,12 +19,12 @@ export const QuotesAndReviews = () => {
     return(
         <section css={QuotesReviewSection}>
             <div css={Menu}>
-                <label css={MenuItem} htmlFor="quote" name="menu" className={`${menu === "quote" ? "boxOn" : ""}`}>Quote</label>
+                <label css={MenuItem} htmlFor="quote" className={`${menu === "quote" ? "boxOn" : ""}`}>Quote</label>
                 <input type="radio" id="quote" name="menu" className="hidden" onChange={handleMenuSelect} value="quote" />
-                <label css={MenuItem} htmlFor="review" name="menu" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
+                <label css={MenuItem} htmlFor="review" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
                 <input type="radio" id="review" name="menu" className="hidden" onChange={handleMenuSelect} value="review" />
-            </div>
-            <InputBox menu={menu}/>
+            </div> 
+            <InputBox menu={menu} />
         </section>
     )
 }
