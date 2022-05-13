@@ -1,7 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import { useRandomMovie } from "../hooks/useRandomMovie";
 import { Error } from "./Error";
 import { PopularMovieCard } from "./PopularMovieCard";
-import styled from "@emotion/styled";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -25,13 +28,13 @@ export const PopularMovies = () => {
         movieData = data.results;
     }
     return (
-        <PopularMovieSection>
-            <PopularSectionTitle>Popular Now</PopularSectionTitle>
+        <section css={PopularMovieSection}>
+            <h2 className="text-hide">Currently Popular Movies</h2>
+            <p css={PopularSectionTitle}>Popular Now</p>
             <Swiper 
                 modules={[Pagination, Navigation]}
                 slidesPerView={1}
                 spaceBetween={30}
-                // slidesPerGroup={3}
                 loop={true}
                 loopFillGroupWithBlank={true}
                 pagination={{
@@ -62,8 +65,7 @@ export const PopularMovies = () => {
                 }}
                 navigation={true}
                 className="mySwiper"
-            >         
-            <h2 className="text-hide">Currently Popular Movies</h2>
+            >
             <div>
                 {movieData.map((item : any) => 
                     <SwiperSlide key={`slide-${item.id}`}> 
@@ -72,20 +74,20 @@ export const PopularMovies = () => {
                 )}
             </div>
             </Swiper> 
-        </PopularMovieSection>
+        </section>
     )
 }
 
 
-const PopularMovieSection = styled.section`
+const PopularMovieSection = css`
     padding: 1.2rem;
-    background-color: #000000;
+    background-color: ${Common.colors.backgroundBlack};
 `
 
-const PopularSectionTitle =styled.p`
-    font-size: 1.6rem;
-    font-weight: 900;
+const PopularSectionTitle = css`
+    font-size: ${Common.fontSize.medium};
+    font-weight: ${Common.fontWeight.bold};
     margin-top: 1.2rem;
-    color: white;
+    color: ${Common.colors.text};
 `
 

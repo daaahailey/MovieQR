@@ -14,15 +14,3 @@ export const Layout = ({ children }: LayoutProps) => {
     </>
     )
 }
-
-
-
-// export const Layout = ({ children }: LayoutProps): JSX.Element => {
-//     return (
-//     <>
-//         <Navigation />
-//             {children}
-//         <Footer />
-//     </>
-//     )
-// }

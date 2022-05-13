@@ -1,11 +1,12 @@
-import React from "react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
-import styled from "@emotion/styled";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 
 
 export const RateChart = ({rate}:any) => {
-    // console.log(rate)
     const movieRatePercentage = rate * 10;
     const remainPercentage = 100 - movieRatePercentage;
 
@@ -42,29 +43,30 @@ export const RateChart = ({rate}:any) => {
     };
 
     return (
-        <OuterContainer> 
-            <RateContainer> 
-                <RateText>{rate}</RateText>
+        <div css={OuterContainer}> 
+            <div css={RateContainer}> 
+                <p css={RateText}>{rate}</p>
                 <Doughnut
                     data={data}
                     options={options}
                 />
-                <Score>Rate</Score>
-            </RateContainer>
-        </OuterContainer>
+                <p css={Rate}>Rate</p>
+            </div>
+        </div>
     )
 }
 
 
-const OuterContainer = styled.div`
+const OuterContainer = css`
     display: flex;
     width: 66px;
     height: 66px;
     background-color: #172644;
     border-radius: 50%;
+    font-weight: ${Common.fontWeight.bold};
 `
 
-const RateContainer = styled.div`
+const RateContainer = css`
     position: relative;
     display: flex;
     width: 56px;
@@ -72,27 +74,23 @@ const RateContainer = styled.div`
     align-items: center;
     text-align: center;
     margin: 0 auto;
-    
 `
 
-const Score = styled.span`
+const Rate = css`
     position: absolute;
-
     left: 4.5rem; 
     text-align: center;
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: ${Common.fontSize.basic}; 
     top: 50%;
     transform: translateY(-50%);
 `
 
-const RateText = styled.p`
+const RateText = css`
     position: absolute;
     width: 56px;
     height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: ${Common.fontSize.basic};
 `

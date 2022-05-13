@@ -1,21 +1,23 @@
-import React from "react";
-import styled from "@emotion/styled";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react';
+import { Common } from "../../styles/common";
 
 export const Footer = () => {
 
     return (
-        <StyledFooter>
-            <FooterStrong>Built and designed by @daaahailey</FooterStrong>
-            <FooterUl>
-                <FooterList>About Movie QR</FooterList> 
-                <FooterList>Contact Us</FooterList>
-            </FooterUl>
-        </StyledFooter>
+        <footer css={StyledFooter}>
+            <strong css={StrongText}>Built and designed by @daaahailey</strong>
+            <ul css={FooterUl}>
+                <li css={FooterList}>About Movie QR</li> 
+                <li css={FooterList}>Contact Us</li>
+            </ul>
+        </footer>
     )
 };
 
 
-const StyledFooter = styled.footer`
+const StyledFooter = css`
     z-index: 40;
     width: 100%;
     position: static;
@@ -23,21 +25,21 @@ const StyledFooter = styled.footer`
     flex-direction: column;
     text-align: center;
     padding: 2rem;
-    background-color: #141010;
-    color: #ffffff;
+    background-color: ${Common.colors.backgroundGray};
+    color: ${Common.colors.text}; 
+    font-weight: ${Common.fontWeight.medium}
 `
 
-const FooterStrong = styled.strong`
-    font-weight: 700;
+const StrongText = css`
     padding: 1.5rem;
 `
 
-const FooterUl = styled.ul`
+const FooterUl = css`
     display: flex;
     flex-direction: row;
     justify-content: center;
 `
 
-const FooterList = styled.li`
+const FooterList = css`
     padding: 1rem;
 `

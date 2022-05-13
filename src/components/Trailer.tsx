@@ -1,8 +1,11 @@
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import React from "react";
 import { useMovieTrailer } from "../hooks/useMovieTrailer";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { MdOutlineClose } from "react-icons/md";
+import { jsx, css, keyframes } from '@emotion/react';
+import { Common } from "../styles/common";
 
 
 export const Trailer = (props:any) => {
@@ -37,24 +40,24 @@ export const Trailer = (props:any) => {
   
     return (
         <>
-            <TrailerContainer>
-                <TrailerContent>
-                    <CloseBtn onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "10px"}} /></CloseBtn>
+            <div css={TrailerContainer}>
+                <div css={TrailerContent}>
+                    <button css={CloseBtn} onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "10px"}} /></button>
                     {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} /> : <p>There is not available trailer video</p>}   
-                </TrailerContent>
-            </TrailerContainer>
-            <TrailerLayer onClick={() => props.handleTrailer(false)}>
-            </TrailerLayer>
+                </div>
+            </div>
+            <div css={TrailerLayer }onClick={() => props.handleTrailer(false)}>
+            </div>
         </>
     )
 }
 
-const TrailerLayer = styled.div`
+const TrailerLayer = css`
     position: fixed;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background-color: ${Common.colors.backgroundBlack};
     z-index: 10;
     opacity: 0.7;
 `
@@ -68,7 +71,7 @@ const move = keyframes`
     }
 `
 
-const TrailerContainer = styled.div`
+const TrailerContainer = css`
     position: absolute;
     left: 50%;
     top: 15%;
@@ -77,7 +80,7 @@ const TrailerContainer = styled.div`
     z-index: 20;
 `
 
-const TrailerContent = styled.div`
+const TrailerContent = css`
     width: 100%;
     height: 100%;
     display: flex;
@@ -87,9 +90,9 @@ const TrailerContent = styled.div`
     animation: ${move} 0.2s ease-in;
 `
 
-const CloseBtn = styled.button`
+const CloseBtn = css`
     background: transparent;
-    color: white;
+    color: ${Common.colors.text};
     display: flex;
     font-size: 1.3rem;
     border: none;
@@ -103,7 +106,7 @@ const CloseBtn = styled.button`
     }
     &:after {
         content: "";
-        background-color: #000000;
+        background-color: ${Common.colors.backgroundBlack};
         width: 100%;
         height: 100%;
         position: absolute;

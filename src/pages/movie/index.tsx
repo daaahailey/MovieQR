@@ -1,6 +1,9 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import { useRouter } from "next/router";
 import { Movies } from "../../components/Movies";
-import styled from "@emotion/styled";
+import { jsx, css } from '@emotion/react';
+
 
 const Movie = () => {
     const router = useRouter();
@@ -8,10 +11,10 @@ const Movie = () => {
 
     return (
         <main>
-            <StyledSectionForMovieCard>
+            <section css={StyledSectionForMovieCard}>
                 <h2 className="text-hide">Movie cards by search result</h2>
                 <Movies title={title}/>
-            </StyledSectionForMovieCard>
+            </section>
         </main>
     )
 }
@@ -19,7 +22,7 @@ const Movie = () => {
 export default Movie;
 
 
-const StyledSectionForMovieCard = styled.section`
+const StyledSectionForMovieCard = css`
     display: grid;
     justify-content: center;
     grid-template-columns: repeat(auto-fit, minmax(260px, 2fr));

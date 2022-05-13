@@ -1,7 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React from "react";
 import Image from 'next/image'
 import { movieDataType } from "../types/MovieDataType";
-import styled from "@emotion/styled";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 import { useRouter } from "next/router";
 
 interface MovieType {
@@ -29,28 +32,28 @@ const MovieCard = (movieData: MovieType) => {
     }
 
     return (
-    <MovieCardArticle key={`movie-data-${item.id}`} onClick={handleClick}>     
+    <article css={MovieCardArticle} key={`movie-data-${item.id}`} onClick={handleClick}>     
         { item["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${item.title}`} width={360} height={540} />
         : <Image src={`${BASE_URL}${item["poster_path"]}`} alt={`${item.title}`} width={360} height={540}/> }                         
-        <MovieSummary>
-            <MovieTitle>{item.title}</MovieTitle>
+        <section css={MovieSummary}>
+            <h2 css={MovieTitle}>{item.title}</h2>
             <p>
                 {overviewEllipsis()}
             </p>
-            <MoreAboutTheMovie>More</MoreAboutTheMovie>
-        </MovieSummary>
-     </MovieCardArticle>
+            <button css={MoreAboutTheMovie}>More</button>
+        </section>
+     </article>
     )
 }
 
 export default MovieCard;
 
 
-const MovieCardArticle = styled.article`
+const MovieCardArticle = css`
     position: relative;
     border-radius: 0.8rem;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-    color: #ffffff;
+    color: ${Common.colors.text};
     overflow: hidden;
     cursor: pointer;
     & > span:first-of-type {
@@ -66,9 +69,9 @@ const MovieCardArticle = styled.article`
         height: 100%;
         overflow: hidden;
         background-repeat: no-repeat;
-        background-color: #141010;
-        opacity:0;
-        transition:opacity .5s ease;
+        background-color: ${Common.colors.backgroundGray};
+        opacity: 0;
+        transition: opacity .5s ease;
     }
     &:hover:after {
         opacity: 0.96;
@@ -78,38 +81,37 @@ const MovieCardArticle = styled.article`
     }
     &:hover > section:last-child {
         transition: opacity 1.6s ease;
-        color: #ffffff;
         opacity: 1;
     }    
 `
 
-const MovieSummary = styled.section`
+const MovieSummary = css`
     position :absolute;
     width: 80%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 0.94rem;
+    font-size: ${Common.fontSize.small};
     line-height: 1.5rem;
     text-align: center;
     z-index: 20;
 `
 
-const MovieTitle = styled.h2`
+const MovieTitle = css`
     margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 900;
+    font-size: ${Common.fontSize.medium};
+    font-weight: ${Common.fontWeight.extraBold};
     line-height: 2rem;
     z-index: 1;
 `
 
-const MoreAboutTheMovie = styled.button`
+const MoreAboutTheMovie = css`
     margin-top: 1rem;
     padding: 0.45rem 1rem;
     background-color: #ffffff;
     cursor: pointer;
     border: none;
     border-radius: 0.25rem;
-    font-size: 1rem;
-    font-weight: 900;
+    font-size: ${Common.fontSize.small};
+    font-weight: ${Common.fontWeight.extraBold};
 `

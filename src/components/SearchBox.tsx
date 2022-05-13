@@ -1,52 +1,52 @@
-import React from "react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import { useState } from "react";
-import { Movies } from "./Movies";
-import { SearchResult } from "./SearchResult";
 import Link from "next/link";
-import styled from "@emotion/styled";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 
 export const SearchBox = () => {
     const [initialValue, setInitialValue] = useState("");
 
     return (
-        <SearchInputContainer>
+        <div css={SearchInputContainer}>
             <label htmlFor="search" className="text-hide">Search Movies</label>
-            <MovieSearchInput type="search" id="search" value={initialValue} placeholder="Search Movies"
+            <input css={MovieSearchInput} type="search" id="search" value={initialValue} placeholder="Search Movies"
                 onChange={(event) => setInitialValue(event.target.value)} />
             <Link href={{
                 pathname: '/movie',
                 query: { title: initialValue },
             }} passHref>
-                <SearchBtn>Search</SearchBtn>
+                <a css={SearchBtn}>Search</a>
             </Link>
-        </SearchInputContainer>
+        </div>
     )
 }
 
-const SearchInputContainer = styled.div`
+const SearchInputContainer = css`
     width:100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
 `
 
-const MovieSearchInput = styled.input`
+const MovieSearchInput = css`
     width: 60%;
     height: 3rem;
     padding: 0.75rem;
     z-index: 10;
     border-radius: 0.5rem;
     border: none;
-    font-size: 1rem;
+    font-size: ${Common.fontSize.basic};
 `
 
-const SearchBtn = styled.a`
+const SearchBtn = css`
     padding: 0.85rem 2rem;
     height: 3rem;
-    background-color: #f70776;
+    background-color: ${Common.colors.point};
     margin-left: 0.5rem;
-    color: #ffffff;
-    font-weight: 600;
+    color: ${Common.colors.text};
+    font-weight: ${Common.fontWeight.bold};
     cursor: pointer;
     border-radius: 0.5rem;
     display: flex;

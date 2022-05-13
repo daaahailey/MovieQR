@@ -1,8 +1,10 @@
-import React from "react";
-import styled from "@emotion/styled";
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import { useRandomMovie } from "../hooks/useRandomMovie";
 import { Error } from "./Error";
 import { SearchBox } from "./SearchBox";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 
 export const SearchContainer = () => {
 
@@ -24,38 +26,36 @@ export const SearchContainer = () => {
         : ""; 
     
     return (
-        <SearchBoxContainer style={{ backgroundImage: `${background}` }}>
-            <Heading>Welcome to Movie QR</Heading>
-            <SubHeading>Search movies you are interested!</SubHeading>
+        <section css={SearchBoxContainer} style={{ backgroundImage: `${background}` }}>
+            <h1 css={Heading}>Welcome to Movie QR</h1>
+            <h2 css={SubHeading}>Search movies you are interested!</h2>
             <SearchBox />
-        </SearchBoxContainer>
+        </section>
     )
 }
 
-const SearchBoxContainer = styled.div`
-    background-repeat: no-repeat;
+const SearchBoxContainer = css`
     width: 100%;
     height:40rem;
+    background-repeat: no-repeat;
     background-size: cover; 
     background-position: top center;
-    background-color: #000000;
+    background-color: ${Common.colors.backgroundBlack};
     padding: 5rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;   
+    color: ${Common.colors.text};
+    font-weight: ${Common.fontWeight.extraBold};
 `
 
-const Heading = styled.h1`
-    font-size: 3rem;
-    font-weight: 900;
-    color: #ffffff;
+const Heading = css`
+    font-size: ${Common.fontSize.extraLarge};
     margin-bottom: 1rem;
 `
-const SubHeading = styled.h2`
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #ffffff;
+const SubHeading = css`
+    font-size: ${Common.fontSize.medium};
     margin-bottom: 2rem;
 `

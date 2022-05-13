@@ -1,7 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import Head from 'next/head';
-import styled from "@emotion/styled";
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
 import { magic } from '../../lib/magic-client';
 
 const Login = () => {
@@ -69,31 +72,31 @@ const Login = () => {
 
     return <>
                 <Head>
-                <title>Movie QR Sign In</title>
+                    <title>Movie QR Sign In</title>
                 </Head>
-                <StyledMain>
-                    <SignInContainer >
-                        <SignInText>Sign In</SignInText>
-                        <EmailInput type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
+                <main css={StyledMain}>
+                    <section css={SignInContainer}>
+                        <h1 css={SignInText}>Sign In</h1>
+                        <input css={EmailInput} type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
                         <p>{userMessage}</p>
-                        <SignInButton onClick={(handleLogin)}>
+                        <button css={SignInButton} onClick={(handleLogin)}>
                             {isLoading? "Loading..." : "Sign In"}
-                        </SignInButton>
-                    </SignInContainer>
-                </StyledMain>
+                        </button>
+                    </section>
+                </main>
             </>
 }
 
 export default Login;
 
-const StyledMain = styled.main`
+const StyledMain = css`
     display: flex;
     align-items: center;
     height: 100%;
     min-height: 50vh;
 `
 
-const SignInContainer = styled.section`
+const SignInContainer = css`
     display: flex;
     flex-direction: column;
     width: 24rem;
@@ -102,33 +105,33 @@ const SignInContainer = styled.section`
     margin: 0 auto;
 ` 
 
-const SignInText = styled.h1`
-    font-size: 2rem;
-    font-weight: 700;
+const SignInText = css`
+    font-size: ${Common.fontSize.large};
+    font-weight: ${Common.fontWeight.bold};
     margin-bottom: 1.5rem;
 `
 
-const EmailInput = styled.input`
+const EmailInput = css`
     height: 2.75rem;
     padding: 1rem;
     margin-bottom: 0.5rem;
     border: 1px solid black;
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: ${Common.fontSize.basic};
 `
 
-const SignInButton = styled.button`
+const SignInButton = css`
     height: 2.8rem;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: ${Common.fontSize.basic};
+    font-weight: ${Common.fontWeight.medium};
     margin-top: 0.8rem;
-    background-color: #f70776;
-    color: #ffffff;
+    background-color: ${Common.colors.point};
+    color: ${Common.colors.text};
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
     &:hover {
-        background-color: #141010;
+        background-color: ${Common.colors.backgroundBlack};s
     }
     &:active {
         transform: scale(0.98);
