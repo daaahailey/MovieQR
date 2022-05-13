@@ -17,7 +17,7 @@ export const InputBox = ({ menu }:any) => {
             </section>
             <form css={TextForm}>
                 <label css={InputLabel} htmlFor="textArea"></label>
-                <textarea css={QuoteTextArea} name="textArea" id="textArea" cols="30" rows="2"></textarea>
+                <textarea css={QuoteTextArea} name="textArea" id="textArea" cols={30} rows={2}></textarea>
                 <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`}/>
             </form>
         </section>
