@@ -1,3 +1,5 @@
+// Common styles
+git 
 export const Common = {
     colors: {
         backgroundBlack: "#000000",
