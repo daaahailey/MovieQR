@@ -1,7 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
+import React from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
+
+
 
 export const InputBox = ({ menu }:any) => {
     const inputMenu = menu;
@@ -13,7 +16,7 @@ export const InputBox = ({ menu }:any) => {
                 display quotes or reviews here
             </section>
             <form css={TextForm}>
-                <label css={InputLabel} htmlFor="textArea" name="textArea" ></label>
+                <label css={InputLabel} htmlFor="textArea"></label>
                 <textarea css={QuoteTextArea} name="textArea" id="textArea" cols="30" rows="2"></textarea>
                 <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`}/>
             </form>
