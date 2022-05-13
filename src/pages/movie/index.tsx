@@ -3,12 +3,8 @@ import { Movies } from "../../components/Movies";
 import styled from "@emotion/styled";
 
 const Movie = () => {
-    console.log("searched movie list")
     const router = useRouter();
-    // console.log(router);
     const { title } = router.query;
-    // console.log(title);
-
 
     return (
         <main>
