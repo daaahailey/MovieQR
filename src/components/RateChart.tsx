@@ -64,6 +64,7 @@ const OuterContainer = css`
     background-color: #172644;
     border-radius: 50%;
     font-weight: ${Common.fontWeight.bold};
+    margin-bottom: 1.6rem;
 `
 
 const RateContainer = css`
