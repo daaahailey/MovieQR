@@ -9,24 +9,30 @@ import { RateChart } from "../../components/RateChart";
 import { Trailer } from "../../components/Trailer";
 import { BsPlayBtnFill } from "react-icons/bs";
 import { QuotesAndReviews } from "../../components/QuotesAndReviews";
+import { Cast } from "../../components/Cast";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 
 const MovieDetail = ({ movieData, movieCredits } :any) => {
     // console.log("clicked movie card")
     // console.log(movieCredits)
     const BASE_URL = "https://image.tmdb.org/t/p/original/"
     const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } = movieData;
-    const { cast }  = movieCredits;
+    const { cast } = movieCredits;
     const movieId = movieData.id;
     // console.log(movieId);
-    
+    // console.log(cast);
+
     const genreArr:any = [];
     genres.map((genre:any) => genreArr.push(genre["name"]));
     const genreStr = genreArr.join(", ");
-    // console.log("genres:",genreStr)
-       // console.log(movieData)
-    // console.log(genres)
-
-    // console.log(id)
+    const relDate = release_date.replace(/-/g, "/").split("/").reverse().join("/");
     const [watchTrailer, setWatchTrailer] = useState(false);
 
     const handleWatchTrailer = (isClicked: boolean) => {
@@ -49,7 +55,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                         <h2 css={MovieTitle}>{title}</h2>
                         <RateChart rate={vote_average}/>
                         <p>Runtime: {runtime} min</p>
-                        <p>Release Date: {release_date}</p>
+                        <p>Release Date: {relDate}</p>
                         { genreStr ? <p>Genres: {genreStr}</p> : ""}
                         {/* 
                         { production_countries ?
@@ -57,12 +63,51 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                                 {production_countries.length > 1 ? production_countries.map((country:any)=> `${country["name"]} ` ) : production_countries[0]["name"]}
                             </p> : <></>
                         } */}
-                        <p>{overview}</p>
-                        <p>{cast.map((person:any) => person.name)}</p>
+                        <p>Summary: {overview}</p>
+                        {/* <Cast fullCast={cast}/> */}
+                        <h3 css={SubTitle}>Cast</h3>
+                        <Swiper
+                            slidesPerView={1}
+                            spaceBetween={30}
+                            loop={true}
+                            loopFillGroupWithBlank={true}
+                            navigation={true}
+                            modules={[Navigation]}
+                            className="mySwiper"
+                            breakpoints={{
+                                0: {
+                                    slidesPerView: 2,
+                                    slidesPerGroup: 2,
+                                },
+                                540: {
+                                    slidesPerView: 3,
+                                    slidesPerGroup: 3,
+                                },
+                                720: {
+                                    slidesPerView: 4,
+                                    slidesPerGroup: 4,
+                                },
+                                1024: {
+                                    slidesPerView: 6,
+                                    slidesPerGroup: 6,
+                                },
+                                1440: {
+                                    slidesPerView: 9,
+                                    slidesPerGroup: 9,
+                                },
+                            }}
+                        >
+                            <ul css={AllCast}>
+                                {cast.map((person:any) => 
+                                    <SwiperSlide key={person.cast_id}>
+                                        <Cast castAll={person} key={person.cast_id} />
+                                    </SwiperSlide>
+                                )}
+                            </ul>
+                        </Swiper>
                     </article>     
                     <QuotesAndReviews /> 
             </section>
-            =
         </div>
     )
 }
@@ -135,13 +180,29 @@ const WatchTrailerBtn = css`
 
 const ContentArticle = css`
     padding: 2rem;
-    line-height: 1.35rem;
+    line-height: 1.45rem;
 `
 
 const MovieTitle = css`
     font-size: ${Common.fontSize.extraLarge};
     font-weight: ${Common.fontWeight.bold};
     margin: 2rem 0;
+    line-height: 3rem;
+`
+
+const SubTitle = css`
+    font-size: ${Common.fontSize.medium};
+    font-weight: ${Common.fontWeight.medium};
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: 2rem;
+    // padding-bottom: 0.5rem;
+`
+
+const AllCast = css`
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid white;
 `
 
 
