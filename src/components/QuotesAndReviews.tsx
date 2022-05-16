@@ -32,14 +32,14 @@ export const QuotesAndReviews = () => {
 
 const QuotesReviewSection = css`
     padding: 2rem;
-    background-color: ${Common.colors.backgroundBlack}
+    background-color: ${Common.colors.backgroundBlack};
+    color: ${Common.colors.text};
 `
 
 const Menu = css`
     display: flex;
-    color: ${Common.colors.text}
     border-bottom: 1px solid #ffffff;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
     margin-bottom: 1.8rem;
 `
 
@@ -51,7 +51,7 @@ const MenuItem = css`
     font-size: ${Common.fontSize.medium};
     font-weight: ${Common.fontWeight.medium};
     cursor: pointer;
-    &:nth-child(3) {
+    &:nth-of-type(2) {
         margin-left: 0.5rem;
     }
 `
