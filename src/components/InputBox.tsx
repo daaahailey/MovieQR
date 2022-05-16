@@ -1,14 +1,23 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from "react";
+import React, { useState } from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 
 
 
-export const InputBox = ({ menu }:any) => {
+export const InputBox = ({ menu, movieId }:any) => {
     const inputMenu = menu;
+    const [initialValue, setInitialValue] = useState("");
     // console.log(inputMenu);
+    console.log(movieId);
+    console.log(initialValue);
+
+    const handleSubmit = (event:any) => {
+        event.preventDefault();
+
+    }
+
 
     return ( 
         <section css={InputBoxContainer}>
@@ -17,8 +26,17 @@ export const InputBox = ({ menu }:any) => {
             </section>
             <form css={TextForm}>
                 <label css={InputLabel} htmlFor="textArea"></label>
-                <textarea css={QuoteTextArea} name="textArea" id="textArea" cols={30} rows={2}></textarea>
-                <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`}/>
+                <textarea 
+                    css={QuoteTextArea}
+                    name="textArea"
+                    id="textArea"
+                    cols={30}
+                    rows={2}
+                    placeholder={inputMenu === "quote" ? "Share your favourite quote from the movie!" : "Share your thoughts about the movie!"}
+                    onChange={(event) => setInitialValue(event.target.value)}
+                    value={initialValue}
+                    ></textarea>
+                <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`} onClick={handleSubmit}/>
             </form>
         </section>
     )
