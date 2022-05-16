@@ -54,18 +54,18 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                     <article css={ContentArticle}>
                         <h2 css={MovieTitle}>{title}</h2>
                         <RateChart rate={vote_average}/>
-                        <p>Runtime: {runtime} min</p>
-                        <p>Release Date: {relDate}</p>
-                        { genreStr ? <p>Genres: {genreStr}</p> : ""}
+                        <p css={InfoText}><span css={InfoTitle}>Runtime</span> {runtime} min</p>
+                        <p css={InfoText}><span css={InfoTitle}>Release Date</span>{relDate}</p>
+                        { genreStr ? <p css={InfoText}><span css={InfoTitle}>Genres</span> {genreStr}</p> : ""}
                         {/* 
                         { production_countries ?
                             <p>production countries: 
                                 {production_countries.length > 1 ? production_countries.map((country:any)=> `${country["name"]} ` ) : production_countries[0]["name"]}
                             </p> : <></>
                         } */}
-                        <p>Summary: {overview}</p>
+                        <p css={InfoText}><span css={InfoTitle}>Summary</span>{overview}</p>
                         {/* <Cast fullCast={cast}/> */}
-                        <h3 css={SubTitle}>Cast</h3>
+                        <h3 css={InfoTitle}>Cast</h3>
                         <Swiper
                             slidesPerView={1}
                             spaceBetween={30}
@@ -106,7 +106,7 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                             </ul>
                         </Swiper>
                     </article>     
-                    <QuotesAndReviews /> 
+                    <QuotesAndReviews movieId={movieId} /> 
             </section>
         </div>
     )
@@ -119,7 +119,7 @@ export const getServerSideProps = async ({ params }: any) => {
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
-    console.log(movieData)
+    // console.log(movieData)
 
     return {
         props: { 
@@ -190,19 +190,23 @@ const MovieTitle = css`
     line-height: 3rem;
 `
 
-const SubTitle = css`
+const InfoText = css`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+`
+const InfoTitle = css`
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
     font-size: ${Common.fontSize.medium};
     font-weight: ${Common.fontWeight.medium};
-    display: flex;
-    flex-direction: column-reverse;
-    margin-top: 2rem;
-    // padding-bottom: 0.5rem;
 `
 
 const AllCast = css`
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid white;
+    margin:0;
 `
 
 
