@@ -10,9 +10,10 @@ export default async function quote(req:any, res:any) {
                 // if there isn't token
                 res.status(403).send({}); // forbidden for user that doesn't have right token
             } else {
-                const movieId = req.query.movieId;
+                const { movieId, quote } = req.body;
+                // const movieId = req.query.movieId;
                 const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
-                // console.log({ decodedToken });       
+                console.log({ decodedToken });       
                 const userId = decodedToken.issuer;
                 const doesQuotesExist = await findMovieIdByUser(token, userId, movieId);
                 // console.log({findMovieId});
@@ -21,16 +22,16 @@ export default async function quote(req:any, res:any) {
                     // update it
                     const response = await updateQuotes(token, { 
                         userId, 
-                        movieId: "577922", 
-                        quote: "What's Happened, Happened, It's An Expression Of Faith In The Mechanics Of The World, It's Not An Excuse For Doing Nothing.",
+                        movieId,
+                        quote,
                     });
                     res.send({ message: "it works", response });
                 } else {
                     // add it
                     const response = await insertQuotes(token, { 
                         userId,
-                        movieId: "335787", 
-                        quote: "test test ~~ this is for a test",
+                        movieId, 
+                        quote,
                     });
                     res.send({ message: "it works", response });
                 }
