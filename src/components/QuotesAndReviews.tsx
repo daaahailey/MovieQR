@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
-import { InputBox } from "./InputBox";
+import { QuoteInput } from "./QuoteInput";
+import { ReviewInput } from "./ReviewInput";
 
 
 export const QuotesAndReviews = (movieId:any) => {
@@ -23,7 +24,7 @@ export const QuotesAndReviews = (movieId:any) => {
                 <label css={MenuItem} htmlFor="review" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
                 <input type="radio" id="review" name="menu" className="hidden" onChange={handleMenuSelect} value="review" />
             </div> 
-            <InputBox menu={menu} movieId={movieId}/>
+            {menu === "quote" ?  <QuoteInput movieId={movieId} /> : <ReviewInput movieId={movieId} />}
         </section>
     )
 }
