@@ -5,17 +5,42 @@ import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 
 
-
-export const InputBox = ({ menu, movieId }:any) => {
+export const InputBox = ({ movieId, menu }:any) => {
     const inputMenu = menu;
     const [initialValue, setInitialValue] = useState("");
-    // console.log(inputMenu);
-    console.log(movieId);
-    console.log(initialValue);
 
-    const handleSubmit = (event:any) => {
+    const handleSubmit =  async (event:any) => {
         event.preventDefault();
-
+        const movieIdStr = movieId.movieId.toString();
+        // console.log(movieIdStr)
+        if(!initialValue) {
+            // if input is empty, show a message      
+            console.log("Please write something.");
+        } else if(initialValue) {
+            if(inputMenu === "quote") {
+                // if user selected quote, add quote
+                const response = await fetch("/api/quote", {
+                    method: "POST",
+                    headers : {
+                        "Content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        movieId: movieIdStr,
+                        quote: initialValue,
+                    })
+                })
+                .then((response) => response.json())
+                .then((response) => {
+                    console.log("success", response);
+                })
+                .catch((error) => {
+                    console.log("fail", error);
+                })
+                // console.log("data", await response.json());
+            } else if(inputMenu === "review") {
+                console.log("review", initialValue);
+            }
+        }
     }
 
 
@@ -35,7 +60,7 @@ export const InputBox = ({ menu, movieId }:any) => {
                     placeholder={inputMenu === "quote" ? "Share your favourite quote from the movie!" : "Share your thoughts about the movie!"}
                     onChange={(event) => setInitialValue(event.target.value)}
                     value={initialValue}
-                    ></textarea>
+                    >{initialValue}</textarea>
                 <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`} onClick={handleSubmit}/>
             </form>
         </section>
