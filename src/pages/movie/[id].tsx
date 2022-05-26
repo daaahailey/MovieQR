@@ -39,8 +39,13 @@ const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
     const relDate = release_date.replace(/-/g, "/").split("/").reverse().join("/");
     const [watchTrailer, setWatchTrailer] = useState(false);
 
-    const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
-    const currentUser = decodedToken.issuer;
+    let currentUser;
+
+    if(cookie) {
+        const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
+        currentUser = decodedToken.issuer;
+    }
+    
 
 
     const handleWatchTrailer = (isClicked: boolean) => {
@@ -127,7 +132,15 @@ export const getServerSideProps = async (context:any) => {
     const movieCredits = await credit.json();
     // console.log(movieData)
 
-    const cookie = context.req.headers.cookie.split("token=")[1];
+    const cookies = context.req.headers.cookie;
+    let cookie;
+
+    if(cookies) {
+        cookie = context.req.headers.cookie.split("token=")[1];
+    }
+
+
+
 
     return {
         props: { 

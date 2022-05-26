@@ -1,21 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
-
 import React, { useEffect, useState } from "react";
 import { InputBox } from "./InputBox";
-
-// interface Props {
-//     name: string;
-//     quoteData: quoteDataData[];
-// }
 
 export const QuoteInput = ({movieId, currentUser }:any) => {
     const [ quoteData, setQuoteData ] = useState([]); 
     const [ editClicked, setEditClicked ] = useState(false);
     const [ updatedQuote, setUpdatedQuote ] = useState(""); 
     const [ postId, setPostId ] = useState("");
-
 
     // this renders all quotes
     useEffect(() => {
@@ -26,7 +19,7 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
             .then((response) => response.json())
             .then((result) => {
                 if(result.length > 0) {
-                    console.log(result);
+                    // console.log(result);
                     setQuoteData(result);
                 } else if(result.length === 0) {
                     console.log("there isn't any quote added yet");
@@ -88,11 +81,10 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
                 { quoteData && quoteData.map((item:any) => {
                     const email = item.userEmail.split("@");
                     const userNickname = email[0];
-
-                    if(item.userId === currentUser) {
+                    
+                    if(currentUser && item.userId === currentUser) {
                         //if it's written by current user, add edit & delete button       
-                        return (
-            
+                        return (    
                             <li key={item.id}>
                                 <span>{userNickname}</span>
                                 {item.quote}
@@ -101,7 +93,7 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
                             </li>
                         )
 
-                    } else if(item.userId !== currentUser) {
+                    } else if(item.userId !== currentUser || !currentUser) {
                         return (
                             <li key={item.id}>
                                     <span>{userNickname}</span>
