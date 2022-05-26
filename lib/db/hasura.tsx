@@ -1,53 +1,76 @@
 // insert new quote
-export async function insertQuotes (token:any, { userId, movieId, quote }:any) {
+export async function insertQuotes (token:any, { userId, movieId, quote, userEmail }:any) {
 
 const operationsDoc = `
-  mutation insertQuotes($userId: String!, $movieId: String!, $quote: String!) {
+  mutation insertQuotes($userId: String!, $movieId: String!, $quote: String!, $userEmail: String!) {
     insert_quotes_one( object: {
         movieId: $movieId, 
         quote: $quote, 
         userId: $userId,
+        userEmail: $userEmail,
       }) {
             userId
             quote
+            userEmail
     }
   }
 `
 
-  const response = await queryHasuraGraphQL(operationsDoc, "insertQuotes", { userId, movieId, quote }, token);
+  const response = await queryHasuraGraphQL(operationsDoc, "insertQuotes", { userId, movieId, quote, userEmail }, token);
   console.log({response});
   return response;
 }
 
 
-// update existing quote
-export async function updateQuotes (token:any, { userId, movieId, quote }:any) {
+// update existing quote (written by the same user)
+export async function updateQuotes (token:any, { userId, movieId, quote, id }:any) {
 
   const operationsDoc = `
-  mutation updateQuotes($userId: String!, $movieId: String!, $quote: String!) {
+  mutation updateQuotes($userId: String!, $movieId: String!, $quote: String!, $id: Int!) {
     update_quotes(
       _set: {quote: $quote}, 
       where: {
         userId: {_eq: $userId}, 
         movieId: {_eq: $movieId}
+        id: {_eq: $id}
       }) {
         returning {
           userId
           movieId
           quote
+          id
         }
     }
   }
 `
 
-  const response = await queryHasuraGraphQL(operationsDoc, "updateQuotes", { userId, movieId, quote }, token);
+  const response = await queryHasuraGraphQL(operationsDoc, "updateQuotes", { userId, movieId, quote, id }, token);
   // console.log({ response });
   return response;
 }
 
 
 
-// find movie id by user
+// find movie and quote
+export async function fetchMovieQuotes(admin:string, movieId:any) {
+const operationsDoc = `
+  query fetchMovieQuotes($movieId: String!) {
+    quotes(where: {movieId: {_eq: $movieId }}) {
+      id
+      movieId
+      quote
+      userId
+      userEmail
+    }
+  }
+`
+  const response = await queryAllQuotes(operationsDoc, "fetchMovieQuotes", { movieId }, admin);
+  return response?.data?.quotes;
+}
+
+
+
+// find movie id by user - find quote I wrote
 export async function findMovieIdByUser(token:any, userId:any, movieId:any) {
 
   const operationsDoc = `
@@ -61,7 +84,7 @@ export async function findMovieIdByUser(token:any, userId:any, movieId:any) {
   }
 `;
   const response = await queryHasuraGraphQL(operationsDoc, "findMovieByUserId", { userId, movieId }, token);
-  return response?.data?.quotes?.length > 0;
+  return response?.data?.quotes;
 }
 
 
@@ -110,8 +133,8 @@ export async function isNewUser (token:any, issuer:any) {
   }
 
 
-// fetchGraphQL
-export async function queryHasuraGraphQL(operationsDoc:any, operationName:any, variables:any, token:any) {
+// fetchGraphQL  
+export async function queryHasuraGraphQL(operationsDoc:any, operationName:any, variables:any, token:any, admin:any) {
   const result = await fetch(process.env.NEXT_PUBLIC_HASURA_ADMIN_URL as string,
     {
       method: "POST",
@@ -128,4 +151,25 @@ export async function queryHasuraGraphQL(operationsDoc:any, operationName:any, v
     }
   );
   return await result.json();
+}
+
+
+
+// query every quotes written by all users including things current user didn't write. 
+export async function queryAllQuotes(operationsDoc:any, operationName:any, variables:any, admin:any) {
+  const result = await fetch(process.env.NEXT_PUBLIC_HASURA_ADMIN_URL as string,
+    {
+      method: "POST",
+      headers: {
+        "x-hasura-admin-secret": admin,
+      },
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      }),
+    }
+  );
+  return await result.json();
+  console.log("quotes", result.json());
 }
