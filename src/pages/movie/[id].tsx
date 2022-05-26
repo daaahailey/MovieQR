@@ -14,6 +14,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import jwt from "jsonwebtoken";
 
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -23,6 +24,11 @@ import "swiper/css/navigation";
 const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
     // console.log("clicked movie card")
     // console.log(movieCredits)
+    interface JwtPayload {
+        issuer: string;
+        email: string;
+    }
+
     const BASE_URL = "https://image.tmdb.org/t/p/original/"
     const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } = movieData;
     const { cast } = movieCredits;
@@ -32,15 +38,14 @@ const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
     const genreStr = genreArr.join(", ");
     const relDate = release_date.replace(/-/g, "/").split("/").reverse().join("/");
     const [watchTrailer, setWatchTrailer] = useState(false);
-    // console.log("cookie:", cookies)
-    const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string);   
-    // console.log(decodedToken);
+
+    const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
     const currentUser = decodedToken.issuer;
+
 
     const handleWatchTrailer = (isClicked: boolean) => {
         setWatchTrailer(isClicked);
     }
-
     // console.log(watchTrailer)
 
 
@@ -94,7 +99,7 @@ const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
                                 },
                                 1440: {
                                     slidesPerView: 9,
-                                    slidesPerGroup: 9,
+                                    slidesPerGroup: 9, 
                                 },
                             }}
                         >
@@ -212,11 +217,3 @@ const AllCast = css`
     border-bottom: 1px solid white;
     margin:0;
 `
-
-
-
-
-
-
-
-
