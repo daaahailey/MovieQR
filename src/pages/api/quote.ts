@@ -18,8 +18,8 @@ export default async function quote(req:any, res:any) {
                  res.send(findMovie);
             } else {
                 // there isn't any quote - need to add default message 
-                res.status(404);
-                res.send({ user: null,  message: "Quote not found" });
+                // res.status(404);
+                res.send({ message: "Quote not found" });
             }
 
         } else if(req.method === "POST") {
