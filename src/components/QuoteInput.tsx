@@ -34,8 +34,8 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
 
 
     const handleEdit = (event:React.MouseEvent<HTMLElement>) => {
-        const postId = event.target.value;
         event.preventDefault();
+        const postId = (event.target as HTMLInputElement).value;
         setEditClicked(true);
         setPostId(postId);
     }
