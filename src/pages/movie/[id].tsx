@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MOVIE_DETAIL_URL } from "../../constants";
 import Image from "next/image";
 import { jsx, css } from '@emotion/react';
@@ -12,6 +12,7 @@ import { QuotesAndReviews } from "../../components/QuotesAndReviews";
 import { Cast } from "../../components/Cast";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
+import jwt from "jsonwebtoken";
 
 // Import Swiper styles
 import "swiper/css";
@@ -19,21 +20,22 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 
-const MovieDetail = ({ movieData, movieCredits } :any) => {
+const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
     // console.log("clicked movie card")
     // console.log(movieCredits)
     const BASE_URL = "https://image.tmdb.org/t/p/original/"
     const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } = movieData;
     const { cast } = movieCredits;
-    const movieId = movieData.id;
-    // console.log(movieId);
-    // console.log(cast);
-
+    const movieId = movieData.id.toString();
     const genreArr:any = [];
     genres.map((genre:any) => genreArr.push(genre["name"]));
     const genreStr = genreArr.join(", ");
     const relDate = release_date.replace(/-/g, "/").split("/").reverse().join("/");
     const [watchTrailer, setWatchTrailer] = useState(false);
+    // console.log("cookie:", cookies)
+    const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string);   
+    // console.log(decodedToken);
+    const currentUser = decodedToken.issuer;
 
     const handleWatchTrailer = (isClicked: boolean) => {
         setWatchTrailer(isClicked);
@@ -43,7 +45,6 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
 
 
     return (
-
         <div css={Container}>
             <section css={MovieDetailContainer}>
                     <div css={ImageContainer}>
@@ -106,25 +107,28 @@ const MovieDetail = ({ movieData, movieCredits } :any) => {
                             </ul>
                         </Swiper>
                     </article>     
-                    <QuotesAndReviews movieId={movieId} /> 
+                    <QuotesAndReviews movieId={movieId} currentUser={currentUser} /> 
             </section>
         </div>
     )
 }
 
 
-export const getServerSideProps = async ({ params }: any) => {
-    const movieId = params.id;
+export const getServerSideProps = async (context:any) => {
+    const movieId = context.params.id;
     const res = await fetch(`${MOVIE_DETAIL_URL}/${movieId}?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
     // console.log(movieData)
 
+    const cookie = context.req.headers.cookie.split("token=")[1];
+
     return {
         props: { 
             movieData,
-            movieCredits
+            movieCredits,
+            cookie,
         }
     }
 }

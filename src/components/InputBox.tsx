@@ -9,10 +9,10 @@ export const InputBox = ({ movieId, menu }:any) => {
     const inputMenu = menu;
     const [initialValue, setInitialValue] = useState("");
 
+    // this creates a new quote or review
     const handleSubmit =  async (event:any) => {
         event.preventDefault();
-        const movieIdStr = movieId.movieId.toString();
-        // console.log(movieIdStr)
+
         if(!initialValue) {
             // if input is empty, show a message      
             console.log("Please write something.");
@@ -25,13 +25,15 @@ export const InputBox = ({ movieId, menu }:any) => {
                         "Content-type": "application/json",
                     },
                     body: JSON.stringify({
-                        movieId: movieIdStr,
+                        movieId: movieId,
                         quote: initialValue,
                     })
                 })
                 .then((response) => response.json())
-                .then((response) => {
-                    console.log("success", response);
+                .then((result) => {
+                    console.log(result)
+                    console.log("success", result);
+                    setInitialValue("");
                 })
                 .catch((error) => {
                     console.log("fail", error);
@@ -46,9 +48,9 @@ export const InputBox = ({ movieId, menu }:any) => {
 
     return ( 
         <section css={InputBoxContainer}>
-            <section css={DisplayItems}>
+            {/* <section css={DisplayItems}>
                 display quotes or reviews here
-            </section>
+            </section> */}
             <form css={TextForm}>
                 <label css={InputLabel} htmlFor="textArea"></label>
                 <textarea 
@@ -74,7 +76,8 @@ const InputBoxContainer = css`
 `
 
 const DisplayItems = css`
-    height: 14rem;
+    // height: 14rem;
+    margin-top: 2rem;
     text-align: left;
 `
 

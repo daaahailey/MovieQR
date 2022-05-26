@@ -7,9 +7,9 @@ import { QuoteInput } from "./QuoteInput";
 import { ReviewInput } from "./ReviewInput";
 
 
-export const QuotesAndReviews = (movieId:any) => {
-    const [menu, setMenu] = useState("quote");
-    
+export const QuotesAndReviews = ({movieId, currentUser }:any) => {
+    const [menu, setMenu] = useState("quote");    
+
     const handleMenuSelect = (event:any) => {
         event.preventDefault();
         const clickedMenu = event.target.value;
@@ -24,7 +24,9 @@ export const QuotesAndReviews = (movieId:any) => {
                 <label css={MenuItem} htmlFor="review" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
                 <input type="radio" id="review" name="menu" className="hidden" onChange={handleMenuSelect} value="review" />
             </div> 
-            {menu === "quote" ?  <QuoteInput movieId={movieId} /> : <ReviewInput movieId={movieId} />}
+            {/* <div>display quote</div> */}
+
+            {menu === "quote" ?  <QuoteInput movieId={movieId} currentUser={currentUser}/> : <ReviewInput movieId={movieId} />}
         </section>
     )
 }
