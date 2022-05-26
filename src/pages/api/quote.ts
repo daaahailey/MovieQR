@@ -35,8 +35,13 @@ export default async function quote(req:any, res:any) {
                 // console.log(inputParams)
                 const id = parseInt(postId);
 
+                interface JwtPayload {
+                    issuer: string;
+                    email: string;
+                }
+
                 if(movieId) {
-                    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);     
+                    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;     
                     const userId = decodedToken.issuer;
                     const userEmail = decodedToken.email;
                     const findMovie = await findMovieIdByUser(token, userId, movieId);
@@ -67,11 +72,12 @@ export default async function quote(req:any, res:any) {
                 }
             }
         }
-
-
-    } catch(error) {
-        console.log("error occurred /quote", error);
-        res.status(500).send({ done: false, error: error?.message });
+    } catch(error) {    
+        if(error instanceof Error) {
+            console.log("error occurred /quote", error);
+            res.status(500).send({ done: false, error: error?.message });
+        } else {
+            console.log("Unexpected Error", error);
+        }
     }
-
 }
