@@ -5,8 +5,13 @@ import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState } from "react";
 import { InputBox } from "./InputBox";
 
+// interface Props {
+//     name: string;
+//     quoteData: quoteDataData[];
+// }
+
 export const QuoteInput = ({movieId, currentUser }:any) => {
-    const [ quoteData, setQuoteData ] = useState(""); 
+    const [ quoteData, setQuoteData ] = useState([]); 
     const [ editClicked, setEditClicked ] = useState(false);
     const [ updatedQuote, setUpdatedQuote ] = useState(""); 
     const [ postId, setPostId ] = useState("");
