@@ -17,7 +17,7 @@ const operationsDoc = `
 `
 
   const response = await queryHasuraGraphQL(operationsDoc, "insertQuotes", { userId, movieId, quote, userEmail }, token);
-  console.log({response});
+  // console.log({response});
   return response;
 }
 
@@ -107,7 +107,7 @@ export async function createNewUser (token:any, metadata:any) {
   const { issuer, email, publicAddress } = metadata;
   const response = await queryHasuraGraphQL(operationsDoc, "createNewUser", { issuer, email, publicAddress }, token);
   console.log("create new user -", response)
-  console.log({ response, issuer });
+  // console.log({ response, issuer });
   return response;
 }
 
@@ -128,7 +128,7 @@ export async function isNewUser (token:any, issuer:any) {
     const response = await queryHasuraGraphQL(operationsDoc, "isNewUser", { issuer }, token);
     console.log("is new user - response",response)
 
-    console.log({ response, issuer });
+    // console.log({ response, issuer });
     return response?.data?.users?.length === 0;
   }
 
@@ -171,5 +171,5 @@ export async function queryAllQuotes(operationsDoc:any, operationName:any, varia
     }
   );
   return await result.json();
-  console.log("quotes", result.json());
+  // console.log("quotes", result.json());
 }
