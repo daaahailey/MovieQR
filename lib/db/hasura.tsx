@@ -134,7 +134,7 @@ export async function isNewUser (token:any, issuer:any) {
 
 
 // fetchGraphQL  
-export async function queryHasuraGraphQL(operationsDoc:any, operationName:any, variables:any, token:any, admin:any) {
+export async function queryHasuraGraphQL(operationsDoc:any, operationName:any, variables:any, token:any) {
   const result = await fetch(process.env.NEXT_PUBLIC_HASURA_ADMIN_URL as string,
     {
       method: "POST",

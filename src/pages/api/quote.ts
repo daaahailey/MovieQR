@@ -3,6 +3,7 @@ import { findMovieIdByUser, fetchMovieQuotes, updateQuotes, insertQuotes } from 
 
 // get quotes from all user (but you cannot edit them because you don't have token. this is only to read them)
 export default async function quote(req:any, res:any) {
+    const token = req.cookies.token;
     try {
         const { movieId, quote } = req.query;
         const admin = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET as string;
@@ -23,8 +24,6 @@ export default async function quote(req:any, res:any) {
 
         } else if(req.method === "POST") {
             // post request - if user has signed in, user can post quote
-            const token = req.cookies.token;
-
             if(!token) {
                 // if there isn't token, user cannot leave quote (user must sign in)
                 // add modal saying  - please sign in to leave quote
