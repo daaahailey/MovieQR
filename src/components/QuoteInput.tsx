@@ -4,11 +4,17 @@ import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState } from "react";
 import { InputBox } from "./InputBox";
 
-export const QuoteInput = ({movieId, currentUser }:any) => {
+export const QuoteInput = ({ movieId, currentUser }:any) => {
+
     const [ quoteData, setQuoteData ] = useState([]); 
     const [ editClicked, setEditClicked ] = useState(false);
     const [ updatedQuote, setUpdatedQuote ] = useState(""); 
+    const [ deleteClicked, setDeleteClicked ] = useState(false);
+    const [ status, setStatus ] = useState("");
+
+    const [ updateQuoteBtnClicked, setUpdateQuoteBtnClicked ] = useState(false);
     const [ postId, setPostId ] = useState("");
+
 
     // this renders all quotes
     useEffect(() => {
@@ -36,42 +42,70 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
         const postId = (event.target as HTMLInputElement).value;
         setEditClicked(true);
         setPostId(postId);
+        setStatus("edit");
     }
 
-    const handleDelete = (event:React.MouseEvent<HTMLElement>) => {
+    const handleDelete = async (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        console.log("delete btn clicked");
+        setDeleteClicked(true);
+        setStatus("delete");
     }
+
+    // const handleDeleteQuote = () => {
+
+    // }
+
 
     const handleEditQuote = async (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+
         // edit quote - works but after edited, 
         // it should refresh and render edited data so the edited quote displays on the screen
-        const response = await fetch("/api/quote", {
-            method: "POST",
-            headers : {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-                movieId: movieId,
-                quote: updatedQuote,
-                status: "edit",
-                postId,
+
+        if(!updatedQuote) {
+            // if quote to update is empty, display a message saying user needs to write something
+            console.log("You must write something!");
+            setUpdateQuoteBtnClicked(true);
+        } else {
+            const response = await fetch("/api/quote", {
+                method: "POST",
+                headers : {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    movieId: movieId,
+                    quote: updatedQuote,
+                    status: "edit",
+                    postId,
+                })
             })
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("success", result);
-            setUpdatedQuote("");
-            setEditClicked(false);
-        })
-        .catch((error) => {
-            console.log("fail", error);
-        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("success", result);
+                setUpdatedQuote("");
+                setEditClicked(false);
+                setUpdateQuoteBtnClicked(false);
+            })
+            .catch((error) => {
+                console.log("fail", error);
+            })
+        }
+    
     }
 
-    const handleCancelEdit = (event:React.MouseEvent<HTMLElement>) => {
+    
+    const handleCancel = (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        setEditClicked(false);
+        const clickedBtn = status;
+
+        if(clickedBtn === "edit") {
+            setEditClicked(false);
+            setUpdateQuoteBtnClicked(false);
+        } else if(clickedBtn === "delete") {
+            setDeleteClicked(false);
+        }
+        setStatus("");
     }
 
 
@@ -81,7 +115,7 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
                 { quoteData && quoteData.map((item:any) => {
                     const email = item.userEmail.split("@");
                     const userNickname = email[0];
-                    
+
                     if(currentUser && item.userId === currentUser) {
                         //if it's written by current user, add edit & delete button       
                         return (    
@@ -104,7 +138,13 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
                 })}
                 {editClicked && 
                     <>
-                        <div css={EditModal}>
+                        <div css={Modal}>
+                            { updateQuoteBtnClicked ? 
+                                !updatedQuote ? 
+                                    <p css={[MessageOnEditModal, MessageRed ]}>Please write quote to update.</p>
+                                    : <p css={MessageOnEditModal}>Edit my quote</p>
+                                : <p css={MessageOnEditModal}>Edit my quote</p>
+                            }
                             <form css={EditForm}>
                                 <label htmlFor="textArea"></label>
                                 <textarea 
@@ -118,12 +158,25 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
                                     ></textarea>    
                                 <div css={Buttons}>
                                     <input css={Button} type="submit" value="Edit Quote" onClick={handleEditQuote}/>
-                                    <input css={Button} type="submit" value="Cancel" onClick={handleCancelEdit}/>
+                                    <input css={Button} type="submit" value="Cancel" onClick={handleCancel}/>
                                 </div>
                             </form>
                         </div>
                         <div css={ModalLayer}></div>
                     </>
+                }
+                { deleteClicked &&
+                    <>
+                        <div css={Modal}>
+                            <p>Are you sure you want to delete this quote?</p>
+                            <div css={Buttons}>
+                                <input css={Button} type="submit" value="Delete Quote" onClick={handleDeleteQuote}/>
+                                <input css={Button} type="submit" value="Cancel" onClick={handleCancel}/>
+                            </div>
+                        </div>
+                        <div css={ModalLayer}></div>
+                    </>
+
                 }
             </ul>
  
@@ -134,7 +187,7 @@ export const QuoteInput = ({movieId, currentUser }:any) => {
 
 
 
-const EditModal = css`
+const Modal = css`
     position: absolute;
     bottom: 5%;
     left: 50%;
@@ -145,9 +198,16 @@ const EditModal = css`
     background-color: white;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    color: black;
+`
+const MessageOnEditModal = css`
+    margin-bottom: 1.2rem;
+`
+const MessageRed = css`
+    color: red;
 `
 
 const ModalLayer = css`
