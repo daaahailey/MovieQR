@@ -2,39 +2,45 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState } from "react";
-import { InputBox } from "./InputBox";
 
-export const QuoteInput = ({ movieId, currentUser }:any) => {
+export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
 
     const [ quoteData, setQuoteData ] = useState([]); 
     const [ editClicked, setEditClicked ] = useState(false);
     const [ updatedQuote, setUpdatedQuote ] = useState(""); 
     const [ deleteClicked, setDeleteClicked ] = useState(false);
     const [ status, setStatus ] = useState("");
-
-    const [ updateQuoteBtnClicked, setUpdateQuoteBtnClicked ] = useState(false);
+    const [ isQuoteEmpty, setIsQuoteEmpty ] = useState(false);
     const [ postId, setPostId ] = useState("");
 
 
     // this renders all quotes
-    useEffect(() => {
-        async function fetchData() { 
-            const response = await fetch(`/api/quote?movieId=${movieId}`, {
-                method: "GET",
-            })
-            .then((response) => response.json())
-            .then((result) => {
-                if(result.length > 0) {
-                    // console.log(result);
-                    setQuoteData(result);
-                } else if(result.length === 0) {
-                    console.log("there isn't any quote added yet");
-                }
-            })
-        }
+    async function fetchData() { 
+        const response = await fetch(`/api/quote?movieId=${movieId}`, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.length > 0) {
+                // console.log(result);
+                setQuoteData(result);
+            } else if(result.length === 0) {
+                console.log("there isn't any quote added yet");
+            }
+        })
+    }
+
+    
+    useEffect(() => { 
         fetchData();
-        
     }, []);
+
+
+    if(addedNewQuote === true) {
+        // if new quote gets added, fetch data again
+        fetchData();
+    }
+
 
 
     const handleEdit = (event:React.MouseEvent<HTMLElement>) => {
@@ -47,26 +53,47 @@ export const QuoteInput = ({ movieId, currentUser }:any) => {
 
     const handleDelete = async (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        console.log("delete btn clicked");
+        const postId = (event.target as HTMLInputElement).value;
         setDeleteClicked(true);
+        setPostId(postId);
         setStatus("delete");
     }
 
-    // const handleDeleteQuote = () => {
+    const handleDeleteQuote = async (event:React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        console.log("delete final btn clicked")
 
-    // }
+        const response = await fetch("/api/quote", {
+            method: "POST",
+            headers : {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                movieId: movieId,
+                quote: updatedQuote,
+                status: "delete",
+                postId,
+            })
+        })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log("success", result);
+            setUpdatedQuote("");
+            setDeleteClicked(false);
+            fetchData(); 
+        })
+        .catch((error) => {
+            console.log("fail", error);
+        })
+
+    }
 
 
     const handleEditQuote = async (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-
-        // edit quote - works but after edited, 
-        // it should refresh and render edited data so the edited quote displays on the screen
-
         if(!updatedQuote) {
             // if quote to update is empty, display a message saying user needs to write something
-            console.log("You must write something!");
-            setUpdateQuoteBtnClicked(true);
+            setIsQuoteEmpty(true);
         } else {
             const response = await fetch("/api/quote", {
                 method: "POST",
@@ -85,23 +112,24 @@ export const QuoteInput = ({ movieId, currentUser }:any) => {
                 console.log("success", result);
                 setUpdatedQuote("");
                 setEditClicked(false);
-                setUpdateQuoteBtnClicked(false);
+                setIsQuoteEmpty(false);
+                fetchData();
             })
             .catch((error) => {
                 console.log("fail", error);
             })
         }
-    
     }
 
-    
+
+
     const handleCancel = (event:React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         const clickedBtn = status;
 
         if(clickedBtn === "edit") {
             setEditClicked(false);
-            setUpdateQuoteBtnClicked(false);
+            setIsQuoteEmpty(false);
         } else if(clickedBtn === "delete") {
             setDeleteClicked(false);
         }
@@ -139,7 +167,7 @@ export const QuoteInput = ({ movieId, currentUser }:any) => {
                 {editClicked && 
                     <>
                         <div css={Modal}>
-                            { updateQuoteBtnClicked ? 
+                            { isQuoteEmpty ? 
                                 !updatedQuote ? 
                                     <p css={[MessageOnEditModal, MessageRed ]}>Please write quote to update.</p>
                                     : <p css={MessageOnEditModal}>Edit my quote</p>
@@ -179,8 +207,6 @@ export const QuoteInput = ({ movieId, currentUser }:any) => {
 
                 }
             </ul>
- 
-            <InputBox movieId={movieId} menu="quote" />
         </div>
     )
 }

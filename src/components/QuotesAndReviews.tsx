@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
-import { QuoteInput } from "./QuoteInput";
-import { ReviewInput } from "./ReviewInput";
+import { InputBox } from "./InputBox";
 
 
-export const QuotesAndReviews = ({movieId, currentUser }:any) => {
+export const QuotesAndReviews = ({ movieId, currentUser }:any) => {
     const [menu, setMenu] = useState("quote");    
 
     const handleMenuSelect = (event:any) => {
@@ -24,9 +23,7 @@ export const QuotesAndReviews = ({movieId, currentUser }:any) => {
                 <label css={MenuItem} htmlFor="review" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
                 <input type="radio" id="review" name="menu" className="hidden" onChange={handleMenuSelect} value="review" />
             </div> 
-            {/* <div>display quote</div> */}
-
-            {menu === "quote" ?  <QuoteInput movieId={movieId} currentUser={currentUser}/> : <ReviewInput movieId={movieId} />}
+            {menu=== "quote" ? <InputBox movieId={movieId} menu="quote" currentUser={currentUser} /> : <InputBox movieId={movieId} menu="review" currentUser={currentUser}/>}
         </section>
     )
 }

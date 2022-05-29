@@ -1,5 +1,5 @@
 import { InputBox } from "./InputBox"
 
-export const ReviewInput = ({movieId} : any) => {
+export const ReviewList = ({movieId} : any) => {
     return <InputBox movieId={movieId} menu="review" />
 }

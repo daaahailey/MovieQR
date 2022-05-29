@@ -3,11 +3,14 @@
 import React, { useState } from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
+import { QuoteList } from "./QuoteList";
+import { ReviewList } from "./ReviewList";
 
 
-export const InputBox = ({ movieId, menu }:any) => {
+export const InputBox = ({ movieId, menu, currentUser }:any) => {
     const inputMenu = menu;
     const [initialValue, setInitialValue] = useState("");
+    const [ addedNewQuote, setAddedNewQuote ] = useState(false);
 
     // this creates a new quote or review
     const handleSubmit =  async (event:any) => {
@@ -27,13 +30,14 @@ export const InputBox = ({ movieId, menu }:any) => {
                     body: JSON.stringify({
                         movieId: movieId,
                         quote: initialValue,
+                        status: "create",
                     })
                 })
                 .then((response) => response.json())
                 .then((result) => {
-                    console.log(result)
                     console.log("success", result);
                     setInitialValue("");
+                    setAddedNewQuote(true);
                 })
                 .catch((error) => {
                     console.log("fail", error);
@@ -43,14 +47,18 @@ export const InputBox = ({ movieId, menu }:any) => {
                 console.log("review", initialValue);
             }
         }
+        setAddedNewQuote(false);
     }
 
+    console.log(addedNewQuote)
 
     return ( 
+        
         <section css={InputBoxContainer}>
-            {/* <section css={DisplayItems}>
-                display quotes or reviews here
-            </section> */}
+            { menu === "quote" ? 
+            <QuoteList movieId={movieId} currentUser={currentUser} addedNewQuote={addedNewQuote}/>
+            : <ReviewList movieId={movieId} />
+            }
             <form css={TextForm}>
                 <label css={InputLabel} htmlFor="textArea"></label>
                 <textarea 
