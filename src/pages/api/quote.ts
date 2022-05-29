@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { findMovieIdByUser, fetchMovieQuotes, updateQuotes, insertQuotes } from "../../../lib/db/hasura";
+import { findMovieIdByUser, fetchMovieQuotes, updateQuotes, insertQuotes, deleteQuotes } from "../../../lib/db/hasura";
 
 // get quotes from all user (but you cannot edit them because you don't have token. this is only to read them)
 export default async function quote(req:any, res:any) {
@@ -47,7 +47,16 @@ export default async function quote(req:any, res:any) {
                     const findMovie = await findMovieIdByUser(token, userId, movieId);
                     const quotesExist = findMovie?.length > 0;  // quote I wrote exist
 
-                    if(quotesExist && status === "edit") {
+                    if (quotesExist && status === "create") {
+                        // create a new quote
+                        const response = await insertQuotes(token, { 
+                            userId,
+                            movieId, 
+                            quote,
+                            userEmail,
+                        });
+                        res.send({ message: "it works", response });
+                    } else if(quotesExist && status === "edit") {
                         // if the quote is what current user wrote, update it
                         const response = await updateQuotes(token, { 
                             userId, 
@@ -57,16 +66,17 @@ export default async function quote(req:any, res:any) {
                             id,
                         });
                         res.send({ message: "it works", response });
-                    } else {
-                        // create a new quote
-                        const response = await insertQuotes(token, { 
+                    } else if(quotesExist && status === "delete") {
+                        // delete quote
+                        const response = await deleteQuotes(token, {
                             userId,
-                            movieId, 
-                            quote,
+                            movieId,
                             userEmail,
+                            id,
                         });
                         res.send({ message: "it works", response });
                     }
+
                 } else {
                     res.status(500).send({ message: "movieId is required" });
                 }

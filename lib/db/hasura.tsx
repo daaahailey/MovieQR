@@ -31,7 +31,7 @@ export async function updateQuotes (token:any, { userId, movieId, quote, id }:an
       _set: {quote: $quote}, 
       where: {
         userId: {_eq: $userId}, 
-        movieId: {_eq: $movieId}
+        movieId: {_eq: $movieId},
         id: {_eq: $id}
       }) {
         returning {
@@ -49,6 +49,27 @@ export async function updateQuotes (token:any, { userId, movieId, quote, id }:an
   return response;
 }
 
+
+// delete quote if that quote is written by current user signed in
+export async function deleteQuotes(token:any, { userId, movieId, id}:any ) {
+
+  const operationsDoc = `
+  mutation deleteQuotes($userId: String!, $movieId: String!, $id: Int!) {
+    delete_quotes(
+      where: {
+        movieId: {_eq: $movieId},
+        userId: {_eq: $userId},
+        id: {_eq: $id}
+      }) {
+      affected_rows
+    }
+  }
+`;  
+
+  const response = await queryHasuraGraphQL(operationsDoc, "deleteQuotes", { userId, movieId, id }, token);
+  return response;
+
+}
 
 
 // find movie and quote
