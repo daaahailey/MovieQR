@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { useRandomMovie } from "../hooks/useRandomMovie";
+import { usePopularMovies } from "../hooks/usePopularMovies";
 import { Error } from "./Error";
 import { PopularMovieCard } from "./PopularMovieCard";
 import { jsx, css } from '@emotion/react';
@@ -17,7 +17,7 @@ import { Pagination, Navigation } from "swiper";
 
 export const PopularMovies = () => {
     const baseURL = "https://api.themoviedb.org/3/movie/popular";
-    const {data, error} : any = useRandomMovie(baseURL);
+    const {data, error} : any = usePopularMovies(baseURL);
     let movieData;
 
     if (error) return <Error />
