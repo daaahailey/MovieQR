@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MOVIE_DETAIL_URL } from "../../constants";
 import Image from "next/image";
 import { jsx, css } from '@emotion/react';
@@ -10,56 +10,51 @@ import { Trailer } from "../../components/Trailer";
 import { BsPlayBtnFill } from "react-icons/bs";
 import { QuotesAndReviews } from "../../components/QuotesAndReviews";
 import { Cast } from "../../components/Cast";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
 import jwt from "jsonwebtoken";
 
-
-// Import Swiper styles
+// Swiper / Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 
-const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
-    // console.log("clicked movie card")
-    // console.log(movieCredits)
+
+const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
     interface JwtPayload {
         issuer: string;
         email: string;
     }
 
     const BASE_URL = "https://image.tmdb.org/t/p/original/"
-    const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } = movieData;
+    const { title, vote_average, runtime, release_date, genres, production_countries, overview, backdrop_path } =  movieData;
     const { cast } = movieCredits;
-    const movieId = movieData.id.toString();
     const genreArr:any = [];
     genres.map((genre:any) => genreArr.push(genre["name"]));
     const genreStr = genreArr.join(", ");
     const relDate = release_date.replace(/-/g, "/").split("/").reverse().join("/");
-    const [watchTrailer, setWatchTrailer] = useState(false);
+    const [ watchTrailer, setWatchTrailer ] = useState(false);
 
     let currentUser;
 
-    if(cookie) {
-        const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
+    if(token) {
+        const decodedToken = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
         currentUser = decodedToken.issuer;
     }
     
-
-
     const handleWatchTrailer = (isClicked: boolean) => {
-        setWatchTrailer(isClicked);
+        setWatchTrailer(true);
     }
-    // console.log(watchTrailer)
-
 
     return (
         <div css={Container}>
             <section css={MovieDetailContainer}>
                     <div css={ImageContainer}>
-                        <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={movieData.original_title} />
-                        <button css={WatchTrailerBtn} type="button" onClick={() => handleWatchTrailer(true)}><BsPlayBtnFill style={{marginRight: "10px"}} />Watch Trailer</button>     
+                        <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={title} />
+                        <button css={WatchTrailerBtn} type="button" onClick={() => handleWatchTrailer(true)}>
+                            <BsPlayBtnFill style={{marginRight: "10px"}} />Watch Trailer
+                        </button>    
                         {watchTrailer && <Trailer handleTrailer={setWatchTrailer} movieId={movieId} />}
                     </div>
                     <article css={ContentArticle}>
@@ -68,14 +63,7 @@ const MovieDetail = ({ movieData, movieCredits, cookie } :any) => {
                         <p css={InfoText}><span css={InfoTitle}>Runtime</span> {runtime} min</p>
                         <p css={InfoText}><span css={InfoTitle}>Release Date</span>{relDate}</p>
                         { genreStr ? <p css={InfoText}><span css={InfoTitle}>Genres</span> {genreStr}</p> : ""}
-                        {/* 
-                        { production_countries ?
-                            <p>production countries: 
-                                {production_countries.length > 1 ? production_countries.map((country:any)=> `${country["name"]} ` ) : production_countries[0]["name"]}
-                            </p> : <></>
-                        } */}
                         <p css={InfoText}><span css={InfoTitle}>Summary</span>{overview}</p>
-                        {/* <Cast fullCast={cast}/> */}
                         <h3 css={InfoTitle}>Cast</h3>
                         <Swiper
                             slidesPerView={1}
@@ -130,23 +118,20 @@ export const getServerSideProps = async (context:any) => {
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
-    // console.log(movieData)
 
     const cookies = context.req.headers.cookie;
-    let cookie;
+    let token = null;
 
     if(cookies) {
-        cookie = context.req.headers.cookie.split("token=")[1];
+        token = context.req.headers.cookie.split("token=")[1];
     }
-
-
-
 
     return {
         props: { 
+            movieId,
+            token,
             movieData,
-            movieCredits,
-            cookie,
+            movieCredits
         }
     }
 }

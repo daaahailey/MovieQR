@@ -12,12 +12,13 @@ export const InputBox = ({ movieId, menu, currentUser }:any) => {
     const [initialValue, setInitialValue] = useState("");
     const [ addedNewQuote, setAddedNewQuote ] = useState(false);
 
+
     // this creates a new quote or review
     const handleSubmit =  async (event:any) => {
         event.preventDefault();
 
         if(!initialValue) {
-            // if input is empty, show a message      
+            // if input is empty, show a message  !!! ****   
             console.log("Please write something.");
         } else if(initialValue) {
             if(inputMenu === "quote") {
@@ -50,7 +51,6 @@ export const InputBox = ({ movieId, menu, currentUser }:any) => {
         setAddedNewQuote(false);
     }
 
-    console.log(addedNewQuote)
 
     return ( 
         
