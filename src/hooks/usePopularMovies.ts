@@ -5,6 +5,6 @@ import { fetcher } from "../utils/fetcher";
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 // console.log(API_KEY);
 
-export const useRandomMovie = (baseURL : string) => {
+export const usePopularMovies = (baseURL : string) => {
     return useSWR(`${baseURL}?${API_KEY as string}`, fetcher);
 }
