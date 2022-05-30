@@ -1,15 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { useRandomMovie } from "../hooks/useRandomMovie";
+import { usePopularMovies } from "../hooks/usePopularMovies";
 import { Error } from "./Error";
 import { SearchBox } from "./SearchBox";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 
 export const SearchContainer = () => {
-
-    const baseURL = "https://api.themoviedb.org/3/movie/popular";
-    const {data, error} : any = useRandomMovie(baseURL);
+    
+    const {data, error} : any = usePopularMovies();
     let randomMovieUrl;  
 
     if(data) {

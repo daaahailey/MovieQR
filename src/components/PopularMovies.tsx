@@ -16,8 +16,8 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper";
 
 export const PopularMovies = () => {
-    const baseURL = "https://api.themoviedb.org/3/movie/popular";
-    const {data, error} : any = usePopularMovies(baseURL);
+    // const baseURL = "https://api.themoviedb.org/3/movie/popular";
+    const {data, error} : any = usePopularMovies();
     let movieData;
 
     if (error) return <Error />
