@@ -24,7 +24,7 @@ module.exports = {
         destination: `https://api.themoviedb.org/3/movie/popular?${process.env.NEXT_PUBLIC_API_KEY}`,
       },
       {
-        source: "/api/search-movies/:path*",
+        source: "/api/search-movies:path*",
         destination: `https://api.themoviedb.org/3/search/movie?${process.env.NEXT_PUBLIC_API_KEY}:path*`,
       },
       {
