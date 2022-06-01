@@ -113,11 +113,15 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
 
 
 export const getServerSideProps = async (context:any) => {
-    const movieId = context.params.id;
+    const params = context.params;
+    const movieId = params.id[1];
     const res = await fetch(`${MOVIE_DETAIL_URL}/${movieId}?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
+
+    // console.log(params)
+
 
     const cookies = context.req.headers.cookie;
     let token = null;
@@ -131,7 +135,7 @@ export const getServerSideProps = async (context:any) => {
             movieId,
             token,
             movieData,
-            movieCredits
+            movieCredits,
         }
     }
 }

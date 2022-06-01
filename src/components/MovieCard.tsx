@@ -15,11 +15,12 @@ const MovieCard = (movieData: MovieType) => {
     const BASE_URL = "https://image.tmdb.org/t/p/original"
     const item = movieData.movieData;
     const movieId = item.id;
+    const title = item.title;
     const router = useRouter();
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        router.push({pathname: `movie/${movieId}`})
+        router.push(`/movie/${title}/${movieId}`); 
     }
 
     const overviewEllipsis = () => {

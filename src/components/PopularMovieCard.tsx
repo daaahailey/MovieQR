@@ -7,19 +7,19 @@ import { Common } from "../styles/common";
 
 export const PopularMovieCard = (movieItems : any) => {
 
-    const { poster_path, id} = movieItems.movieItems;
+    const { poster_path, id, title} = movieItems.movieItems;
     const BASE_URL = "https://image.tmdb.org/t/p/original";
     const router = useRouter();
     const movie = movieItems.movieItems;
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        router.push({pathname: `movie/${id}`})
+        router.push(`/movie/${title}/${id}`);
     }
 
     return (
         <article css={PopularMovieCardItem}  onClick={handleClick}> 
-            { movie["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${movie.title}`} width={200} height={300} />
-            : <Image src={`${BASE_URL}${poster_path}`} alt={`${movie.title}`} width={200} height={300} /> }
+            { movie["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${title}`} width={200} height={300} />
+            : <Image src={`${BASE_URL}${poster_path}`} alt={`${title}`} width={200} height={300} /> }
         </article>
     )
 }
