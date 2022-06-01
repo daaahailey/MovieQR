@@ -6,12 +6,12 @@ import MovieCard from "./MovieCard";
 
 
 export const Movies = ({title}: any) => {
+    // console.log(title)
     let searchQuery;
-    title === "" ? searchQuery = "" : searchQuery = `${title}`;
-
-    const { data, error }: any = useData("/api/search-movies", searchQuery);
+    title === "" ? searchQuery = "" : searchQuery = title;
+    const { data, error }: any = useData(searchQuery);
     let receivedData;
-    
+
     if (error) return <Error/>
     if(data) {
         receivedData = data.results;
