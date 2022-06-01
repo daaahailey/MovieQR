@@ -25,10 +25,10 @@ module.exports = {
       },
       {
         source: "/api/search-movies:path*",
-        destination: `https://api.themoviedb.org/3/search/movie?${process.env.NEXT_PUBLIC_API_KEY}:path*`,
+        destination: `https://api.themoviedb.org/3/search/movie?${process.env.NEXT_PUBLIC_API_KEY}&query=:path*`,
       },
       {
-        source: "/api/trailer/:path*",
+        source: "/api/trailer/:path*",          
         destination: `https://api.themoviedb.org/3/movie/:path*?${process.env.NEXT_PUBLIC_API_KEY}`,
       },
     ]
