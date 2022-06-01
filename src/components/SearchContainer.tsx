@@ -7,8 +7,7 @@ import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 
 export const SearchContainer = () => {
-    
-    const {data, error} : any = usePopularMovies();
+    const { data, error } : any = usePopularMovies("/api/popular-movies");
     let randomMovieUrl;  
 
     if(data) {

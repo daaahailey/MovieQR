@@ -9,7 +9,7 @@ import { Common } from "../styles/common";
 
 
 export const Trailer = (props:any) => {
-    const { data, error } = useMovieTrailer(props.movieId);
+    const { data, error } = useMovieTrailer("/api/trailer", props.movieId);
     let movieKey;
 
     if(data) {

@@ -8,7 +8,8 @@ import MovieCard from "./MovieCard";
 export const Movies = ({title}: any) => {
     let searchQuery;
     title === "" ? searchQuery = "" : searchQuery = `&query=${title}`;
-    const { data, error }: any = useData(searchQuery);
+
+    const { data, error }: any = useData("/api/search-movies", searchQuery);
     let receivedData;
     
     if (error) return <Error/>
