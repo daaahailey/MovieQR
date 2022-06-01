@@ -5,21 +5,30 @@ import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import { QuoteList } from "./QuoteList";
 import { ReviewList } from "./ReviewList";
+import { useRouter } from 'next/router'
 
 
-export const InputBox = ({ movieId, menu, currentUser }:any) => {
+export const InputBox = ({ movieId, menu, currentUser, token }:any) => {
     const inputMenu = menu;
     const [initialValue, setInitialValue] = useState("");
     const [ addedNewQuote, setAddedNewQuote ] = useState(false);
+    const [ userNotSignedIn, setUserNotSignedIn ] =useState(false);
+    const [ inputEmptyMessage, setInputEmptyMessage ] = useState(false);
+    const router = useRouter()
 
 
     // this creates a new quote or review
     const handleSubmit =  async (event:any) => {
         event.preventDefault();
-
         if(!initialValue) {
-            // if input is empty, show a message  !!! ****   
-            console.log("Please write something.");
+            // if input is empty, display a message     
+            if(!token) {
+                // if user hasn't signed in, display message that user have to sign in first
+                setUserNotSignedIn(true);
+            } else if(token) {
+                // if user has signed in, display message that user have to write something
+                setInputEmptyMessage(true);
+            }
         } else if(initialValue) {
             if(inputMenu === "quote") {
                 // if user selected quote, add quote
@@ -34,7 +43,13 @@ export const InputBox = ({ movieId, menu, currentUser }:any) => {
                         status: "create",
                     })
                 })
-                .then((response) => response.json())
+                .then((response) => {
+                    response.json();
+                    if(response.status === 403) {
+                        // no token
+                        setUserNotSignedIn(true);
+                    };
+                })
                 .then((result) => {
                     console.log("success", result);
                     setInitialValue("");
@@ -43,13 +58,26 @@ export const InputBox = ({ movieId, menu, currentUser }:any) => {
                 .catch((error) => {
                     console.log("fail", error);
                 })
-                // console.log("data", await response.json());
             } else if(inputMenu === "review") {
                 console.log("review", initialValue);
             }
         }
         setAddedNewQuote(false);
     }
+
+
+    const handleOkayBtn = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        setUserNotSignedIn(false);
+        setInputEmptyMessage(false);
+    }
+
+    const handleSignIn = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        setUserNotSignedIn(false);
+        router.push("/login");
+    }
+
 
 
     return ( 
@@ -73,7 +101,32 @@ export const InputBox = ({ movieId, menu, currentUser }:any) => {
                     >{initialValue}</textarea>
                 <input css={SubmitBtn} type="submit" value={`${inputMenu === "quote" ? "Add Quote" : "Add Review"}`} onClick={handleSubmit}/>
             </form>
+
+            { userNotSignedIn &&
+                <>
+                    <div css={Modal}>
+                        <p>Please sign in to if you would like to write something!</p>
+                        <div css={Buttons}>                 
+                            <input css={Button} type="button" value="Okay" onClick={handleOkayBtn}/>
+                            <input css={Button} type="button" value="Sign In" onClick={handleSignIn}/>
+                        </div>
+                    </div>
+                    <div css={ModalLayer}></div>
+                </>
+            }
+            { inputEmptyMessage &&
+                <>
+                    <div css={Modal}>
+                        <p>Please write something!</p>
+                        <div css={Buttons}>
+                            <input css={Button} type="button" value="Okay" onClick={handleOkayBtn}/>
+                        </div>
+                    </div>
+                    <div css={ModalLayer}></div>
+                </>
+            }
         </section>
+
     )
 }
 
@@ -117,5 +170,43 @@ const SubmitBtn = css`
     border: none;
     box-sizing: border-box;
     padding: 1rem;
+`
 
+const Modal = css`
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 10%;
+    z-index: 50;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
+`
+
+const ModalLayer = css`
+    position: fixed;
+    background-color: black;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    opacity: 0.7;
+`
+
+const Buttons = css`
+    margin: 0 auto;
+    margin-top: 1.4rem;
+`
+
+const Button = css`
+width: 6rem;
+margin: 0.25rem;
+padding: 0.25rem;
 `
