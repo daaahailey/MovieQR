@@ -4,7 +4,7 @@ import React, { useState, createContext, useContext, ReactNode } from "react";
 type authContextType = {
     user: string;
     isLoggedIn: boolean;
-    login: (user) => void;
+    login: (user:any) => void;
     logout: () => void;
 }
 
@@ -12,7 +12,7 @@ type authContextType = {
 const authContextDefaultValue:authContextType = {
     user: "",
     isLoggedIn: false,
-    login: (user:"") => {},
+    login: (user) => {},
     logout: () => {},
 }
 
