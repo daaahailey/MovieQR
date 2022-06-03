@@ -7,22 +7,24 @@ import Link from "next/link";
 import Image from 'next/image'
 import { useRouter } from 'next/router';
 import { magic } from "../../../lib/magic-client";
+import { useAuth } from "../../../context/AuthContext";
 
 export const Navigation = () => {
     const [signedUser, setSignedUser] = useState(""); // get user email
     const [ didToken, setDidToken] = useState("");
     const router = useRouter();
+    const { user, isLoggedIn, login, logout } = useAuth(); // to display user email faster when user sign in
 
     useEffect( () => {
         // Assumes a user is already logged in
         const fetchData = async () => {
             try {
-                const { email, issuer } = await magic.user.getMetadata();
+                const { email } = await magic.user.getMetadata();
                 const userDidToken = await magic.user.getIdToken();    
                 if(email) {
-                    // console.log("email:", email, "issuer:", issuer)
-                    setDidToken(userDidToken);
+                    login(email);
                     setSignedUser(email);
+                    setDidToken(userDidToken);
                 }
             } catch(error) {
                 // Handle errors if required!
@@ -30,7 +32,7 @@ export const Navigation = () => {
             }
         }
         fetchData();
-    }, [router]);
+    }, [router, login]);
 
 
     const handleSignOut = async(e:any) => {
@@ -49,8 +51,7 @@ export const Navigation = () => {
             console.error("Error signing out", error);
             router.push("/login");
         }
-        setSignedUser("");
-        setDidToken("");
+        logout();
     }
 
     return (
@@ -72,13 +73,13 @@ export const Navigation = () => {
             {/* area where there's sign in or sign out button  */}
             <ul css={MenuSection}>
                 {/* display email address of signed user (if user has signed in) */}
-                { signedUser ?
-                    <li css={List}>{signedUser}</li> 
+                { isLoggedIn ?
+                    <li css={List}>{user}</li> 
                     : null
                 }
                 <li css={List}>
                 {
-                    signedUser? 
+                    isLoggedIn ? 
                     <Link href="/login">
                         <a onClick={handleSignOut}>Sign Out</a>
                     </Link> : 

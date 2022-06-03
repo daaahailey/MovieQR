@@ -6,12 +6,14 @@ import { useRouter } from 'next/router';
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import { magic } from '../../lib/magic-client';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
     const [userMessage, setUserMessage] = useState("");
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const { user, isLoggedIn, login, logout } = useAuth();
 
     const handleEmailInput = (event:any) => {
         event.preventDefault();
@@ -33,7 +35,7 @@ const Login = () => {
                 // log in a user by their email
                 try {
                     const didToken = await magic.auth.loginWithMagicLink({ email, });
-                    console.log({ didToken });
+                    // console.log({ didToken });
                     if(didToken) {
                         const response = await fetch("/api/login", {
                             method: "POST",
@@ -45,9 +47,10 @@ const Login = () => {
                         
                         const loggedInResponse = await response.json();
                         if(loggedInResponse.done) {
-                            console.log({loggedInResponse});
+                            // console.log({loggedInResponse});
                             router.push("/");
                             setIsLoading(false);
+                            login(email);
                         } else {
                             setIsLoading(false);
                             setUserMessage("Something went wrong logging in")
@@ -79,7 +82,7 @@ const Login = () => {
                         <h1 css={SignInText}>Sign In</h1>
                         <input css={EmailInput} type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
                         <p>{userMessage}</p>
-                        <button css={SignInButton} onClick={(handleLogin)}>
+                        <button css={SignInButton} onClick={handleLogin}>
                             {isLoading? "Loading..." : "Sign In"}
                         </button>
                     </section>
