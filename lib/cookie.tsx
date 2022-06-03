@@ -11,7 +11,7 @@ export const setTokenCookie = (token:any, res:any) => {
     res.setHeader("Set-Cookie", setCookie);
 }
 
-export const removeTokenCookie = (res) => {
+export const removeTokenCookie = (res:any) => {
     const savedCookie = cookie.serialize("token", "", {  // give empty value for cookie(token) because it's to delete
         maxAge: -1, // it makes there's no time left 
         path: "/",
