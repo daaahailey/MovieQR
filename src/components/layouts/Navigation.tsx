@@ -9,7 +9,8 @@ import { useRouter } from 'next/router';
 import { magic } from "../../../lib/magic-client";
 
 export const Navigation = () => {
-    const [userName, setUserName] = useState("");
+    const [signedUser, setSignedUser] = useState(""); // get user email
+    const [ didToken, setDidToken] = useState("");
     const router = useRouter();
 
     useEffect( () => {
@@ -17,31 +18,39 @@ export const Navigation = () => {
         const fetchData = async () => {
             try {
                 const { email, issuer } = await magic.user.getMetadata();
-                const didToken = await magic.user.getIdToken();
-                // console.log({ didToken });
+                const userDidToken = await magic.user.getIdToken();    
                 if(email) {
-                    setUserName(email)
+                    // console.log("email:", email, "issuer:", issuer)
+                    setDidToken(userDidToken);
+                    setSignedUser(email);
                 }
             } catch(error) {
-            // Handle errors if required!
+                // Handle errors if required!
                 console.log(error);
             }
         }
         fetchData();
     }, [router]);
 
+
     const handleSignOut = async(e:any) => {
         e.preventDefault();
-        try {  
-            await magic.user.logout();
-            console.log(await magic.user.isLoggedIn()); // console.log "false" when it log out
-            setUserName("");
-            router.push("/");
-            } catch(error) {
-            // Handle errors if required!
-            console.log(error);
-            router.push("/");
-            }
+
+        try {
+            const response = await fetch("/api/logout", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${didToken}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            const res = await response.json();
+        } catch(error) {
+            console.error("Error signing out", error);
+            router.push("/login");
+        }
+        setSignedUser("");
+        setDidToken("");
     }
 
     return (
@@ -59,15 +68,17 @@ export const Navigation = () => {
                 <li css={List}>Suggestions</li>
                 <li css={List}>Reviews</li>
             </ul>
+
+            {/* area where there's sign in or sign out button  */}
             <ul css={MenuSection}>
-                <li css={List}>
-                    <Link href="/login">
-                        <a>{userName}</a>
-                    </Link>
-                </li>
+                {/* display email address of signed user (if user has signed in) */}
+                { signedUser ?
+                    <li css={List}>{signedUser}</li> 
+                    : null
+                }
                 <li css={List}>
                 {
-                    userName? 
+                    signedUser? 
                     <Link href="/login">
                         <a onClick={handleSignOut}>Sign Out</a>
                     </Link> : 
