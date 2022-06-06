@@ -47,7 +47,7 @@ export default async function quote(req:any, res:any) {
                     const findMovie = await findMovieIdByUser(token, userId, movieId);
                     const quotesExist = findMovie?.length > 0;  // quote I wrote exist
 
-                    if (quotesExist && status === "create") {
+                    if (status === "create") {
                         // create a new quote
                         const response = await insertQuotes(token, { 
                             userId,
