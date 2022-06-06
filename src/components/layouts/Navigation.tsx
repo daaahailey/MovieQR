@@ -16,12 +16,8 @@ export const Navigation = () => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [didToken, setDidToken] = useState("");
     const [userEmail, setUserEmail] = useState("");
-    const { login, cookie, saveCookie, logout } = useAuth();  // to display user email faster when user sign in
+    const { cookie, logout } = useAuth();  // to display user email faster when user sign in
     const router = useRouter();
-
-    console.log(loggedIn, "logged in")
-    console.log(userEmail, "~user email~")
-    // console.log(cookie, "~cookie~")
 
     interface JwtPayload {
         issuer: string;
