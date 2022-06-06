@@ -4,6 +4,7 @@ export const Common = {
         backgroundBlack: "#000000",
         backgroundGray: "#141010",
         point: "#f70776",
+        pointDark: "#ac0a52",
         text: "#ffffff",
     },
     fontSize: {
