@@ -2,8 +2,21 @@ import type { NextPage } from 'next';
 import Head from 'next/head'
 import { SearchContainer } from '../components/SearchContainer';
 import { PopularMovies } from '../components/PopularMovies';
+import { useAuth } from '../../context/AuthContext';
+import { useEffect } from 'react';
 
-const Home: NextPage = () => {
+const Home: NextPage = (token:any) => {
+  const { login, saveCookie } = useAuth();
+  const userToken = token.token;
+  // console.log(userToken)
+
+  useEffect(() => {
+    if(token) {
+      saveCookie(userToken)
+    } else if(!token) {
+      saveCookie("");
+    }
+  })
 
   return (
     <>
@@ -22,3 +35,16 @@ const Home: NextPage = () => {
 
 export default Home;
 
+export async function getServerSideProps(context:any) {
+  const cookies = context.req.headers.cookie;
+  let token = null;
+
+  if(cookies) {
+    token = cookies.split("token=")[1];
+  }
+  return {
+    props: {
+      token,
+    }
+  }
+} 
