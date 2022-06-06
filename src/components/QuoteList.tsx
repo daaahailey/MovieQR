@@ -3,11 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
-import { useQuotes } from "../hooks/useQuotes";
+import { Loading } from "./Loading";
+import useSWR, { useSWRConfig } from "swr";
+import { fetcher } from "../utils/fetcher";
 
-export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
 
-    const [ quoteData, setQuoteData ] = useState([]); 
+export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) => {
+
+    const [ quoteData, setQuoteData ] = useState([]);
     const [ editClicked, setEditClicked ] = useState(false);
     const [ updatedQuote, setUpdatedQuote ] = useState(""); 
     const [ deleteClicked, setDeleteClicked ] = useState(false);
@@ -16,32 +19,23 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
     const [ postId, setPostId ] = useState("");
 
     // this renders all quotes
-    async function fetchData() { 
-        const response = await fetch(`/api/quote?movieId=${movieId}`, {
-            method: "GET",
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            if(result.length > 0) {
-                // console.log(result);
-                setQuoteData(result);
-            } else if(result.length === 0) {
-                console.log("there isn't any quote added yet");
-            }
-        })
-    }
-
+    const { data, error } = useSWR(`/api/quote?movieId=${movieId}`, fetcher);
+    const { mutate } = useSWRConfig();
     
-    useEffect(() => { 
-        fetchData();
-    }, []);
+    useEffect(() => {
+        if(data) {
+            setQuoteData(data);
+        } else if(!data) {
+            setQuoteData([]);
+        }
+    }, [data, setQuoteData, mutate])
 
 
     if(addedNewQuote === true) {
+        console.log(addedNewQuote)
         // if new quote gets added, fetch data again
-        fetchData();
+        mutate(`/api/quote?movieId=${movieId}`);
     }
-
 
 
     const handleEdit = (event:React.MouseEvent<HTMLElement>) => {
@@ -81,7 +75,7 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
             console.log("success", result);
             setUpdatedQuote("");
             setDeleteClicked(false);
-            fetchData(); 
+            mutate(`/api/quote?movieId=${movieId}`);
         })
         .catch((error) => {
             console.log("fail", error);
@@ -114,7 +108,7 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
                 setUpdatedQuote("");
                 setEditClicked(false);
                 setIsQuoteEmpty(false);
-                fetchData();
+                mutate(`/api/quote?movieId=${movieId}`);
             })
             .catch((error) => {
                 console.log("fail", error);
@@ -141,12 +135,12 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
     return (
         <div>
             <ul css={QuotesItemsContainer}>
-                { quoteData && quoteData.map((item:any) => {
+            { !data ? <Loading /> :
+                    quoteData.length > 0 ? quoteData.map((item:any) => {
                     const email = item.userEmail.split("@");
                     const userNickname = email[0];
-
                     if(currentUser && item.userId === currentUser) {
-                        //if it's written by current user, add edit & delete button       
+                        //if it's written by current user singed in, add edit & delete button       
                         return (    
                             <li key={item.id} css={QuoteItem}>
                                 <div css={QuoteText}>
@@ -167,8 +161,13 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
                                     <p>{item.quote}</p>
                             </li> 
                         )
-                    }
-                })}
+                    } 
+                }) : 
+                <li css={DefaultMessage}>
+                    <p>There isn&apos;t any quote added yet.</p>
+                    <p>Be the first one to leave a quote from <strong css={StrongText}>{title}</strong>.</p>
+                </li>
+                }
                 {editClicked && 
                     <>
                         <div css={Modal}>
@@ -222,13 +221,15 @@ const QuotesItemsContainer = css`
 `
 
 const QuoteItem = css`
-    margin: 0.5rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    line-height: 2.25rem;
+
 `
 const QuoteItemOther = css`
     display: flex;
+    line-height: 2.25rem;
 `
 
 const QuoteText = css`
@@ -252,6 +253,16 @@ const SmallBtn = css`
         background-color: ${Common.colors.pointDark};
     }
 `
+
+const DefaultMessage = css`
+    p {
+        line-height: 1.4rem;
+    }
+`
+const StrongText = css`
+    font-weight: ${Common.fontWeight.bold};
+`
+
 
 
 const Modal = css`

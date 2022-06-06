@@ -105,7 +105,7 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                             </ul>
                         </Swiper>
                     </article>     
-                    <QuotesAndReviews movieId={movieId} currentUser={currentUser} token={token}/> 
+                    <QuotesAndReviews movieId={movieId} title={title} currentUser={currentUser} token={token} /> 
             </section>
         </div>
     )

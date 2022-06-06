@@ -6,7 +6,7 @@ import { Common } from "../styles/common";
 import { InputBox } from "./InputBox";
 
 
-export const QuotesAndReviews = ({ movieId, currentUser, token }:any) => {
+export const QuotesAndReviews = ({ movieId, title, currentUser, token }:any) => {
     const [menu, setMenu] = useState("quote");
 
     const handleMenuSelect = (event:any) => {
@@ -23,7 +23,7 @@ export const QuotesAndReviews = ({ movieId, currentUser, token }:any) => {
                 <label css={MenuItem} htmlFor="review" className={`${menu === "review" ? "boxOn" : ""}`}>Review</label>
                 <input type="radio" id="review" name="menu" className="hidden" onChange={handleMenuSelect} value="review" />
             </div> 
-            <InputBox movieId={movieId} menu={`${menu === "quote" ? "quote" : "review"}`} currentUser={currentUser} token={token}/>
+            <InputBox movieId={movieId} menu={`${menu === "quote" ? "quote" : "review"}`} title={title} currentUser={currentUser} token={token}/>
         </section>
     )
 }

@@ -8,7 +8,7 @@ import { ReviewList } from "./ReviewList";
 import { useRouter } from 'next/router'
 
 
-export const InputBox = ({ movieId, menu, currentUser, token }:any) => {
+export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
     const inputMenu = menu;
     const [initialValue, setInitialValue] = useState("");
     const [ addedNewQuote, setAddedNewQuote ] = useState(false);
@@ -84,7 +84,7 @@ export const InputBox = ({ movieId, menu, currentUser, token }:any) => {
         
         <section css={InputBoxContainer}>
             { menu === "quote" ? 
-            <QuoteList movieId={movieId} currentUser={currentUser} addedNewQuote={addedNewQuote}/>
+            <QuoteList movieId={movieId} title={title} currentUser={currentUser} addedNewQuote={addedNewQuote}/>
             : <ReviewList movieId={movieId} />
             }
             <form css={TextForm}>
@@ -165,11 +165,15 @@ const SubmitBtn = css`
     width: 100%;
     font-weight: ${Common.fontWeight.medium};
     color: ${Common.colors.text};
-    background-color: ${Common.colors.point};
+    background-color: ${Common.colors.pointDark};
     font-size: ${Common.fontSize.medium};
     border: none;
     box-sizing: border-box;
     padding: 1rem;
+    cursor: pointer;
+    &:hover {
+        background-color: ${Common.colors.point};
+    }
 `
 
 const Modal = css`
