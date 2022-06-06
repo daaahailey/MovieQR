@@ -1,38 +1,67 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useState, useEffect } from "react";
-import { jsx, css } from '@emotion/react';
+import { jsx, css } from "@emotion/react";
 import { Common } from "../../styles/common";
 import Link from "next/link";
-import Image from 'next/image'
-import { useRouter } from 'next/router';
+import Image from "next/image"
+import { useRouter } from "next/router";
 import { magic } from "../../../lib/magic-client";
 import { useAuth } from "../../../context/AuthContext";
+import jwt from "jsonwebtoken";
+// import login from "../../pages/api/login";
 
 export const Navigation = () => {
-    const [signedUser, setSignedUser] = useState(""); // get user email
-    const [ didToken, setDidToken] = useState("");
-    const router = useRouter();
-    const { user, isLoggedIn, login, logout } = useAuth(); // to display user email faster when user sign in
 
-    useEffect( () => {
-        // Assumes a user is already logged in
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [didToken, setDidToken] = useState("");
+    const [userEmail, setUserEmail] = useState("");
+    const { login, cookie, saveCookie, logout } = useAuth();  // to display user email faster when user sign in
+    const router = useRouter();
+
+    console.log(loggedIn, "logged in")
+    console.log(userEmail, "~user email~")
+    // console.log(cookie, "~cookie~")
+
+    interface JwtPayload {
+        issuer: string;
+        email: string;
+    }
+
+    useEffect(() => {
+        if(cookie) {
+            const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;  
+            const email = decodedToken.email;
+            setUserEmail(email);
+            setLoggedIn(true)
+        }
+    },[cookie])
+
+
+    useEffect(() => {
         const fetchData = async () => {
-            try {
-                const { email } = await magic.user.getMetadata();
-                const userDidToken = await magic.user.getIdToken();    
-                if(email) {
-                    login(email);
-                    setSignedUser(email);
-                    setDidToken(userDidToken);
+            const isLoggedIn = await magic.user.isLoggedIn();
+            if(isLoggedIn) {
+                try {
+                    // Assumes a user is already logged in
+                    const { email } = await magic.user.getMetadata();
+                    const userDidToken = await magic.user.getIdToken();    
+                    if(email) {
+                        setUserEmail(email);
+                        setDidToken(userDidToken);
+                        setLoggedIn(true);
+                    }
+                } catch(error) {
+                    console.log(error)
                 }
-            } catch(error) {
-                // Handle errors if required!
-                console.log(error);
+            } 
+            else if(!isLoggedIn) {
+                setLoggedIn(false);
+                setUserEmail("");
             }
         }
         fetchData();
-    }, [router, login]);
+    },[])
 
 
     const handleSignOut = async(e:any) => {
@@ -46,12 +75,16 @@ export const Navigation = () => {
                     "Content-Type": "application/json",
                 },
             });
-            const res = await response.json();
+            const res = await response.text();
+
         } catch(error) {
             console.error("Error signing out", error);
             router.push("/login");
         }
         logout();
+        router.push("/login");
+        setUserEmail("");
+        setLoggedIn(false);
     }
 
     return (
@@ -73,13 +106,13 @@ export const Navigation = () => {
             {/* area where there's sign in or sign out button  */}
             <ul css={MenuSection}>
                 {/* display email address of signed user (if user has signed in) */}
-                { isLoggedIn ?
-                    <li css={List}>{user}</li> 
-                    : null
+                { loggedIn ?
+                    <li css={List}>{userEmail}</li> 
+                    : ""
                 }
                 <li css={List}>
                 {
-                    isLoggedIn ? 
+                    loggedIn ? 
                     <Link href="/login">
                         <a onClick={handleSignOut}>Sign Out</a>
                     </Link> : 
