@@ -1,7 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, css } from '@emotion/react';
 import React, { useEffect, useState } from "react";
+import { jsx, css } from '@emotion/react';
+import { Common } from "../styles/common";
+import { useQuotes } from "../hooks/useQuotes";
 
 export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
 
@@ -12,7 +14,6 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
     const [ status, setStatus ] = useState("");
     const [ isQuoteEmpty, setIsQuoteEmpty ] = useState(false);
     const [ postId, setPostId ] = useState("");
-
 
     // this renders all quotes
     async function fetchData() { 
@@ -139,7 +140,7 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
 
     return (
         <div>
-            <ul>
+            <ul css={QuotesItemsContainer}>
                 { quoteData && quoteData.map((item:any) => {
                     const email = item.userEmail.split("@");
                     const userNickname = email[0];
@@ -147,19 +148,23 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
                     if(currentUser && item.userId === currentUser) {
                         //if it's written by current user, add edit & delete button       
                         return (    
-                            <li key={item.id}>
-                                <span>{userNickname}</span>
-                                {item.quote}
-                                <button type="button" onClick={handleEdit} value={item.id}>Edit</button>
-                                <button type="button" onClick={handleDelete} value={item.id}>Delete</button>
+                            <li key={item.id} css={QuoteItem}>
+                                <div css={QuoteText}>
+                                    <p css={UserName}>{userNickname}</p>
+                                    <p>{item.quote}</p>
+                                </div>                          
+                                <div>
+                                    <button css={SmallBtn} type="button" onClick={handleEdit} value={item.id}>Edit</button>
+                                    <button css={SmallBtn} type="button" onClick={handleDelete} value={item.id}>Delete</button>
+                                </div>                             
                             </li>
                         )
 
                     } else if(item.userId !== currentUser || !currentUser) {
                         return (
-                            <li key={item.id}>
-                                    <span>{userNickname}</span>
-                                    {item.quote}
+                            <li key={item.id} css={QuoteItemOther}>
+                                    <p css={UserName}>{userNickname}</p>
+                                    <p>{item.quote}</p>
                             </li> 
                         )
                     }
@@ -169,9 +174,9 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
                         <div css={Modal}>
                             { isQuoteEmpty ? 
                                 !updatedQuote ? 
-                                    <p css={[MessageOnEditModal, MessageRed ]}>Please write quote to update.</p>
-                                    : <p css={MessageOnEditModal}>Edit my quote</p>
-                                : <p css={MessageOnEditModal}>Edit my quote</p>
+                                    <p css={[MessageOnModal, MessageRed ]}>Please write quote to update.</p>
+                                    : <p css={MessageOnModal}>Edit my quote</p>
+                                : <p css={MessageOnModal}>Edit my quote</p>
                             }
                             <form css={EditForm}>
                                 <label htmlFor="textArea"></label>
@@ -196,7 +201,7 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
                 { deleteClicked &&
                     <>
                         <div css={Modal}>
-                            <p>Are you sure you want to delete this quote?</p>
+                            <p css={MessageOnModal}>Are you sure you want to delete this quote?</p>
                             <div css={Buttons}>
                                 <input css={Button} type="submit" value="Delete Quote" onClick={handleDeleteQuote}/>
                                 <input css={Button} type="submit" value="Cancel" onClick={handleCancel}/>
@@ -212,6 +217,42 @@ export const QuoteList = ({ movieId, currentUser, addedNewQuote }:any) => {
 }
 
 
+const QuotesItemsContainer = css`
+    margin-bottom: 2rem;
+`
+
+const QuoteItem = css`
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`
+const QuoteItemOther = css`
+    display: flex;
+`
+
+const QuoteText = css`
+    display: flex;
+`
+
+const UserName = css`
+    margin-right: 1rem;
+    width: 8rem;
+`
+
+const SmallBtn = css`
+    border: none;
+    padding: 0.3rem 0.5rem;
+    margin-left: 0.4rem;
+    border-radius: 6px;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+    &: hover {
+        background-color: ${Common.colors.pointDark};
+    }
+`
+
 
 const Modal = css`
     position: absolute;
@@ -222,18 +263,21 @@ const Modal = css`
     height: 10%;
     z-index: 50;
     background-color: white;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: black;
+    border-radius: 10px;
 `
-const MessageOnEditModal = css`
-    margin-bottom: 1.2rem;
+const MessageOnModal = css`
+    margin: 0.5rem 0;
+    font-size: ${Common.fontSize.basic};
+    font-weight: ${Common.fontWeight.medium};
+
 `
 const MessageRed = css`
-    color: red;
+    color: ${Common.colors.point};
 `
 
 const ModalLayer = css`
@@ -259,7 +303,18 @@ const Buttons = css`
 `
 
 const Button = css`
-width: 6rem;
-margin: 0.25rem;
-padding: 0.25rem;
+    width: 8rem;
+    margin: 0.25rem;
+    padding: 0.25rem;
+    color: ${Common.colors.text};
+    background-color: ${Common.colors.backgroundBlack};
+    padding: 0.6rem 0.4rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: ${Common.fontWeight.bold};
+    font-size: ${Common.fontSize.basic};
+    cursor: pointer;
+    &:hover {
+        background-color: ${Common.colors.point};
+    }
 `
