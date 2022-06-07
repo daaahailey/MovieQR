@@ -13,7 +13,7 @@ export default async function logout(req:any, res:any) {
     try {
         if(!token) {
             // if there is no token (user not signed in)
-            return res.status(401).json({ message: "User has not signed in! "});
+            return res.status(401).json({ message: "User has not signed in"});
         }
         const decodedToken = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;  
         const currentUser = decodedToken.issuer;
@@ -29,6 +29,6 @@ export default async function logout(req:any, res:any) {
         res.end(); // ending response 
     } catch(error) {
         console.log({error});
-        res.status(401).json({ message: "User has not signed in!" })
+        res.status(401).json({ message: "User has not signed in" })
     }
 }

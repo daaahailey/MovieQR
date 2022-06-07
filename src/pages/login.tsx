@@ -6,14 +6,12 @@ import { useRouter } from 'next/router';
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import { magic } from '../../lib/magic-client';
-import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
     const [userMessage, setUserMessage] = useState("");
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const { user, isLoggedIn, login, logout } = useAuth();
 
     const handleEmailInput = (event:any) => {
         event.preventDefault();
@@ -50,25 +48,28 @@ const Login = () => {
                             // console.log({loggedInResponse});
                             router.push("/");
                             setIsLoading(false);
-                            login(email);
                         } else {
                             setIsLoading(false);
                             setUserMessage("Something went wrong logging in")
                         }
                     }
+                    console.log("login done") 
                 } catch(error) {
                     // Handle errors if required!
                     console.log("Something went wrong", error);
                     setEmail("");
                     setIsLoading(false);
-                }    
+                }   
+                
             } else {
                 setUserMessage("Enter a valid email address")
                 setEmail("");
+                setIsLoading(false);
             }
         } else {
             setUserMessage("Enter a valid email address")
             setEmail("");
+            setIsLoading(false);
         }
     }
 

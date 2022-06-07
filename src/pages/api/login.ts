@@ -8,12 +8,10 @@ export default async function login(req :any , res :any) {
         try {
             const auth = req.headers.authorization;
             const didToken = auth ? auth.substr(7) : "";
-            // console.log({didToken});
-            
+
             // invoke magic 
             // Retrieves user information by DID token
             const metadata = await magicAdmin.users.getMetadataByToken(didToken);
-            // console.log({ metadata });
 
             // create jwt
             const token = jwt.sign({
