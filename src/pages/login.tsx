@@ -32,25 +32,27 @@ const Login = () => {
                 setIsLoading(true);
                 // log in a user by their email
                 try {
-                    const didToken = await magic.auth.loginWithMagicLink({ email, });
-                    // console.log({ didToken });
-                    if(didToken) {
-                        const response = await fetch("/api/login", {
-                            method: "POST",
-                            headers : {
-                                Authorization: `Bearer ${didToken}`,
-                                "Content-type": "application/json",
+                    if(magic) {
+                        const didToken = await magic.auth.loginWithMagicLink({ email, });
+                        // console.log({ didToken });
+                        if(didToken) {
+                            const response = await fetch("/api/login", {
+                                method: "POST",
+                                headers : {
+                                    Authorization: `Bearer ${didToken}`,
+                                    "Content-type": "application/json",
+                                }
+                            })
+                            
+                            const loggedInResponse = await response.json();
+                            if(loggedInResponse.done) {
+                                // console.log({loggedInResponse});
+                                router.push("/");
+                                setIsLoading(false);
+                            } else {
+                                setIsLoading(false);
+                                setUserMessage("Something went wrong logging in")
                             }
-                        })
-                        
-                        const loggedInResponse = await response.json();
-                        if(loggedInResponse.done) {
-                            // console.log({loggedInResponse});
-                            router.push("/");
-                            setIsLoading(false);
-                        } else {
-                            setIsLoading(false);
-                            setUserMessage("Something went wrong logging in")
                         }
                     }
                     console.log("login done") 
