@@ -6,9 +6,32 @@ import { Common } from "../../styles/common";
 import Link from "next/link";
 import Image from "next/image"
 import { SignInOut } from "../SignInOut";
+import { HamburgerMenu } from "../HamburgerMenu";
 
 
 export const Navigation = () => {
+
+    const [ isMobile, setIsMobile ] = useState(false);
+    const [ screenSize, setScreenSize ] = useState(0);
+
+
+    useEffect(() => {
+        if(typeof window !== "undefined") {
+            const setDefaultSize = function() {
+                setScreenSize(window.innerWidth);
+                if(screenSize < 800) {
+                    setIsMobile(true);
+                } else {
+                    setIsMobile(false);
+                }
+            }
+            setDefaultSize();
+            window.addEventListener("resize", setDefaultSize);
+            return () => window.removeEventListener("resize", setDefaultSize)
+        }  
+    })
+
+
 
     return (
         <nav css={StyledNav}>
@@ -20,15 +43,17 @@ export const Navigation = () => {
                         </a>
                     </Link>
                 </li>
-                <li css={List}>Movies</li>
-                <li css={List}>Quotes</li>
-                <li css={List}>Suggestions</li>
-                <li css={List}>Reviews</li>
+                { !isMobile &&
+                <>
+                    <li css={List}>Movies</li>
+                    <li css={List}>Quotes</li>
+                    <li css={List}>Suggestions</li>
+                    <li css={List}>Reviews</li>
+                </> 
+                }
             </ul>
-
-            {/* area where there's sign in or sign out button  */}
             <ul css={MenuSection}>
-                <SignInOut /> 
+            { isMobile ?  <HamburgerMenu isMobile={isMobile} /> : <SignInOut />}
             </ul>
         </nav>
     )
@@ -45,7 +70,7 @@ const StyledNav = css`
     background-color: ${Common.colors.backgroundBlack};
 `
 
-const  MenuSection = css`
+const MenuSection = css`
     display: flex;
     flex-direction: row;
     align-items: center;
