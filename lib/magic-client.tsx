@@ -1,3 +1,10 @@
 import { Magic } from 'magic-sdk';
 
-export const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_API_KEY as string);
+const createMagic = () => {
+    return (
+        typeof window !== "undefined" &&
+        new Magic(process.env.NEXT_PUBLIC_MAGIC_API_KEY as string)
+    );
+};
+
+export const magic = createMagic();
