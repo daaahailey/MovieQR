@@ -9,12 +9,12 @@ import { useAuth } from "../../context/AuthContext";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 
-export const SignInOut = () => {
+export const SignInOut = ({setIsOn, isMobile}:any) => {
 
     const [loggedIn, setLoggedIn] = useState(false);
-    const [didToken, setDidToken] = useState("");
+    const [userDidToken, setUserDidToken] = useState("");
     const [userEmail, setUserEmail] = useState("");
-    const { cookie, logout } = useAuth();  // to display user email faster when user sign in
+    const { didToken, cookie, saveCookie, saveDidToken } = useAuth(); // to display user email faster when user sign in
     const router = useRouter();
 
     interface JwtPayload {
@@ -24,40 +24,13 @@ export const SignInOut = () => {
 
     useEffect(() => {
         if(cookie) {
-            const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;  
+            const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload; 
             const email = decodedToken.email;
-            setUserEmail(email);
-            setLoggedIn(true)
+            setUserDidToken(didToken);
+            setUserEmail(email) 
+            setLoggedIn(true);
         }
-    },[cookie])
-
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const isLoggedIn = await magic.user.isLoggedIn();
-            if(isLoggedIn) {
-                try {
-                    // Assumes a user is already logged in
-                    const { email } = await magic.user.getMetadata();
-                    const userDidToken = await magic.user.getIdToken();    
-                    if(email) {
-                        setUserEmail(email);
-                        setDidToken(userDidToken);
-                        setLoggedIn(true);
-                    }
-                } catch(error) {
-                    console.log(error)
-                }
-            } 
-            else if(!isLoggedIn) {
-                setLoggedIn(false);
-                setUserEmail("");
-            }
-        }
-        fetchData();
-    },[])
-
+    }, [cookie, didToken])
 
 
     const handleSignOut = async(e:any) => {
@@ -67,21 +40,35 @@ export const SignInOut = () => {
             const response = await fetch("/api/logout", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${didToken}`,
+                    Authorization: `Bearer ${userDidToken}`,
                     "Content-Type": "application/json",
                 },
             });
             const res = await response.text();
-
+            console.log("sign out!")
+            setUserEmail("");
+            setUserDidToken("");
+            setLoggedIn(false);
+            saveCookie("");
+            saveDidToken("");
         } catch(error) {
             console.error("Error signing out", error);
             router.push("/login");
         }
-        logout();
         router.push("/login");
-        setUserEmail("");
-        setLoggedIn(false);
+        if(isMobile) {
+            setIsOn(false);
+        }
     }
+
+    const handleSignIn = (e:any) => {
+        e.preventDefault();
+        router.push("/login")
+        if(isMobile) {
+            setIsOn(false);
+        }
+    }
+
 
 
     return (
@@ -94,7 +81,7 @@ export const SignInOut = () => {
                         <a css={AMenu} onClick={handleSignOut}>Sign Out</a>
                     </Link> : 
                     <Link href="/login">
-                        <a>Sign In</a>
+                        <a onClick={handleSignIn}>Sign In</a>
                     </Link>
                 }
             </li>
