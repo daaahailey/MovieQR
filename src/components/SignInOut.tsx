@@ -73,15 +73,15 @@ export const SignInOut = ({setIsOn, isMobile}:any) => {
 
     return (
         <>  {/* display email address of signed user (if user has signed in) */}
-            { loggedIn ? <li css={List}>{userEmail}</li> : null }
+            { loggedIn ? <li css={List}>{ isMobile ? `You are signed in as ${userEmail}` :  `${userEmail}`}</li> : null }
             <li css={List}>
                 {
                     loggedIn ? 
                     <Link href="/login">
-                        <a css={AMenu} onClick={handleSignOut}>Sign Out</a>
+                        <a css={isMobile ? AMenuMobile : AMenu} onClick={handleSignOut}>Sign Out</a>
                     </Link> : 
                     <Link href="/login">
-                        <a onClick={handleSignIn}>Sign In</a>
+                        <a css={isMobile ? AMenuMobile : AMenu} onClick={handleSignIn}>Sign In</a>
                     </Link>
                 }
             </li>
@@ -99,7 +99,21 @@ const List = css`
 `
 const AMenu = css`
     cursor: pointer;
-    &:hover, &:active {
+    &:hover {
         color: ${Common.colors.point};
     }
 `
+
+const AMenuMobile = css`
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: ${Common.colors.text};
+    font-size: ${Common.fontSize.large};
+    font-weight: ${Common.fontWeight.extraBold};
+    line-height: 3rem;
+    &:hover {
+        color: ${Common.colors.point};
+    }
+`
+
