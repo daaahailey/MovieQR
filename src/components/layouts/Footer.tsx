@@ -2,15 +2,25 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
 import { Common } from "../../styles/common";
-
+import Link
+ from 'next/link';
 export const Footer = () => {
 
     return (
         <footer css={StyledFooter}>
-            <strong css={StrongText}>Built and designed by @daaahailey</strong>
+            <ul>
+                <li css={FooterList}>
+                    <p css={BuiltByText}>Built and designed by</p>
+                    <Link href="https://github.com/daaahailey">
+                        <a target="_blank">@daaahailey</a>
+                    </Link>
+                </li>
+            </ul>
             <ul css={FooterUl}>
                 <li css={FooterList}>About Movie QR</li> 
-                <li css={FooterList}>Contact Us</li>
+                <li css={FooterList}>
+                    <a href="mailto:daaahailey@gmail.com">Contact Us</a>
+                </li>
             </ul>
         </footer>
     )
@@ -18,26 +28,23 @@ export const Footer = () => {
 
 
 const StyledFooter = css`
-    z-index: 40;
     width: 100%;
-    position: static;
     display: flex;
     flex-direction: column;
-    text-align: center;
+    align-items: center;
     padding: 2rem;
     background-color: ${Common.colors.backgroundGray};
     color: ${Common.colors.text}; 
-    font-weight: ${Common.fontWeight.medium}
+    font-family: ${Common.fonts.point};
 `
 
-const StrongText = css`
-    padding: 1.5rem;
+const BuiltByText = css`
+    display: inline-block;
+    margin-right: 0.2rem;
 `
 
 const FooterUl = css`
     display: flex;
-    flex-direction: row;
-    justify-content: center;
 `
 
 const FooterList = css`

@@ -80,13 +80,13 @@ export const PopularMovies = () => {
 
 const PopularMovieSection = css`
     padding: 1.2rem;
-    background-color: ${Common.colors.backgroundBlack};
+    background-color: ${Common.colors.backgroundBlack}; 
 `
 
 const PopularSectionTitle = css`
-    font-size: ${Common.fontSize.medium};
-    font-weight: ${Common.fontWeight.bold};
     margin-top: 1.2rem;
     color: ${Common.colors.text};
+    font-family: ${Common.fonts.point};
+    font-size: ${Common.fontSize.medium};
+    font-weight: ${Common.fontWeight.bold};
 `
-
