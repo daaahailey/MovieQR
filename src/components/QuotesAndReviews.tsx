@@ -17,6 +17,7 @@ export const QuotesAndReviews = ({ movieId, title, currentUser, token }:any) => 
 
     return(
         <section css={QuotesReviewSection}>
+            <h2 className="text-hide">Quote and Review area</h2>
             <div css={Menu}>
                 <label css={MenuItem} htmlFor="quote" className={`${menu === "quote" ? "boxOn" : ""}`}>Quote</label>
                 <input type="radio" id="quote" name="menu" className="hidden" onChange={handleMenuSelect} value="quote" />
@@ -47,6 +48,7 @@ const MenuItem = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: ${Common.fonts.point};
     font-size: ${Common.fontSize.medium};
     font-weight: ${Common.fontWeight.medium};
     cursor: pointer;
