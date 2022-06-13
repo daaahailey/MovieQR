@@ -5,13 +5,11 @@ import { jsx, css, keyframes } from "@emotion/react";
 import { Common } from "../styles/common";
 import { IoMdClose} from "react-icons/io";
 import { IoMdMenu } from "react-icons/io";
-import Link from "next/link";
 import { SignInOut } from "./SignInOut";
 import { useRouter } from "next/router";
 
 
 export const HamburgerMenu = ({isMobile}:any) => {
-
 
     const [ isOn, setIsOn ] = useState(false);
     const router = useRouter();
@@ -66,7 +64,6 @@ export const HamburgerMenu = ({isMobile}:any) => {
                             <button css={AMenu} onClick={handlePageMenuClick} value="quotes">Quotes</button>
                         </li> 
                     </div>
-                    
                 </ul>
             }    
         </>
@@ -150,7 +147,6 @@ const Modal = css`
 
 const List = css`
     padding: 1rem;
-    font-weight: ${Common.fontWeight.medium}
     width: 100%;
 `
 
@@ -167,6 +163,7 @@ const AMenu = css`
     border: none;
     padding: 0;
     color: ${Common.colors.text};
+    font-family: ${Common.fonts.point};
     font-size: ${Common.fontSize.large};
     font-weight: ${Common.fontWeight.extraBold};
     line-height: 3rem;

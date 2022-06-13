@@ -19,7 +19,7 @@ export const Navigation = () => {
         if(typeof window !== "undefined") {
             const setDefaultSize = function() {
                 setScreenSize(window.innerWidth);
-                if(screenSize < 800) {
+                if(screenSize < 790) {
                     setIsMobile(true);
                 } else {
                     setIsMobile(false);
@@ -39,16 +39,22 @@ export const Navigation = () => {
                 <li css={List}>
                     <Link href="/">
                         <a>
-                            <Image src="/images/logo.png" width={160} height={44} alt="app-logo"/>
+                            <Image src="/images/logo.png" width={160} height={44} alt="app-logo" objectFit="contain"/>
                         </a>
                     </Link>
                 </li>
                 { !isMobile &&
                 <>
-                    <li css={List}>Movies</li>
-                    <li css={List}>Quotes</li>
-                    <li css={List}>Suggestions</li>
-                    <li css={List}>Reviews</li>
+                    <li css={List}>
+                        <Link href="/quotes">
+                            <a css={AMenu}>Quotes</a>
+                        </Link>
+                    </li>
+                    <li css={List}>
+                        <Link href="/reviews">
+                            <a css={AMenu}>Reviews</a>
+                        </Link>
+                    </li>
                 </> 
                 }
             </ul>
@@ -62,23 +68,26 @@ export const Navigation = () => {
 const StyledNav = css`
     width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;    
-    font-size: ${Common.fontSize.basic};
-    color: ${Common.colors.text};
-    z-index: 10;
+    justify-content: space-between;   
+    color: ${Common.colors.text}; 
+    font-family: ${Common.fonts.point};
+    font-size: ${Common.fontSize.basicStrong};
     background-color: ${Common.colors.backgroundBlack};
 `
 
 const MenuSection = css`
     display: flex;
-    flex-direction: row;
     align-items: center;
 `
 
 const List = css`
     padding: 1rem;
-    font-size: 1.25rem;
-    font-weight: ${Common.fontWeight.medium}
     cursor: pointer;
+`
+
+const AMenu = css`
+    cursor: pointer;
+    &:hover {
+        color: ${Common.colors.point};
+    }
 `

@@ -4,7 +4,6 @@ import { jsx, css } from "@emotion/react";
 import { Common } from "../styles/common";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { magic } from "../../lib/magic-client";
 import { useAuth } from "../../context/AuthContext";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
@@ -72,8 +71,8 @@ export const SignInOut = ({setIsOn, isMobile}:any) => {
 
 
     return (
-        <>  {/* display email address of signed user (if user has signed in) */}
-            { loggedIn ? <li css={List}>{ isMobile ? `You are signed in as ${userEmail}` :  `${userEmail}`}</li> : null }
+        <>
+            { loggedIn ? <li css={List}>{userEmail}</li> : null }
             <li css={List}>
                 {
                     loggedIn ? 
@@ -92,10 +91,11 @@ export const SignInOut = ({setIsOn, isMobile}:any) => {
 
 const List = css`
     padding: 1rem;
-    font-size: 1.25rem;
-    font-weight: ${Common.fontWeight.medium}
     cursor: pointer;
-
+    font-family: ${Common.fonts.point};
+    &:nth-child(1) {
+        padding-top: 1.4rem;
+    }
 `
 const AMenu = css`
     cursor: pointer;
@@ -106,8 +106,6 @@ const AMenu = css`
 
 const AMenuMobile = css`
     cursor: pointer;
-    background-color: transparent;
-    border: none;
     color: ${Common.colors.text};
     font-size: ${Common.fontSize.large};
     font-weight: ${Common.fontWeight.extraBold};
