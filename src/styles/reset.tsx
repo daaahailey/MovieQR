@@ -31,7 +31,8 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-html,
+
+html,body {
 	font-family: Overpass, sans-serif;
 }
 ol, ul, li {
@@ -61,9 +62,14 @@ table {
 input[type="search"],
 input[type="button"] {
 	-webkit-appearance: none;
-	-webkit-border-radius:0;
+	-webkit-border-radius: 0.5rem;
+}
+
+input[type="submit"] {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
 }
 `
-// above input style is to remove default style(rounded input) from iphone 
+// -webkit style is to remove default style(rounded input) from iphone 
 
 export default reset;
