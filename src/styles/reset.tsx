@@ -31,8 +31,8 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-body {
-	line-height: 1;
+html,body {
+	font-family: Overpass, sans-serif;
 }
 ol, ul, li {
 	list-style: none;
