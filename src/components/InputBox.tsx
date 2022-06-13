@@ -80,9 +80,9 @@ export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
 
 
 
-    return ( 
-        
-        <section css={InputBoxContainer}>
+    return (  
+        <article css={InputBoxContainer}>
+            <h3 className="text-hide">Write Quotes here</h3>
             { menu === "quote" ? 
             <QuoteList movieId={movieId} title={title} currentUser={currentUser} addedNewQuote={addedNewQuote}/>
             : <ReviewList movieId={movieId} />
@@ -105,7 +105,7 @@ export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
             { userNotSignedIn &&
                 <>
                     <div css={Modal}>
-                        <p>Please sign in to if you would like to write something!</p>
+                        <p css={MessageOnModal}>Please sign in to if you would like to write something!</p>
                         <div css={Buttons}>                 
                             <input css={Button} type="button" value="Okay" onClick={handleOkayBtn}/>
                             <input css={Button} type="button" value="Sign In" onClick={handleSignIn}/>
@@ -117,7 +117,7 @@ export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
             { inputEmptyMessage &&
                 <>
                     <div css={Modal}>
-                        <p>Please write something!</p>
+                        <p css={MessageOnModal}>Please write something!</p>
                         <div css={Buttons}>
                             <input css={Button} type="button" value="Okay" onClick={handleOkayBtn}/>
                         </div>
@@ -125,21 +125,16 @@ export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
                     <div css={ModalLayer}></div>
                 </>
             }
-        </section>
+        </article>
 
     )
 }
 
 
 const InputBoxContainer = css`
+    position: relative;
     width: 100%;
     color: ${Common.colors.text};
-`
-
-const DisplayItems = css`
-    // height: 14rem;
-    margin-top: 2rem;
-    text-align: left;
 `
 
 const TextForm = css`
@@ -156,21 +151,22 @@ const InputLabel = css`
 
 const QuoteTextArea = css`
     width: 100%;
-    font-size: ${Common.fontSize.basic};
     padding: 1rem;
     margin-bottom: 1rem;
+    font-family: ${Common.fonts.basic};
+    font-size: ${Common.fontSize.basic};
 `
 
 const SubmitBtn = css`
     width: 100%;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    font-family: ${Common.fonts.point};
     font-weight: ${Common.fontWeight.medium};
     color: ${Common.colors.text};
     background-color: ${Common.colors.pointDark};
     font-size: ${Common.fontSize.medium};
-    border: none;
-    box-sizing: border-box;
-    padding: 1rem;
-    cursor: pointer;
     &:hover {
         background-color: ${Common.colors.point};
     }
@@ -178,19 +174,27 @@ const SubmitBtn = css`
 
 const Modal = css`
     position: absolute;
-    bottom: 5%;
+    bottom: 100px;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
-    height: 10%;
-    z-index: 50;
-    background-color: white;
-
+    padding: 1.8rem;
+    z-index: 40;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: black;
+    border-radius: 10px;
+    font-weight: ${Common.fontWeight.medium};
+    color: ${Common.colors.backgroundBlack};
+    background-color: ${Common.colors.text};
+
+    @media (max-width: 640px) {
+        width: 80%;
+    }
+    @media (max-width: 490px) {
+        width: 90%;
+    }
 `
 
 const ModalLayer = css`
@@ -204,13 +208,27 @@ const ModalLayer = css`
     opacity: 0.7;
 `
 
+const MessageOnModal = css`
+    margin: 0.5rem 0;
+    text-align: center;
+`
+
 const Buttons = css`
     margin: 0 auto;
     margin-top: 1.4rem;
 `
 
 const Button = css`
-width: 6rem;
-margin: 0.25rem;
-padding: 0.25rem;
+    width: 6rem;
+    margin: 0.25rem;
+    padding: 0.6rem 0.4rem;
+    border: none;
+    cursor: pointer;
+    color: ${Common.colors.text};
+    font-weight: ${Common.fontWeight.bold};
+    font-size: ${Common.fontSize.basic};
+    background-color: ${Common.colors.backgroundBlack};
+    &:hover {
+        background-color: ${Common.colors.point};
+    }
 `

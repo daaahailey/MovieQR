@@ -127,6 +127,7 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
             setIsQuoteEmpty(false);
         } else if(clickedBtn === "delete") {
             setDeleteClicked(false);
+            
         }
         setStatus("");
     }
@@ -143,22 +144,21 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                         //if it's written by current user singed in, add edit & delete button       
                         return (    
                             <li key={item.id} css={QuoteItem}>
-                                <div css={QuoteText}>
-                                    <p css={UserName}>{userNickname}</p>
-                                    <p>{item.quote}</p>
-                                </div>                          
-                                <div>
-                                    <button css={SmallBtn} type="button" onClick={handleEdit} value={item.id}>Edit</button>
-                                    <button css={SmallBtn} type="button" onClick={handleDelete} value={item.id}>Delete</button>
-                                </div>                             
+                                <div css={AuthorHandler}>
+                                    <p css={UserName}>@{userNickname}</p>
+                                    <div css={SmallButtons}>
+                                        <button css={SmallBtn} type="button" onClick={handleEdit} value={item.id}>Edit</button>
+                                        <button css={SmallBtn} type="button" onClick={handleDelete} value={item.id}>Delete</button>
+                                    </div>
+                                </div>
+                                <p css={QuoteText}>{item.quote}</p> 
                             </li>
                         )
-
                     } else if(item.userId !== currentUser || !currentUser) {
                         return (
                             <li key={item.id} css={QuoteItemOther}>
-                                    <p css={UserName}>{userNickname}</p>
-                                    <p>{item.quote}</p>
+                                    <p css={UserName}>@{userNickname}</p>
+                                    <p>{item.quote}</p> 
                             </li> 
                         )
                     } 
@@ -180,6 +180,7 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                             <form css={EditForm}>
                                 <label htmlFor="textArea"></label>
                                 <textarea 
+                                    css={EditFormTextArea}
                                     name="textArea"
                                     id="textArea"
                                     cols={30}
@@ -189,8 +190,8 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                                     value={updatedQuote}
                                     ></textarea>    
                                 <div css={Buttons}>
-                                    <input css={Button} type="submit" value="Edit Quote" onClick={handleEditQuote}/>
-                                    <input css={Button} type="submit" value="Cancel" onClick={handleCancel}/>
+                                    <input css={Button} type="submit" className="editCancel" value="Edit Quote" onClick={handleEditQuote}/>
+                                    <input css={Button} type="submit" className="editCancel" value="Cancel" onClick={handleCancel}/>
                                 </div>
                             </form>
                         </div>
@@ -202,8 +203,8 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                         <div css={Modal}>
                             <p css={MessageOnModal}>Are you sure you want to delete this quote?</p>
                             <div css={Buttons}>
-                                <input css={Button} type="submit" value="Delete Quote" onClick={handleDeleteQuote}/>
-                                <input css={Button} type="submit" value="Cancel" onClick={handleCancel}/>
+                                <input css={Button} type="submit" className="editCancel" value="Delete Quote" onClick={handleDeleteQuote}/>
+                                <input css={Button} type="submit" className="editCancel" value="Cancel" onClick={handleCancel}/>
                             </div>
                         </div>
                         <div css={ModalLayer}></div>
@@ -222,23 +223,43 @@ const QuotesItemsContainer = css`
 
 const QuoteItem = css`
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    line-height: 2.25rem;
-
+    line-height: 1.5rem;
+    margin: 1rem 0;
 `
-const QuoteItemOther = css`
+const AuthorHandler = css`
+    width: 100%;
     display: flex;
-    line-height: 2.25rem;
+    justify-content: space-between;
+`
+
+const QuoteItemOther = css`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5rem;
+    margin: 1rem 0;
 `
 
 const QuoteText = css`
+    width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 `
 
 const UserName = css`
-    margin-right: 1rem;
-    width: 8rem;
+    // margin-right: 1rem;
+    // width: 8rem;
+    // min-width: 8rem;
+`
+
+const SmallButtons = css`
+    display: flex;
+    min-width: 8rem;
+    justify-content: flex-end;
 `
 
 const SmallBtn = css`
@@ -257,22 +278,21 @@ const SmallBtn = css`
 const DefaultMessage = css`
     p {
         line-height: 1.4rem;
+        text-align: center;
     }
 `
 const StrongText = css`
     font-weight: ${Common.fontWeight.bold};
 `
 
-
-
 const Modal = css`
     position: absolute;
-    bottom: 5%;
+    bottom: 100px;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
-    height: 10%;
-    z-index: 50;
+    padding: 1.8rem;
+    z-index: 40;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -280,9 +300,18 @@ const Modal = css`
     align-items: center;
     color: black;
     border-radius: 10px;
+
+    @media (max-width: 640px) {
+        width: 80%;
+    }
+    @media (max-width: 490px) {
+        width: 90%;
+    }
 `
+
 const MessageOnModal = css`
     margin: 0.5rem 0;
+    text-align: center;
     font-size: ${Common.fontSize.basic};
     font-weight: ${Common.fontWeight.medium};
 
@@ -306,11 +335,26 @@ const EditForm = css`
     display: flex;
     flex-direction: column;
     width: 80%;
+    @media (max-width: 490px) {
+        width: 100%;
+    }
+`
+const EditFormTextArea = css`
+    padding: 1rem;
+    font-family: ${Common.fonts.basic};
+    font-size: ${Common.fontSize.basic};
 `
 
 const Buttons = css`
     margin: 0 auto;
     margin-top: 1.4rem;
+
+    @media (max-width: 640px) {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        box
+    }
 `
 
 const Button = css`
@@ -321,11 +365,16 @@ const Button = css`
     background-color: ${Common.colors.backgroundBlack};
     padding: 0.6rem 0.4rem;
     border: none;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     font-weight: ${Common.fontWeight.bold};
     font-size: ${Common.fontSize.basic};
     cursor: pointer;
     &:hover {
         background-color: ${Common.colors.point};
+    }
+
+    @media (max-width: 640px) {
+        width: 100%;
+        margin: 0.25rem 0;
     }
 `
