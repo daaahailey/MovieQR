@@ -39,21 +39,33 @@ const SearchBoxContainer = css`
     background-size: cover; 
     background-position: top center;
     background-color: ${Common.colors.backgroundBlack};
-    padding: 5rem;
+    padding: 3rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;   
     color: ${Common.colors.text};
-    font-weight: ${Common.fontWeight.extraBold};
+    font-family: ${Common.fonts.point};
+
+    @media (max-width: 790px) {
+        padding: 8rem;
+    }
+    @media (max-width: 640px) {
+        padding: 3rem;
+    }
+    
 `
 
 const Heading = css`
+    font-weight: ${Common.fontWeight.extraBold};
     font-size: ${Common.fontSize.extraLarge};
     margin-bottom: 1rem;
 `
 const SubHeading = css`
     font-size: ${Common.fontSize.medium};
     margin-bottom: 2rem;
+    @media (max-width: 790px) {
+        font-size: ${Common.fontSize.basicStrong};
+    }
 `

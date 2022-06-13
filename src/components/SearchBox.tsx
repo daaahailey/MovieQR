@@ -28,6 +28,10 @@ const SearchInputContainer = css`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    
+    @media (max-width: 790px) {
+        flex-direction: column;
+    }
 `
 
 const MovieSearchInput = css`
@@ -38,6 +42,11 @@ const MovieSearchInput = css`
     border-radius: 0.5rem;
     border: none;
     font-size: ${Common.fontSize.basic};
+
+    @media (max-width: 790px) {
+        width: 100%;
+        margin-bottom: 0.75rem;
+    } 
 `
 
 const SearchBtn = css`
@@ -46,11 +55,19 @@ const SearchBtn = css`
     background-color: ${Common.colors.point};
     margin-left: 0.5rem;
     color: ${Common.colors.text};
-    font-weight: ${Common.fontWeight.bold};
+    font-weight: ${Common.fontWeight.medium};
     cursor: pointer;
     border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    letter-spacing: 1px;
+    &:hover {
+        background-color: ${Common.colors.pointDark};
+    }
+
+    @media (max-width: 790px) {
+        margin-left: 0;
+    } 
 `
