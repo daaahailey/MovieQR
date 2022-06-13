@@ -48,8 +48,9 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
     }
 
     return (
-        <div css={Container}>
+        <main css={Container}>
             <section css={MovieDetailContainer}>
+                    <h1 className="text-hide">Movie Detail Page</h1>
                     <div css={ImageContainer}>
                         <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={title} />
                         <button css={WatchTrailerBtn} type="button" onClick={() => handleWatchTrailer(true)}>
@@ -64,7 +65,7 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                         <p css={InfoText}><span css={InfoTitle}>Release Date</span>{relDate}</p>
                         { genreStr ? <p css={InfoText}><span css={InfoTitle}>Genres</span> {genreStr}</p> : ""}
                         <p css={InfoText}><span css={InfoTitle}>Summary</span>{overview}</p>
-                        <h3 css={InfoTitle}>Cast</h3>
+                        <strong css={InfoTitle}>Cast</strong>
                         <Swiper
                             slidesPerView={1}
                             spaceBetween={30}
@@ -105,9 +106,10 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                             </ul>
                         </Swiper>
                     </article>     
-                    <QuotesAndReviews movieId={movieId} title={title} currentUser={currentUser} token={token} /> 
+                    
             </section>
-        </div>
+            <QuotesAndReviews movieId={movieId} title={title} currentUser={currentUser} token={token} /> 
+        </main>
     )
 }
 
@@ -119,9 +121,6 @@ export const getServerSideProps = async (context:any) => {
     const credit = await fetch(`${MOVIE_DETAIL_URL}/${movieId}/credits?${process.env.NEXT_PUBLIC_API_KEY as string}`);
     const movieData = await res.json();
     const movieCredits = await credit.json();
-
-    // console.log(params)
-
 
     const cookies = context.req.headers.cookie;
     let token = null;
@@ -166,14 +165,15 @@ const WatchTrailerBtn = css`
     position: absolute;
     left: 2rem;
     top: 1.5rem;
-    background: transparent;
-    border: none;
-    color: ${Common.colors.text};
-    font-size: ${Common.fontSize.medium};
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: ${Common.fontWeight.bold};
+    border: none;
+    background: transparent;
+    font-family: ${Common.fonts.point};
+    color: ${Common.colors.text};
+    font-size: ${Common.fontSize.medium};
+    font-weight: ${Common.fontWeight.medium};
     z-index: 10;
     cursor: pointer;
     &:after {
@@ -195,10 +195,11 @@ const ContentArticle = css`
 `
 
 const MovieTitle = css`
-    font-size: ${Common.fontSize.extraLarge};
-    font-weight: ${Common.fontWeight.bold};
     margin: 2rem 0;
     line-height: 3rem;
+    font-family: ${Common.fonts.point};
+    font-size: ${Common.fontSize.extraLarge};
+    font-weight: ${Common.fontWeight.bold};
 `
 
 const InfoText = css`
@@ -215,7 +216,6 @@ const InfoTitle = css`
 
 const AllCast = css`
     display: flex;
-    flex-direction: row;
     border-bottom: 1px solid white;
     margin:0;
 `
