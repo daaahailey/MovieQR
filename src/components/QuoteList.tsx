@@ -278,7 +278,6 @@ const SmallBtn = css`
 const DefaultMessage = css`
     p {
         line-height: 1.4rem;
-        text-align: center;
     }
 `
 const StrongText = css`
