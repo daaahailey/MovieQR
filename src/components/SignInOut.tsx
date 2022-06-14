@@ -93,7 +93,7 @@ const List = css`
     padding: 1rem;
     cursor: pointer;
     font-family: ${Common.fonts.point};
-    &:nth-child(1) {
+    &:nth-of-type(1) {
         padding-top: 1.4rem;
     }
 `
