@@ -49,6 +49,7 @@ export const HamburgerMenu = ({isMobile}:any) => {
                 
             </ul>
             { isOn && 
+                <>
                 <ul css={Modal}> 
                     <li css={CloseButtonContainer}>
                         <button css={CloseButton} onClick={handleClose}>
@@ -65,6 +66,8 @@ export const HamburgerMenu = ({isMobile}:any) => {
                         </li> 
                     </div>
                 </ul>
+                <ul css={ModalLayer}></ul>
+                </>
             }    
         </>
     )
@@ -132,17 +135,27 @@ const Modal = css`
     right: 0;
     width: 100%;
     z-index: 30;
-    padding-bottom: 0.4rem;
+    padding-bottom: 1.2rem;
     animation: ${slide} 1s ease forwards; 
     &::before {
         content: "";
         position: absolute;
         bottom: -2px;
         width: 100%;
-        height: 2px;
+        height: 3px;
         animation: ${modalLine} 1.4s ease forwards; 
         animation-delay: 0.2s;
     }
+`
+const ModalLayer = css`
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: ${Common.colors.backgroundBlack};
+    z-index: 20;
+    opacity: 0.7;
 `
 
 const List = css`
