@@ -69,6 +69,11 @@ input[type="submit"] {
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 }
+
+input[type="submit"].editCancel {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0.5rem;
+}
 `
 // -webkit style is to remove default style(rounded input) from iphone 
 
