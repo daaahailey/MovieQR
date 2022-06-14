@@ -6,9 +6,11 @@ import YouTube, { YouTubeProps } from "react-youtube";
 import { MdOutlineClose } from "react-icons/md";
 import { jsx, css, keyframes } from '@emotion/react';
 import { Common } from "../styles/common";
+import { Loading } from "./Loading";
 
 
 export const Trailer = (props:any) => {
+
     const { data, error } = useMovieTrailer("/api/trailer", props.movieId);
     let movieKey;
 
@@ -29,7 +31,13 @@ export const Trailer = (props:any) => {
             <div css={TrailerContainer}>
                 <div css={TrailerContent}>
                     <button css={CloseBtn} onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "4px"}} /></button>
-                    {movieKey ? <div css={VideoContainer}><YouTube videoId={`${movieKey}`}  onReady={onPlayerReady} /></div> : <p>There is not available trailer video</p>}   
+                    { data ?
+                        movieKey ?
+                        <div css={VideoContainer}>
+                            <YouTube videoId={`${movieKey}`}  onReady={onPlayerReady} />
+                        </div> : <Loading />
+                        : <p>There is not available trailer video</p>
+                    }   
                 </div>
             </div>
             <div css={TrailerLayer }onClick={() => props.handleTrailer(false)}>
