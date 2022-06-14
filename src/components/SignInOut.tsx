@@ -72,7 +72,7 @@ export const SignInOut = ({setIsOn, isMobile}:any) => {
 
     return (
         <>
-            { loggedIn ? <li css={List}>{userEmail}</li> : null }
+            { loggedIn ? <li css={[List, UserEmail]}>{userEmail}</li> : null }
             <li css={List}>
                 {
                     loggedIn ? 
@@ -93,10 +93,12 @@ const List = css`
     padding: 1rem;
     cursor: pointer;
     font-family: ${Common.fonts.point};
-    &:nth-of-type(1) {
-        padding-top: 1.4rem;
-    }
 `
+
+const UserEmail = css`
+    padding-top: 1.4rem;
+`
+
 const AMenu = css`
     cursor: pointer;
     &:hover {
@@ -114,4 +116,3 @@ const AMenuMobile = css`
         color: ${Common.colors.point};
     }
 `
-
