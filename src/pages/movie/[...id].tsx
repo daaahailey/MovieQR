@@ -159,6 +159,10 @@ const ImageContainer = css`
     position: relative;
     max-height: 600px;
     height: 1200px;
+
+    @media(max-width: 490px) {
+        max-height: 460px;
+    }
 `
 
 const WatchTrailerBtn = css`
@@ -218,7 +222,7 @@ const ContentArticle = css`
 `
 
 const MovieTitle = css`
-    margin: 2rem 0;
+    margin: 0.5rem 0 2rem 0;
     line-height: 3rem;
     font-family: ${Common.fonts.point};
     font-size: ${Common.fontSize.extraLarge};

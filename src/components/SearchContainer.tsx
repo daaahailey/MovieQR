@@ -34,7 +34,7 @@ export const SearchContainer = () => {
 
 const SearchBoxContainer = css`
     width: 100%;
-    height:40rem;
+    height: 40rem;
     background-repeat: no-repeat;
     background-size: cover; 
     background-position: top center;
@@ -53,6 +53,9 @@ const SearchBoxContainer = css`
     }
     @media (max-width: 640px) {
         padding: 3rem;
+    }
+    @media (max-width: 490px) {
+        height: 37rem;
     }
     
 `
