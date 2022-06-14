@@ -54,7 +54,7 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                     <div css={ImageContainer}>
                         <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={title} />
                         <button css={WatchTrailerBtn} type="button" onClick={() => handleWatchTrailer(true)}>
-                            <BsPlayBtnFill style={{marginRight: "10px"}} />Watch Trailer
+                            <BsPlayBtnFill />Watch Trailer
                         </button>    
                         {watchTrailer && <Trailer handleTrailer={setWatchTrailer} movieId={movieId} />}
                     </div>
@@ -176,6 +176,24 @@ const WatchTrailerBtn = css`
     font-weight: ${Common.fontWeight.medium};
     z-index: 10;
     cursor: pointer;
+    
+    svg {
+        margin-right: 10px;
+        @media(max-width: 490px) {
+            font-size: 4.6rem;
+            margin-right: 4px;
+            overflow:hidden;
+            background: transparent
+        }
+    }
+
+    @media(max-width: 490px) {
+        width: 120px;
+        height: 50px;
+        font-size: ${Common.fontSize.small};
+    }
+
+
     &:after {
         content: "";
         position: absolute;
@@ -186,6 +204,9 @@ const WatchTrailerBtn = css`
         opacity: 0.7;
         z-index: -10;
         border-radius: 10px;
+        @media(max-width: 490px) {
+            padding: 3px;
+        }
     }
 `
 
