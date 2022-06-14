@@ -34,8 +34,9 @@ const MovieCard = (movieData: MovieType) => {
 
     return (
     <article css={MovieCardArticle} key={`movie-data-${item.id}`} onClick={handleClick}>     
-        { item["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${item.title}`} width={360} height={540} />
-        : <Image src={`${BASE_URL}${item["poster_path"]}`} alt={`${item.title}`} width={360} height={540}/> }                         
+        { item["poster_path"] === null ? <Image src="/images/movie_fallback.png" alt={`${item.title}`} layout="fill" objectFit="cover"/>
+        : <Image src={`${BASE_URL}${item["poster_path"]}`} alt={`${item.title}`} layout="fill" objectFit="cover" />
+        }                         
         <section css={MovieSummary}>
             <h2 css={MovieTitle}>{item.title}</h2>
             <p>
@@ -49,9 +50,12 @@ const MovieCard = (movieData: MovieType) => {
 
 export default MovieCard;
 
-
 const MovieCardArticle = css`
     position: relative;
+    box-sizing: border-box;
+    max-width: 320px;
+    min-width: 240px;
+    min-height: 480px;
     border-radius: 0.8rem;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     color: ${Common.colors.text};
@@ -73,6 +77,7 @@ const MovieCardArticle = css`
         background-color: ${Common.colors.backgroundGray};
         opacity: 0;
         transition: opacity .5s ease;
+        box-sizing: border-box;
     }
     &:hover:after {
         opacity: 0.96;

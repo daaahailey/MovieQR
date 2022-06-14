@@ -25,13 +25,9 @@ export default Movie;
 const StyledSectionForMovieCard = css`
     display: grid;
     justify-content: center;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 2fr));
-    gap: 2.25rem;
-    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
+    grid-auto-rows: minmax(480px, auto);
+    gap: 2.8rem;
     margin: 0 auto;
     padding: 5rem 3rem;
-
-    @media (max-width: 690px)  {
-        grid-template-columns: repeat(auto-fit, minmax(260px, 370px));
-    }
 `
