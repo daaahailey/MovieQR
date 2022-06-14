@@ -12,18 +12,21 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
     const handleEmailInput = (event:any) => {
         event.preventDefault();
         const email = event.target.value;
         setEmail(email);
+        const isValid = emailRegex.test(email);
+        if(isValid) {
+            setUserMessage("");
+        } 
     }
 
     const handleLogin = async (event:any) => {
         event.preventDefault();
-        const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
         const isValid = emailRegex.test(email);
-
         if(email) {
             // route to dashboard
             if(isValid) {
@@ -84,7 +87,7 @@ const Login = () => {
                     <section css={SignInContainer}>
                         <h1 css={SignInText}>Sign In</h1>
                         <input css={EmailInput} type="text" placeholder="Email Address" value={email} onChange={handleEmailInput}/>
-                        <p>{userMessage}</p>
+                        <p css={LoginErrorMessage}>{userMessage}</p>
                         <button css={SignInButton} onClick={handleLogin}>
                             {isLoading? "Loading..." : "Sign In"}
                         </button>
@@ -98,23 +101,26 @@ export default Login;
 const StyledMain = css`
     display: flex;
     align-items: center;
-    height: 100%;
-    min-height: 50vh;
+    min-height: 80vh;
 `
 
 const SignInContainer = css`
     display: flex;
     flex-direction: column;
     width: 24rem;
-    height: 100%;
     text-align: center;
     margin: 0 auto;
+
+    @media (max-width: 490px) {
+        width: 80%;
+    }
 ` 
 
 const SignInText = css`
-    font-size: ${Common.fontSize.large};
-    font-weight: ${Common.fontWeight.bold};
     margin-bottom: 1.5rem;
+    font-family: ${Common.fonts.point};
+    font-size: ${Common.fontSize.large};
+    font-weight: ${Common.fontWeight.bold}; 
 `
 
 const EmailInput = css`
@@ -126,16 +132,21 @@ const EmailInput = css`
     font-size: ${Common.fontSize.basic};
 `
 
+const LoginErrorMessage = css`
+    color: ${Common.colors.point};
+    font-weight: ${Common.fontWeight.medium};
+`
+
 const SignInButton = css`
     height: 2.8rem;
-    font-size: ${Common.fontSize.basic};
-    font-weight: ${Common.fontWeight.medium};
     margin-top: 0.8rem;
-    background-color: ${Common.colors.point};
-    color: ${Common.colors.text};
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
+    background-color: ${Common.colors.point};
+    color: ${Common.colors.text};
+    font-size: ${Common.fontSize.basic};
+    font-weight: ${Common.fontWeight.medium};
     &:hover {
         background-color: ${Common.colors.backgroundBlack};
     }
