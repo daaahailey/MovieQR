@@ -51,8 +51,9 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
         <main css={Container}>
             <section css={MovieDetailContainer}>
                     <h1 className="text-hide">Movie Detail Page</h1>
-                    <div css={ImageContainer}>
-                        <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={title} />
+                    <div css={ImageContainer} style={ !backdrop_path ? {backgroundColor: "white"} : { backgroundColor:"black"}}>
+                        { backdrop_path ? <Image src={`${BASE_URL}${backdrop_path}`} layout="fill" objectFit="cover" alt={title} /> 
+                        : <Image src="/images/movie_fallback.png" alt={`${title}`} layout="fill" objectFit="contain"/>}
                         <button css={WatchTrailerBtn} type="button" onClick={() => handleWatchTrailer(true)}>
                             <BsPlayBtnFill />Watch Trailer
                         </button>    
@@ -65,6 +66,8 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                         <p css={InfoText}><span css={InfoTitle}>Release Date</span>{relDate}</p>
                         { genreStr ? <p css={InfoText}><span css={InfoTitle}>Genres</span> {genreStr}</p> : ""}
                         <p css={InfoText}><span css={InfoTitle}>Summary</span>{overview}</p>
+                        { cast.length !== 0 ? 
+                        <>
                         <strong css={InfoTitle}>Cast</strong>
                         <Swiper
                             slidesPerView={1}
@@ -105,6 +108,7 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
                                 )}
                             </ul>
                         </Swiper>
+                        </> : "" }
                     </article>     
                     
             </section>
