@@ -53,9 +53,10 @@ export default MovieCard;
 const MovieCardArticle = css`
     position: relative;
     box-sizing: border-box;
-    max-width: 320px;
     min-width: 240px;
-    min-height: 480px;
+
+    max-width: 320px;
+    max-height: 480px;
     border-radius: 0.8rem;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     color: ${Common.colors.text};
@@ -76,8 +77,8 @@ const MovieCardArticle = css`
         background-repeat: no-repeat;
         background-color: ${Common.colors.backgroundGray};
         opacity: 0;
+        border-radius: 0.8rem;
         transition: opacity .5s ease;
-        box-sizing: border-box;
     }
     &:hover:after {
         opacity: 0.96;
