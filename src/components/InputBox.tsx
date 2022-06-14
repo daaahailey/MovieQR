@@ -105,7 +105,7 @@ export const InputBox = ({ movieId, title, menu, currentUser, token }:any) => {
             { userNotSignedIn &&
                 <>
                     <div css={Modal}>
-                        <p css={MessageOnModal}>Please sign in to if you would like to write something!</p>
+                        <p css={MessageOnModal}>Please sign in if you would like to write something!</p>
                         <div css={Buttons}>                 
                             <input css={Button} type="button" value="Okay" onClick={handleOkayBtn}/>
                             <input css={Button} type="button" value="Sign In" onClick={handleSignIn}/>
