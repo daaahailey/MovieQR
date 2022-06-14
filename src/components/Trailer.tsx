@@ -21,29 +21,15 @@ export const Trailer = (props:any) => {
 
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         // access to player in all event handlers via event.target
-        event.target.pauseVideo();
+        event.target.playVideo();
     }
-    
-    const opts: YouTubeProps['opts'] = {
-    height: '500',
-    width: '900',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    playerVars: {
-        // https://developers.google.com/youtube/player_parameters
-        autoplay: 1,
-        origin: window.location.href,
-    },
-    };
-
   
     return (
         <>
             <div css={TrailerContainer}>
                 <div css={TrailerContent}>
-                    <button css={CloseBtn} onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "10px"}} /></button>
-                    {movieKey ? <YouTube videoId={`${movieKey}`} opts={opts} onReady={onPlayerReady} /> : <p>There is not available trailer video</p>}   
+                    <button css={CloseBtn} onClick={() => props.handleTrailer(false)}>Close<MdOutlineClose style={{paddingLeft: "4px"}} /></button>
+                    {movieKey ? <div css={VideoContainer}><YouTube videoId={`${movieKey}`}  onReady={onPlayerReady} /></div> : <p>There is not available trailer video</p>}   
                 </div>
             </div>
             <div css={TrailerLayer }onClick={() => props.handleTrailer(false)}>
@@ -51,6 +37,32 @@ export const Trailer = (props:any) => {
         </>
     )
 }
+
+
+const move = keyframes`
+    0% {
+        transform: scale(0, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+`
+
+const VideoContainer = css`
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%; // 16:9 Aspect Ratio (divide 9 by 16 = 0.5625)
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+`
 
 const TrailerLayer = css`
     position: fixed;
@@ -62,15 +74,6 @@ const TrailerLayer = css`
     opacity: 0.7;
 `
 
-const move = keyframes`
-    0% {
-    transform: scale(0, 0);
-    }
-    100% {
-    transform: scale(1, 1);
-    }
-`
-
 const TrailerContainer = css`
     position: absolute;
     left: 50%;
@@ -78,6 +81,11 @@ const TrailerContainer = css`
     width: 100%;
     transform: translate(-50%,0);
     z-index: 20;
+    padding: 2rem;
+
+    @media (max-width: 490px) {
+        padding: 1rem;
+    }
 `
 
 const TrailerContent = css`
@@ -94,13 +102,15 @@ const CloseBtn = css`
     background: transparent;
     color: ${Common.colors.text};
     display: flex;
-    font-size: 1.3rem;
+    font-size: ${Common.fontSize.basicStrong};
     border: none;
+    text-align: left;
     justify-content: center;
     align-items: center;
     position: relative;
     z-index: 20;
     margin-bottom: 0.8rem;
+    cursor: pointer;
     & > * {
         font-size: 1.8em;
     }
