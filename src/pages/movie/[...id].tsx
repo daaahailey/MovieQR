@@ -180,7 +180,7 @@ const WatchTrailerBtn = css`
     svg {
         margin-right: 10px;
         @media(max-width: 490px) {
-            font-size: 4.6rem;
+            font-size: 3.6rem;
             margin-right: 4px;
             overflow:hidden;
             background: transparent
@@ -188,9 +188,11 @@ const WatchTrailerBtn = css`
     }
 
     @media(max-width: 490px) {
-        width: 120px;
-        height: 50px;
-        font-size: ${Common.fontSize.small};
+        left: 0.95rem;
+        top: 0.95rem;
+        width: 90px;
+        height: 40px;
+        font-size: ${Common.fontSize.extraSmall};
     }
 
 
