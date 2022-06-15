@@ -1,13 +1,15 @@
 import jwt from "jsonwebtoken";
-import { findMovieIdByUser, fetchMovieQuotes, updateQuotes, insertQuotes, deleteQuotes } from "../../../lib/db/hasura";
+import { findMovieIdByUser, fetchMovieQuotes, queryEveryQuotes, updateQuotes, insertQuotes, deleteQuotes } from "../../../lib/db/hasura";
 
 // get quotes from all user (but you cannot edit them because you don't have token. this is only to read them)
 export default async function quote(req:any, res:any) {
     const token = req.cookies.token;
     try {
-        const { movieId, quote } = req.query;
+        const { movieId, quote, all } = req.query;
         const admin = process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET as string;
         const findMovie = await fetchMovieQuotes(admin, movieId);
+        const everyQuotes = await queryEveryQuotes(admin);
+        const anyQuotesExist = everyQuotes?.length > 0;
         const quotesExist = findMovie?.length > 0;
         // const inputParams = req.method === "POST" ? req.body : req.query;
 
@@ -16,6 +18,10 @@ export default async function quote(req:any, res:any) {
              if(quotesExist) {
                  // if there is any quote, send
                  res.send(findMovie);
+            } else if(anyQuotesExist && all) {
+                // every quotes including all movies
+                res.send(everyQuotes);
+
             } else {
                 // there isn't any quote - need to add default message 
                 // res.status(404);

@@ -71,24 +71,42 @@ export async function deleteQuotes(token:any, { userId, movieId, id}:any ) {
 
 }
 
+// query every quotes in database
+export async function queryEveryQuotes(admin:string) {
+  const operationsDoc = `
+    query queryEveryQuotes{
+      quotes(order_by: {createdAt: desc}) {
+        id
+        movieId
+        quote
+        userId
+        userEmail
+        createdAt
+      }
+    }
+  `
+    const response = await fetchEveryQuotes(operationsDoc, "queryEveryQuotes", admin);
+    return response?.data?.quotes;
+  }
+
 
 // find movie and quote
 export async function fetchMovieQuotes(admin:string, movieId:any) {
 const operationsDoc = `
   query fetchMovieQuotes($movieId: String!) {
-    quotes(where: {movieId: {_eq: $movieId }}) {
+    quotes(where: {movieId: {_eq: $movieId }}, order_by: {createdAt: desc}) {
       id
       movieId
       quote
       userId
       userEmail
+      createdAt
     }
   }
 `
   const response = await queryAllQuotes(operationsDoc, "fetchMovieQuotes", { movieId }, admin);
   return response?.data?.quotes;
 }
-
 
 
 // find movie id by user - find quote I wrote
@@ -187,6 +205,26 @@ export async function queryAllQuotes(operationsDoc:any, operationName:any, varia
       body: JSON.stringify({
         query: operationsDoc,
         variables: variables,
+        operationName: operationName
+      }),
+    }
+  );
+  return await result.json();
+  // console.log("quotes", result.json());
+}
+
+
+
+// Every quotes from database
+export async function fetchEveryQuotes(operationsDoc:any, operationName:any, admin:any) {
+  const result = await fetch(process.env.NEXT_PUBLIC_HASURA_ADMIN_URL as string,
+    {
+      method: "POST",
+      headers: {
+        "x-hasura-admin-secret": admin,
+      },
+      body: JSON.stringify({
+        query: operationsDoc,
         operationName: operationName
       }),
     }
