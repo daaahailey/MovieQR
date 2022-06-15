@@ -17,12 +17,14 @@ const Quotes: NextPage = () => {
     const { cookie } = useAuth();
     const [ currentUser, setCurrentUser ] = useState("");
 
+    
+
     interface JwtPayload {
         issuer: string;
         email: string;
     }
 
-    useState(() => {
+    useEffect(() => {
         if(cookie) {
             const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
             setCurrentUser(decodedToken.issuer);
