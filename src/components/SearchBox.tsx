@@ -4,17 +4,29 @@ import { useState } from "react";
 import Link from "next/link";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
+import { useRouter } from "next/router";
 
 export const SearchBox = () => {
     const [initialValue, setInitialValue] = useState("");
+    const router = useRouter();
+
+    const handleEnter = (e:any) => {
+        e.preventDefault();
+        if(e.key === "Enter" || e.keyCode === 13) {
+            router.push({
+                pathname: "/movie",
+                query: { title: initialValue },
+            })
+        }
+    }
 
     return (
         <div css={SearchInputContainer}>
             <label htmlFor="search" className="text-hide">Search Movies</label>
             <input css={MovieSearchInput} type="search" id="search" value={initialValue} placeholder="Search Movies"
-                onChange={(event) => setInitialValue(event.target.value)} />
+                onChange={(event) => setInitialValue(event.target.value)} onKeyUp={handleEnter}/>
             <Link href={{
-                pathname: '/movie',
+                pathname: "/movie",
                 query: { title: initialValue },
             }} passHref>
                 <a css={SearchBtn}>Search</a>
