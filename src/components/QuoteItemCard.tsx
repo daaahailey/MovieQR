@@ -1,23 +1,20 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MOVIE_DETAIL_URL } from "../constants";
 import Image from "next/image";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import Link from "next/link";
 
+
 export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any) => {
     const userEmail = email.split("@");
     const userNickname = userEmail[0];
-    const [ movieInfo, setMovieInfo ] = useState({});
-    console.log({
-        currentUser, userId
-    })
-
-
-    const {title, poster_path }:any = movieInfo;
-
+    const [movieInfo, setMovieInfo] = useState({});
+    const {title, poster_path, backdrop_path }:any = movieInfo;
+    const [overflowActive, setOverflowActive] = useState<boolean>(false);
+    const overflowingText = useRef<HTMLParagraphElement|null>(null);
     const BASE_URL = "https://image.tmdb.org/t/p/original"
 
     useEffect(() => {
@@ -30,30 +27,57 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
 
         getMovieInfo();
     }, [movieId])
+    // console.log(movieInfo)
 
-    console.log(movieInfo)
+
+    const checkOverflow = (textContainer: HTMLParagraphElement|null):boolean => {
+        if(textContainer)
+            return (
+                // offsetHeight -  the height of element (that you can see)
+                // scrollHeight - the height of whole content (including area that you cannot see in your eye)
+                textContainer.offsetHeight < textContainer.scrollHeight || 
+                textContainer.offsetWidth < textContainer.scrollWidth
+                // so it returns true if there is overflowed content
+                );
+            return false; 
+    }
+
+    const detectOverflow = () => {
+        if(checkOverflow(overflowingText.current)) {
+            setOverflowActive(true);
+            return;
+        }
+        setOverflowActive(false);
+    }
+
+    useEffect(() => {
+        detectOverflow();
+    },[]) // detect the overflow when page loaded
+
+    useEffect(() => {
+        window.addEventListener("resize", detectOverflow)
+    }); // detect overflow whenever the screen gets resized
+
+    
+
 
 
     return (
         <article css={QuoteItem}>
             <ul css={MoviePoster}>
-            { poster_path === null ? <Image src="/images/movie_fallback.png" alt={title} layout="fill" objectFit="cover"/>
-        : <Image src={`${BASE_URL}${poster_path}`} alt={title} layout="fill" objectFit="cover" />
-        }  
+                <Image src={`${BASE_URL}${poster_path}`} alt={title} layout="fill" objectFit="cover"/>
+                <Link href={`/movie/${title}/${movieId}`}>
+                    <a css={FindAboutButton}>About Movie</a>
+                </Link>
             </ul>
-            <ul css={Content}>
+            <ul css={Content}>     
                 <li css={MovieList}>
                     <p css={MovieTitle}>{title}</p>
-                    <div css={FindAboutButton}>
-                        <Link href={`/movie/${title}/${movieId}`}>
-                            <a>About Movie</a>
-                        </Link>
-                    </div>
                 </li>
                 <li css={TextContent}>
-                    <p>{quote}</p>
-                    
-                    
+                    <p css={QuoteText} ref={overflowingText}>{quote} </p>  
+                    {/* if ellipsis is applied, show more button and when you click it, you can read full post with modal or go to a separate page   */}
+                    { overflowActive ? <button type="button" css={MoreButton}>More</button> : "" }
                     <div css={Buttons}>
                         <p>Posted by {userNickname}</p>
                         { currentUser === userId ?
@@ -71,42 +95,65 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
 
 const QuoteItem = css`
     position: relative;
-    width: 90%;
-        display: flex;
-        justify-content: space-between;
-    // align-items: center;
-    // background-color: pink;
+    width: 100%;
+    min-height: 150px;
+    max-height: 180px;
+    display: flex;
+    justify-content: space-between;
     margin: 2rem auto;
     border-radius: 10px;
     padding: 10px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        background-color: white;
+        opacity: 0.68;
+        z-index: -20;
+    }
 `
 
 const MoviePoster = css`
     position: relative;
-    box-sizing: border-box;
     min-height: 160px;
     min-width: 100px;
     border-radius: 5px;
     overflow: hidden;
-    // max-width: 200px;
-    // max-height: 300px;
-    m
-    
+`
+
+
+const FindAboutButton = css`
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    line-height: 18px;
+    cursor: pointer;
+    font-size: ${Common.fontSize.extraSmall};
+    background-color: ${Common.colors.backgroundBlack}; 
+    color: ${Common.colors.text};
+    &:hover {
+        background-color: ${Common.colors.point};
+    }
 `
 
 const Content = css`
+    position: relative;
     width: 100%;
+    min-width: 0; // this is to prevent flex item breaking flex layout
     padding-left: 1rem;
-    display: flex;
-    flex-direction: column;
 `
+
 
 const MovieList = css`
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-
+    margin-bottom: 0.4rem;
 `
 const MovieTitle = css`
     font-family: ${Common.fonts.point};
@@ -115,52 +162,57 @@ const MovieTitle = css`
 `
 
 const TextContent = css `
-    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
+
 `
 
+const QuoteText = css`
+    display: -webkit-box;
+    max-height: 100px;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4; // limit the number of line
+    font-size: ${Common.fontSize.basic};
 
+    @media(max-width: 490px) {
+        -webkit-line-clamp: 5;
+        font-size: ${Common.fontSize.extraSmall};
+    }
+`
 
-const FindAboutButton = css`
-    position: relative;
+const MoreButton = css`
     width: fit-content;
-    height: 18px;
-    padding: 0 4px 0 2px;
-    line-height: 18px;
-    margin-left: 20px;
-    font-size: ${Common.fontSize.extraSmall};
-    background-color: ${Common.colors.backgroundBlack}; 
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    margin: 2px 0;
+    background-color: ${Common.colors.backgroundBlack};
     color: ${Common.colors.text};
+    font-size: ${Common.fontSize.extraSmall};
     &:hover {
         background-color: ${Common.colors.point};
-        &:after {
-            background-color: ${Common.colors.point};
-        }
-    }
-    &:after {
-        content: "";
-        position: absolute;
-        top: 2.8px;
-        left: -6.4px;
-        width: 12.4px;
-        height: 12.4px;
-        background-color: black;
-        transform: rotate(225deg);
-        z-index: -20;
     }
 `
-
 
 const Buttons = css`
     width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
     p {
         font-size: ${Common.fontSize.extraSmall};
+        position: absolute;
+        bottom: 0;
+        left: 16px;
+    }
+    div {
+        position: absolute;
+        right: 0;
+        bottom: 0;
     }
 `
 
@@ -168,8 +220,7 @@ const Button = css`
     background-color: transparent;
     border: none;
     cursor: pointer;
-    font-size: ${Common.fontSize.basic};
-    // font-weight: ${Common.fontWeight.medium};
+    font-size: ${Common.fontSize.small};
     font-family: ${Common.fonts.point};
     &:hover {
         color: white;
@@ -177,3 +228,4 @@ const Button = css`
         border-radius: 4px;
     }
 `
+
