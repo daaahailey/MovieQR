@@ -44,10 +44,11 @@ const Quotes: NextPage = () => {
 
         if(data) {
             if(initialValue) {
-                setSearchValue(initialValue);
+                const searchValue = initialValue.toLowerCase();
+                setSearchValue(searchValue);
                 let find = data.filter((item:any) => {
                     const string = item.quote;
-                    let result = hasWord(string, initialValue);
+                    let result = hasWord(string, searchValue);
                     if(result === true) {
                         return string;                        
                     }
