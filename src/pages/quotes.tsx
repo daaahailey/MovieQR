@@ -111,9 +111,11 @@ export default Quotes;
 
 const MainArea = css`
     min-height: 100vh;
-    // background-color: ${Common.colors.backgroundGray};
     height: 100%;
     padding: 3rem;
+    @media(max-width: 490px) {
+        padding: 1rem;
+    }
 `
 
 const FilterBy = css`
