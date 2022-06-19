@@ -6,9 +6,10 @@ import Image from "next/image";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import Link from "next/link";
+import { EditDeleteModal } from "./EditDeleteModal";
 
 
-export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any) => {
+export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }:any) => {
     const userEmail = email.split("@");
     const userNickname = userEmail[0];
     const [movieInfo, setMovieInfo] = useState({});
@@ -16,6 +17,10 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
     const [overflowActive, setOverflowActive] = useState<boolean>(false);
     const overflowingText = useRef<HTMLParagraphElement|null>(null);
     const BASE_URL = "https://image.tmdb.org/t/p/original"
+    const [ editClicked, setEditClicked ] = useState(false);
+    const [ deleteClicked, setDeleteClicked ] = useState(false);
+    const [ status, setStatus ] = useState("");
+    const [ postId, setPostId ] = useState("");
 
     useEffect(() => {
         const getMovieInfo = async() => {
@@ -28,6 +33,23 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
         getMovieInfo();
     }, [movieId])
     // console.log(movieInfo)
+
+
+    const handleEdit = (event:React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        const postId = (event.target as HTMLInputElement).value;
+        setEditClicked(true);
+        setPostId(postId);
+        setStatus("edit");
+    }
+
+    const handleDelete = async (event:React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        const postId = (event.target as HTMLInputElement).value;
+        setDeleteClicked(true);
+        setPostId(postId);
+        setStatus("delete");
+    }
 
 
     const checkOverflow = (textContainer: HTMLParagraphElement|null):boolean => {
@@ -58,8 +80,6 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
         window.addEventListener("resize", detectOverflow)
     }); // detect overflow whenever the screen gets resized
 
-    
-
 
 
     return (
@@ -82,13 +102,22 @@ export const QuoteItemCard = ({ quote, userId, movieId, email, currentUser }:any
                         <p>Posted by {userNickname}</p>
                         { currentUser === userId ?
                             <div>
-                                <button type="submit" css={Button}>Edit</button>
-                                <button type="submit" css={Button}>Delete</button>
+                                <button type="submit" css={Button} onClick={handleEdit} value={id}>Edit</button>
+                                <button type="submit" css={Button} onClick={handleDelete} value={id}>Delete</button>
                             </div>: "" }
-                    </div> 
-                   
+                    </div>
                 </li>
             </ul>
+            {<EditDeleteModal 
+                movieId={movieId}
+                editClicked={editClicked}
+                setEditClicked={setEditClicked} 
+                deleteClicked={deleteClicked}
+                setDeleteClicked={setDeleteClicked}
+                status={status}
+                setStatus={setStatus}
+                postId={postId}
+            />}
         </article>
     )
 }
@@ -125,7 +154,6 @@ const MoviePoster = css`
     border-radius: 5px;
     overflow: hidden;
 `
-
 
 const FindAboutButton = css`
     position: absolute;
@@ -164,7 +192,6 @@ const MovieTitle = css`
 const TextContent = css `
     display: flex;
     flex-direction: column;
-
 `
 
 const QuoteText = css`
@@ -228,4 +255,3 @@ const Button = css`
         border-radius: 4px;
     }
 `
-

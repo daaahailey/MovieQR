@@ -20,7 +20,6 @@ const Quotes: NextPage = () => {
     const [ searchValue, setSearchValue ] = useState("");
     const [ searchResult, setSearchResult ] = useState<any>({});
 
-    
     interface JwtPayload {
         issuer: string;
         email: string;
@@ -95,10 +94,10 @@ const Quotes: NextPage = () => {
                     searchValue ?
                         searchResult.length > 0 ?
                         searchResult.map((item:any) => 
-                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} email={item.userEmail} currentUser={currentUser}/> )
+                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> )
                         : ""
                     : data ? data.map((item:any) => 
-                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} email={item.userEmail} currentUser={currentUser}/> )                  
+                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> )                  
                         : ""    
                 }
             </section>
@@ -106,9 +105,8 @@ const Quotes: NextPage = () => {
     )
 }
 
-
-
 export default Quotes;
+
 
 const MainArea = css`
     min-height: 100vh;

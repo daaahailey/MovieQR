@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import React, { useState } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 
 export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteClicked, setDeleteClicked, status, setStatus, postId } :any)  => {
 
@@ -51,6 +51,7 @@ export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteCl
                 setEditClicked(false);
                 setIsQuoteEmpty(false);
                 mutate(`/api/quote?movieId=${movieId}`);
+                mutate(`/api/quote?all=true`);
             })
             .catch((error) => {
                 console.log("fail", error);
@@ -81,6 +82,7 @@ export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteCl
             setUpdatedQuote("");
             setDeleteClicked(false);
             mutate(`/api/quote?movieId=${movieId}`);
+            mutate(`/api/quote?all=true`);
         })
         .catch((error) => {
             console.log("fail", error);
@@ -89,9 +91,7 @@ export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteCl
     }
 
     return (
-
         <>
-
         { editClicked && 
             <>
             <div css={Modal}>
@@ -122,7 +122,6 @@ export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteCl
             <div css={ModalLayer}></div>
         </> 
         }
-
         { deleteClicked &&
             <>
                 <div css={Modal}>
@@ -134,13 +133,9 @@ export const EditDeleteModal = ({ movieId, editClicked, setEditClicked, deleteCl
                 </div>
                 <div css={ModalLayer}></div>
             </>
-
         }
-
         </>
     )
-
-
 }
 
 const Modal = css`
@@ -193,6 +188,7 @@ const EditForm = css`
     display: flex;
     flex-direction: column;
     width: 80%;
+    
     @media (max-width: 490px) {
         width: 100%;
     }
@@ -203,7 +199,6 @@ const EditFormTextArea = css`
     font-family: ${Common.fonts.basic};
     font-size: ${Common.fontSize.basic};
 `
-
 
 const Buttons = css`
     margin: 0 auto;
