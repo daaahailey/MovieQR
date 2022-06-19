@@ -17,10 +17,12 @@ export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }
     const [overflowActive, setOverflowActive] = useState<boolean>(false);
     const overflowingText = useRef<HTMLParagraphElement|null>(null);
     const BASE_URL = "https://image.tmdb.org/t/p/original"
-    const [ editClicked, setEditClicked ] = useState(false);
-    const [ deleteClicked, setDeleteClicked ] = useState(false);
-    const [ status, setStatus ] = useState("");
-    const [ postId, setPostId ] = useState("");
+    const [editClicked, setEditClicked] = useState(false);
+    const [deleteClicked, setDeleteClicked] = useState(false);
+    const [status, setStatus] = useState("");
+    const [postId, setPostId] = useState("");
+    const [moreClicked, setMoreClicked] = useState(false);
+
 
     useEffect(() => {
         const getMovieInfo = async() => {
@@ -51,6 +53,15 @@ export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }
         setStatus("delete");
     }
 
+    const handleMoreClick = (e:any) => {
+        e.preventDefault();
+        if(!moreClicked) {
+            setMoreClicked(true);
+        } else if(moreClicked) {
+            setMoreClicked(false);
+        }
+    }
+
 
     const checkOverflow = (textContainer: HTMLParagraphElement|null):boolean => {
         if(textContainer)
@@ -70,6 +81,7 @@ export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }
             return;
         }
         setOverflowActive(false);
+        setMoreClicked(false);
     }
 
     useEffect(() => {
@@ -95,11 +107,11 @@ export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }
                     <p css={MovieTitle}>{title}</p>
                 </li>
                 <li css={TextContent}>
-                    <p css={QuoteText} ref={overflowingText}>{quote} </p>  
+                    <p css={moreClicked? QuoteTextOpen : QuoteText} ref={overflowingText}>{quote} </p>  
                     {/* if ellipsis is applied, show more button and when you click it, you can read full post with modal or go to a separate page   */}
-                    { overflowActive ? <button type="button" css={MoreButton}>More</button> : "" }
-                    <div css={Buttons}>
-                        <p>Posted by {userNickname}</p>
+                    { overflowActive ? <button type="button" css={MoreButton} onClick={handleMoreClick}>{moreClicked ? "Close" : "More"}</button> : "" }
+                    <div css={moreClicked? [Buttons, ButtonsOpen] : Buttons}>
+                        <p>{currentUser === userId ? "" : `Posted by ${userNickname}`}</p>
                         { currentUser === userId ?
                             <div>
                                 <button type="submit" css={Button} onClick={handleEdit} value={id}>Edit</button>
@@ -125,31 +137,18 @@ export const QuoteItemCard = ({ quote, userId, movieId, id, email, currentUser }
 const QuoteItem = css`
     position: relative;
     width: 100%;
-    min-height: 150px;
-    max-height: 180px;
     display: flex;
     justify-content: space-between;
     margin: 2rem auto;
     border-radius: 10px;
     padding: 10px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    &:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-        background-color: white;
-        opacity: 0.68;
-        z-index: -20;
-    }
 `
 
 const MoviePoster = css`
     position: relative;
     min-height: 160px;
+    height: 160px;
     min-width: 100px;
     border-radius: 5px;
     overflow: hidden;
@@ -196,17 +195,20 @@ const TextContent = css `
 
 const QuoteText = css`
     display: -webkit-box;
-    max-height: 100px;
-    max-width: 100%;
-    width: 100%;
-    overflow: hidden;
     text-overflow: ellipsis;
+    overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4; // limit the number of line
     font-size: ${Common.fontSize.basic};
-
     @media(max-width: 490px) {
         -webkit-line-clamp: 5;
+        font-size: ${Common.fontSize.extraSmall};
+    }
+`
+
+const QuoteTextOpen = css`
+    font-size: ${Common.fontSize.basic};
+    @media(max-width: 490px) {
         font-size: ${Common.fontSize.extraSmall};
     }
 `
@@ -220,7 +222,6 @@ const MoreButton = css`
     margin: 2px 0;
     background-color: ${Common.colors.backgroundBlack};
     color: ${Common.colors.text};
-    font-size: ${Common.fontSize.extraSmall};
     &:hover {
         background-color: ${Common.colors.point};
     }
@@ -241,6 +242,9 @@ const Buttons = css`
         right: 0;
         bottom: 0;
     }
+`
+const ButtonsOpen = css`
+    margin: 0.95rem;
 `
 
 const Button = css`
