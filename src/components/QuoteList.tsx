@@ -6,18 +6,16 @@ import { Common } from "../styles/common";
 import { Loading } from "./Loading";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../utils/fetcher";
+import { EditDeleteModals } from "./EditDeleteModals";
 
 
 export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) => {
 
     const [ quoteData, setQuoteData ] = useState([]);
     const [ editClicked, setEditClicked ] = useState(false);
-    const [ updatedQuote, setUpdatedQuote ] = useState(""); 
     const [ deleteClicked, setDeleteClicked ] = useState(false);
     const [ status, setStatus ] = useState("");
-    const [ isQuoteEmpty, setIsQuoteEmpty ] = useState(false);
     const [ postId, setPostId ] = useState("");
-
     // this renders all quotes
     const { data, error } = useSWR(`/api/quote?movieId=${movieId}`, fetcher);
     const { mutate } = useSWRConfig();
@@ -54,85 +52,6 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
         setStatus("delete");
     }
 
-    const handleDeleteQuote = async (event:React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        console.log("delete final btn clicked")
-
-        const response = await fetch("/api/quote", {
-            method: "POST",
-            headers : {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-                movieId: movieId,
-                quote: updatedQuote,
-                status: "delete",
-                postId,
-            })
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("success", result);
-            setUpdatedQuote("");
-            setDeleteClicked(false);
-            mutate(`/api/quote?movieId=${movieId}`);
-        })
-        .catch((error) => {
-            console.log("fail", error);
-        })
-
-    }
-
-
-    const handleEditQuote = async (event:React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        if(!updatedQuote) {
-            // if quote to update is empty, display a message saying user needs to write something
-            setIsQuoteEmpty(true);
-        } else {
-            const response = await fetch("/api/quote", {
-                method: "POST",
-                headers : {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    movieId: movieId,
-                    quote: updatedQuote,
-                    status: "edit",
-                    postId,
-                })
-            })
-            .then((response) => response.json())
-            .then((result) => {
-                console.log("success", result);
-                setUpdatedQuote("");
-                setEditClicked(false);
-                setIsQuoteEmpty(false);
-                mutate(`/api/quote?movieId=${movieId}`);
-            })
-            .catch((error) => {
-                console.log("fail", error);
-            })
-        }
-    }
-
-
-
-    const handleCancel = (event:React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        const clickedBtn = status;
-
-        if(clickedBtn === "edit") {
-            setEditClicked(false);
-            setIsQuoteEmpty(false);
-        } else if(clickedBtn === "delete") {
-            setDeleteClicked(false);
-            
-        }
-        setStatus("");
-    }
-
-
     return (
         <div>
             <ul css={QuotesItemsContainer}>
@@ -168,49 +87,16 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                     <p>Be the first one to leave a quote from <strong css={StrongText}>{title}</strong>.</p>
                 </li>
                 }
-                {editClicked && 
-                    <>
-                        <div css={Modal}>
-                            { isQuoteEmpty ? 
-                                !updatedQuote ? 
-                                    <p css={[MessageOnModal, MessageRed ]}>Please write quote to update.</p>
-                                    : <p css={MessageOnModal}>Edit my quote</p>
-                                : <p css={MessageOnModal}>Edit my quote</p>
-                            }
-                            <form css={EditForm}>
-                                <label htmlFor="textArea"></label>
-                                <textarea 
-                                    css={EditFormTextArea}
-                                    name="textArea"
-                                    id="textArea"
-                                    cols={30}
-                                    rows={3}
-                                    placeholder=""
-                                    onChange={(event) => setUpdatedQuote(event.target.value)}
-                                    value={updatedQuote}
-                                    ></textarea>    
-                                <div css={Buttons}>
-                                    <input css={Button} type="submit" className="editCancel" value="Edit Quote" onClick={handleEditQuote}/>
-                                    <input css={Button} type="submit" className="editCancel" value="Cancel" onClick={handleCancel}/>
-                                </div>
-                            </form>
-                        </div>
-                        <div css={ModalLayer}></div>
-                    </>
-                }
-                { deleteClicked &&
-                    <>
-                        <div css={Modal}>
-                            <p css={MessageOnModal}>Are you sure you want to delete this quote?</p>
-                            <div css={Buttons}>
-                                <input css={Button} type="submit" className="editCancel" value="Delete Quote" onClick={handleDeleteQuote}/>
-                                <input css={Button} type="submit" className="editCancel" value="Cancel" onClick={handleCancel}/>
-                            </div>
-                        </div>
-                        <div css={ModalLayer}></div>
-                    </>
-
-                }
+                <EditDeleteModals 
+                    movieId={movieId}
+                    editClicked={editClicked}
+                    setEditClicked={setEditClicked} 
+                    deleteClicked={deleteClicked}
+                    setDeleteClicked={setDeleteClicked}
+                    status={status}
+                    setStatus={setStatus}
+                    postId={postId}
+                    /> 
             </ul>
         </div>
     )
@@ -284,65 +170,64 @@ const StrongText = css`
     font-weight: ${Common.fontWeight.bold};
 `
 
-const Modal = css`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    padding: 1.8rem;
-    z-index: 40;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    border-radius: 10px;
+// const Modal = css`
+//     position: fixed;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     width: 70%;
+//     padding: 1.8rem;
+//     z-index: 40;
+//     background-color: white;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     color: black;
+//     border-radius: 10px;
 
-    @media (max-width: 640px) {
-        width: 80%;
-    }
-    @media (max-width: 490px) {
-        width: 90%;
-    }
-`
+//     @media (max-width: 640px) {
+//         width: 80%;
+//     }
+//     @media (max-width: 490px) {
+//         width: 90%;
+//     }
+// `
 
-const MessageOnModal = css`
-    margin: 0.5rem 0;
-    text-align: center;
-    font-size: ${Common.fontSize.basic};
-    font-weight: ${Common.fontWeight.medium};
+// const MessageOnModal = css`
+//     margin: 0.5rem 0;
+//     text-align: center;
+//     font-size: ${Common.fontSize.basic};
+//     font-weight: ${Common.fontWeight.medium};
+// `
+// const MessageRed = css`
+//     color: ${Common.colors.point};
+// `
 
-`
-const MessageRed = css`
-    color: ${Common.colors.point};
-`
+// const ModalLayer = css`
+//     position: fixed;
+//     background-color: black;
+//     top: 0;
+//     right: 0;
+//     width: 100%;
+//     height: 100%;
+//     z-index: 10;
+//     opacity: 0.7;
+// `
 
-const ModalLayer = css`
-    position: fixed;
-    background-color: black;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    opacity: 0.7;
-`
-
-const EditForm = css`
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    @media (max-width: 490px) {
-        width: 100%;
-    }
-`
-const EditFormTextArea = css`
-    padding: 1rem;
-    font-family: ${Common.fonts.basic};
-    font-size: ${Common.fontSize.basic};
-`
+// const EditForm = css`
+//     display: flex;
+//     flex-direction: column;
+//     width: 80%;
+//     @media (max-width: 490px) {
+//         width: 100%;
+//     }
+// `
+// const EditFormTextArea = css`
+//     padding: 1rem;
+//     font-family: ${Common.fonts.basic};
+//     font-size: ${Common.fontSize.basic};
+// `
 
 const Buttons = css`
     margin: 0 auto;
