@@ -28,7 +28,7 @@ export const SearchBox = () => {
             <Link href={{
                 pathname: "/movie",
                 query: { title: initialValue },
-            }} passHref>
+            }}>
                 <a css={SearchBtn}>Search</a>
             </Link>
         </div>
@@ -36,7 +36,7 @@ export const SearchBox = () => {
 }
 
 const SearchInputContainer = css`
-    width:100%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
