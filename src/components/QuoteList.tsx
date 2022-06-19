@@ -6,7 +6,7 @@ import { Common } from "../styles/common";
 import { Loading } from "./Loading";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../utils/fetcher";
-import { EditDeleteModals } from "./EditDeleteModals";
+import { EditDeleteModal } from "./EditDeleteModal";
 
 
 export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) => {
@@ -87,7 +87,7 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                     <p>Be the first one to leave a quote from <strong css={StrongText}>{title}</strong>.</p>
                 </li>
                 }
-                <EditDeleteModals 
+                <EditDeleteModal 
                     movieId={movieId}
                     editClicked={editClicked}
                     setEditClicked={setEditClicked} 
