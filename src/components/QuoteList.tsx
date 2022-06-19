@@ -86,7 +86,7 @@ export const QuoteList = ({ movieId, title, currentUser, addedNewQuote }:any) =>
                     <p>There isn&apos;t any quote added yet.</p>
                     <p>Be the first one to leave a quote from <strong css={StrongText}>{title}</strong>.</p>
                 </li>
-                }
+            }
                 <EditDeleteModal 
                     movieId={movieId}
                     editClicked={editClicked}
@@ -137,9 +137,7 @@ const QuoteText = css`
 `
 
 const UserName = css`
-    // margin-right: 1rem;
-    // width: 8rem;
-    // min-width: 8rem;
+    font-weight: ${Common.fontWeight.medium};
 `
 
 const SmallButtons = css`
@@ -168,97 +166,4 @@ const DefaultMessage = css`
 `
 const StrongText = css`
     font-weight: ${Common.fontWeight.bold};
-`
-
-// const Modal = css`
-//     position: fixed;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     width: 70%;
-//     padding: 1.8rem;
-//     z-index: 40;
-//     background-color: white;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     color: black;
-//     border-radius: 10px;
-
-//     @media (max-width: 640px) {
-//         width: 80%;
-//     }
-//     @media (max-width: 490px) {
-//         width: 90%;
-//     }
-// `
-
-// const MessageOnModal = css`
-//     margin: 0.5rem 0;
-//     text-align: center;
-//     font-size: ${Common.fontSize.basic};
-//     font-weight: ${Common.fontWeight.medium};
-// `
-// const MessageRed = css`
-//     color: ${Common.colors.point};
-// `
-
-// const ModalLayer = css`
-//     position: fixed;
-//     background-color: black;
-//     top: 0;
-//     right: 0;
-//     width: 100%;
-//     height: 100%;
-//     z-index: 10;
-//     opacity: 0.7;
-// `
-
-// const EditForm = css`
-//     display: flex;
-//     flex-direction: column;
-//     width: 80%;
-//     @media (max-width: 490px) {
-//         width: 100%;
-//     }
-// `
-// const EditFormTextArea = css`
-//     padding: 1rem;
-//     font-family: ${Common.fonts.basic};
-//     font-size: ${Common.fontSize.basic};
-// `
-
-const Buttons = css`
-    margin: 0 auto;
-    margin-top: 1.4rem;
-
-    @media (max-width: 640px) {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        box
-    }
-`
-
-const Button = css`
-    width: 8rem;
-    margin: 0.25rem;
-    padding: 0.25rem;
-    color: ${Common.colors.text};
-    background-color: ${Common.colors.backgroundBlack};
-    padding: 0.6rem 0.4rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: ${Common.fontWeight.bold};
-    font-size: ${Common.fontSize.basic};
-    cursor: pointer;
-    &:hover {
-        background-color: ${Common.colors.point};
-    }
-
-    @media (max-width: 640px) {
-        width: 100%;
-        margin: 0.25rem 0;
-    }
 `
