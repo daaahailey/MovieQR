@@ -1,30 +1,32 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { fetcher } from "../utils/fetcher";
 import useSWR from "swr";
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
-import { useEffect, useState } from "react";
-import { QuoteItemCard } from "../components/QuoteItemCard";
+// import { QuoteItemCard } from "../components/QuoteItemCard";
 import { useAuth } from "../../context/AuthContext";
 import jwt from "jsonwebtoken";
+import { Loading } from "../components/Loading";
+import { SearchedQuote } from "../components/SearchedQuote";
+import { LoadQuote } from "../components/LoadQuote";
 
 
 const Quotes: NextPage = () => {
     const { data, error } = useSWR(`/api/quote?all=true`, fetcher);
     const { cookie } = useAuth();
-    const [ currentUser, setCurrentUser ] = useState("");
-    const [ initialValue, setInitialValue ] = useState("");
-    const [ searchValue, setSearchValue ] = useState("");
-    const [ searchResult, setSearchResult ] = useState<any>({});
+    const [currentUser, setCurrentUser] = useState("");
+    const [initialValue, setInitialValue] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+    const [searchResult, setSearchResult] = useState<any>({});
 
     interface JwtPayload {
         issuer: string;
         email: string;
     }
-
+    // to get current user issuer - to handle edit/delete post
     useEffect(() => {
         if(cookie) {
             const decodedToken = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET as string) as JwtPayload;   
@@ -33,33 +35,32 @@ const Quotes: NextPage = () => {
     }, []);
 
 
-    const handleSearchQuote = () => {
-        const hasWord = (str:any, word:any) => {
-            const sentence = str.toLowerCase().replace(/[^\w\s]/gi, "");
-            const isIncluded = sentence.includes(word);
-            return isIncluded;
-            
-        }
+    const hasWord = (str:any, word:any) => {
+        const sentence = str.toLowerCase().replace(/[^\w\s]/gi, "");
+        const isIncluded = sentence.includes(word);
+        return isIncluded;   
+    }
 
-        if(data) {
-            if(initialValue) {
-                const searchValue = initialValue.toLowerCase();
-                setSearchValue(searchValue);
+    const handleSearchQuote = () => {
+        if(data) { // whole quote data
+            if(initialValue) {  // search initial
+                const searchedWord = initialValue.toLowerCase();
+                setSearchValue(searchedWord); // save it as searchValue using setSearchValue usesState
                 let find = data.filter((item:any) => {
                     const string = item.quote;
-                    let result = hasWord(string, searchValue);
+                    let result = hasWord(string, searchedWord);
                     if(result === true) {
                         return string;                        
                     }
-                })
-                if(find.length > 0) {
-                    setSearchResult(find);
+                }) 
+                if(find.length > 0) { // if there's search result and it's more than one,
+                    setSearchResult(find);  // save it as searchResult
                 } else {
-                    setSearchResult({});
+                    setSearchResult({}); // no search result, then save empty result to searchResult ( searchResult = {})
                 }
             } else if(initialValue === "") {
-                setSearchResult(data); // if user doesn't type anything but click search, reset the result
-                setSearchValue("");
+                setSearchValue(initialValue);
+                setSearchResult(data); // reset result if there isn't search value
             }
         }
         setInitialValue("");
@@ -73,6 +74,7 @@ const Quotes: NextPage = () => {
     }
 
 
+
     return (
         <main css={MainArea}>
             <h1 className="text-hide">Quotes page</h1>
@@ -82,31 +84,25 @@ const Quotes: NextPage = () => {
                     <input type="search" placeholder="Search quote" css={SearchInput} value={initialValue} onChange={(e) => setInitialValue(e.target.value)} onKeyUp={handleEnterClick} />
                     <input type="button" value="Search" css={SearchButton} onClick={handleSearchQuote} />
                 </div>
-                
-                {/* <div>
-                    sort by - newest / oldest 
-                </div> */}
-            </section>
+            </section>           
             <section css={QuotesContainer}>
                 <h2 className="text-hide">Quotes posted on MovieQR</h2>
                 {searchValue && <p>Search result of {searchValue}</p>}
-                {
+                { data ? 
                     searchValue ?
-                        searchResult.length > 0 ?
-                        searchResult.map((item:any) => 
-                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> )
-                        : ""
-                    : data ? data.map((item:any) => 
-                        <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> )                  
-                        : ""    
+                    <SearchedQuote currentUser={currentUser} searchResult={searchResult} searchValue={searchValue} /> 
+                    : <LoadQuote currentUser={currentUser} data={data} />
+                    // : postToDisplay.map((item:any) => 
+                    // <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> ) 
+                    // }
+                    // {data.length === postToDisplay.length? "" : <button type="button" onClick={handleLoadMore} value="quoteMore">Load More</button> }
+                    // </>
+                : <Loading />
                 }
             </section>
         </main>
     )
 }
-
-export default Quotes;
-
 
 const MainArea = css`
     min-height: 100vh;
@@ -154,4 +150,7 @@ const SearchButton = css`
 
 const QuotesContainer = css`
     width: 100%;
+    margin-bottom: 1rem;
 `
+
+export default Quotes;
