@@ -77,4 +77,11 @@ const LoadMoreButton = css`
     background-color: ${Common.colors.point};
     color: ${Common.colors.text};
     font-weight: ${Common.fontWeight.medium};
+    cursor: pointer;
+    &:hover {
+        background-color: ${Common.colors.backgroundBlack};
+    }
+    &:active {
+        transform: scale(0.98);
+    }
 `

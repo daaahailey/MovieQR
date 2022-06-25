@@ -92,11 +92,6 @@ const Quotes: NextPage = () => {
                     searchValue ?
                     <SearchedQuote currentUser={currentUser} searchResult={searchResult} searchValue={searchValue} /> 
                     : <LoadQuote currentUser={currentUser} data={data} />
-                    // : postToDisplay.map((item:any) => 
-                    // <QuoteItemCard key={item.id} quote={item.quote} userId={item.userId} movieId={item.movieId} id={item.id} email={item.userEmail} currentUser={currentUser}/> ) 
-                    // }
-                    // {data.length === postToDisplay.length? "" : <button type="button" onClick={handleLoadMore} value="quoteMore">Load More</button> }
-                    // </>
                 : <Loading />
                 }
             </section>
@@ -145,6 +140,9 @@ const SearchButton = css`
     letter-spacing: 1px;
     &:hover {
         background-color: ${Common.colors.backgroundBlack};
+    }
+    &:active {
+        transform: scale(0.98);
     }
 `
 
