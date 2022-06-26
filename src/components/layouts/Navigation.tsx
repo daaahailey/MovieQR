@@ -11,8 +11,8 @@ import { HamburgerMenu } from "../HamburgerMenu";
 
 export const Navigation = () => {
 
-    const [ isMobile, setIsMobile ] = useState(false);
-    const [ screenSize, setScreenSize ] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
+    const [screenSize, setScreenSize] = useState(0);
 
 
     useEffect(() => {
@@ -32,7 +32,6 @@ export const Navigation = () => {
     })
 
 
-
     return (
         <nav css={StyledNav}>
             <ul css={MenuSection}>
@@ -50,11 +49,11 @@ export const Navigation = () => {
                             <a css={AMenu}>Quotes</a>
                         </Link>
                     </li>
-                    <li css={List}>
+                    {/* <li css={List}>
                         <Link href="/reviews">
                             <a css={AMenu}>Reviews</a>
                         </Link>
-                    </li>
+                    </li> */}
                 </> 
                 }
             </ul>

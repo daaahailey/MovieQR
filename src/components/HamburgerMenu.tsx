@@ -58,9 +58,9 @@ export const HamburgerMenu = ({isMobile}:any) => {
                     </li>
                     <div css={MenusContainer}>
                         <SignInOut setIsOn={setIsOn} isMobile={isMobile}/>
-                        <li css={List}>
+                        {/* <li css={List}>
                             <button css={AMenu} onClick={handlePageMenuClick} value="reviews">Reviews</button>
-                        </li>
+                        </li> */}
                         <li css={List}>
                             <button css={AMenu} onClick={handlePageMenuClick} value="quotes">Quotes</button>
                         </li> 
