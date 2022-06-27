@@ -1,34 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Movie QR
 
-## Getting Started
+## Live Demo(라이브 데모) - [MovieQR](https://movie-qr.vercel.app/)
 
-First, run the development server:
+\*로그인은 이메일 입력 후, 전달받은 <strong>링크</strong>로 온 <u>인증버튼</u>을 클릭해야 합니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+    Movie QR is where you can share your favourite quotes from movies you like and also share your thoughts. Current working features are as described down below but more functions will be available in the future since it is still under development.
+    Movie QR은 좋아하는 영화의 명대사나 영화에 대한 각자의 의견을 공유할 수 있는 앱입니다. 하단의 기능들은 현재 까지 구현되어 있는 기능들이며, 계속하여 개발중이므로 다른 기능들 또한 추가될 예정 입니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Built with (사용기술)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- Frontend: Next.js, Emotion
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Backend: Hasura(GraphQL engine on Heroku)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Deploy: Vercel
 
-## Learn More
+- Movie information is fetched from [TMDB API](https://developers.themoviedb.org/3/getting-started/introduction) (영화 상세정보들은 TMBD API를 사용해 불러왔습니다)
 
-To learn more about Next.js, take a look at the following resources:
+# Features (구현 기능)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    - Sign In/Out (로그인/로그아웃)
+    - Search (검색)
+        - Movie search by title (영화 검색)
+        - Quote search by word (명대사 검색)
+    - Dynamic Pages - movie detail pages by movie (다이내믹 페이지 - 영화별 상세 페이지)
+        - Read detailed movie information (영화 상세 정보 불러오기)
+        - Watch Trailer (트레일러 비디오 보기)
+        - Quote / Review Board (명대사/리뷰 게시판)
+    - Quote (명대사)
+        - CRUD(Create(작성) / Read(읽기) / Update(수정) / Delete(삭제))
+        - Load more button (five quotes are displayed by default and it loads more quotes when "load more" button gets clicked. 명대사 리스트 5개씩 로드 - 버튼 클릭시 추가 로드)
