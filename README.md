@@ -30,3 +30,26 @@
     - Quote (명대사)
         - CRUD(Create(작성) / Read(읽기) / Update(수정) / Delete(삭제))
         - Load more button (five quotes are displayed by default and it loads more quotes when "load more" button gets clicked. 명대사 리스트 5개씩 로드 - 버튼 클릭시 추가 로드)
+        
+        
+# GIF Preview
+
+## Search movie
+![movie-qr_search](https://user-images.githubusercontent.com/56154510/176017783-f46206e2-161b-4366-bef7-0dfb45f22768.gif)
+
+## Sign In / Sign Out
+![movie-qr_login_logout](https://user-images.githubusercontent.com/56154510/176018316-eeac2778-8bbb-4a3f-b96a-ab68805bec1f.gif)
+
+## Movie detail page
+![movie-qr_slider](https://user-images.githubusercontent.com/56154510/176018575-23df99b6-7944-47c9-b984-b56927fee555.gif)
+
+## Watch trailer
+![movie-qr_trailer](https://user-images.githubusercontent.com/56154510/176018466-236242ec-992c-4312-902f-969197db1a3d.gif)
+
+## CRUD - Write quote / Edit quote / Delete quote (from movie detail page)
+![movie-qr_create](https://user-images.githubusercontent.com/56154510/176020127-627e4346-e036-4096-a8df-0bd32bccdc57.gif)
+![movie-qr_update](https://user-images.githubusercontent.com/56154510/176020240-4a9b6519-525f-4ae5-bf90-e7aebc9a60e3.gif)
+![movie-qr_delete](https://user-images.githubusercontent.com/56154510/176020386-5ea17a08-b349-4438-88d5-aee7e0e522fc.gif)
+
+## Quote page / Load More / Search quote, etc
+![movie-qr_quote-page](https://user-images.githubusercontent.com/56154510/176020464-0b66e332-8001-40c4-915e-8a62f0403ca5.gif)
