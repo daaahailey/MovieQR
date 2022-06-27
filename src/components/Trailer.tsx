@@ -15,7 +15,9 @@ export const Trailer = (props:any) => {
     let movieKey;
 
     if(data) {
-        movieKey = data.results[0].key;
+        if(data.results.length > 0) {
+            movieKey = data.results[0].key;
+        }
     }
     if(error) {
         console.log(error);
@@ -34,9 +36,9 @@ export const Trailer = (props:any) => {
                     { data ?
                         movieKey ?
                         <div css={VideoContainer}>
-                            <YouTube videoId={`${movieKey}`}  onReady={onPlayerReady} />
-                        </div> : <Loading />
-                        : <p>There is not available trailer video</p>
+                            <YouTube videoId={`${movieKey}`} onReady={onPlayerReady} />
+                        </div> : <p>There is not available trailer video</p>
+                        : <Loading />
                     }   
                 </div>
             </div>
