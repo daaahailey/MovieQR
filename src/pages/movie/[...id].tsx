@@ -18,6 +18,7 @@ import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { Seo } from "../../components/Seo";
 
 
 
@@ -48,6 +49,8 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
     }
 
     return (
+        <>
+        <Seo title={title} description={`Movie detail page: ${title}`} url={`https://movie-qr.vercel.app/${title}/${movieId}`} />
         <main css={Container}>
             <section css={MovieDetailContainer}>
                     <h1 className="text-hide">Movie Detail Page</h1>
@@ -114,6 +117,7 @@ const MovieDetail = ({ movieId, movieData, movieCredits, token } :any) => {
             </section>
             <QuotesAndReviews movieId={movieId} title={title} currentUser={currentUser} token={token} /> 
         </main>
+        </>
     )
 }
 

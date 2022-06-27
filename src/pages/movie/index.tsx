@@ -8,6 +8,7 @@ import { useData } from "../../hooks/useData";
 import { Error } from "../../components/Error";
 import Link from "next/link";
 import { Common } from "../../styles/common";
+import { Seo } from "../../components/Seo";
 
 const Movie = () => {
     const router = useRouter();
@@ -28,23 +29,26 @@ const Movie = () => {
 
 
     return (
-        <main css={Main}>
-            <section css={isNothingFound ? StyledSectionDefault : StyledSectionForMovieCard}>
-                <h2 className="text-hide">Movie cards by search result</h2>
-                <Movies title={title} /> 
-                { data ? 
-                    data.results.length > 0 ?
-                        <Movies title={title} data={data.results}/> :
-                        <div css={NotFoundMessage}>
-                            <p>Search result of <span css={Title}>{title}</span></p>
-                            <p>Nothing Found. Please search something else.</p>
-                            <Link href="/"> 
-                                <a css={GoBack}>Go back to main page</a>
-                            </Link>
-                        </div> 
-                    : <div>Loading...</div>}
-            </section>
-        </main>
+        <>
+            <Seo title="Search Results" description={`Search result of ${title}`} url={`https://movie-qr.vercel.app/movie?title=${title}`}/>
+            <main css={Main}>
+                <section css={isNothingFound ? StyledSectionDefault : StyledSectionForMovieCard}>
+                    <h2 className="text-hide">Movie cards by search result</h2>
+                    <Movies title={title} /> 
+                    { data ? 
+                        data.results.length > 0 ?
+                            <Movies title={title} data={data.results}/> :
+                            <div css={NotFoundMessage}>
+                                <p>Search result of <span css={Title}>{title}</span></p>
+                                <p>Nothing Found. Please search something else.</p>
+                                <Link href="/"> 
+                                    <a css={GoBack}>Go back to main page</a>
+                                </Link>
+                            </div> 
+                        : <div>Loading...</div>}
+                </section>
+            </main>
+        </>
     )
 }
 

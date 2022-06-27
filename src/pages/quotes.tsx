@@ -12,6 +12,8 @@ import jwt from "jsonwebtoken";
 import { Loading } from "../components/Loading";
 import { SearchedQuote } from "../components/SearchedQuote";
 import { LoadQuote } from "../components/LoadQuote";
+import { useRouter } from "next/router";
+import { Seo } from "../components/Seo";
 
 
 const Quotes: NextPage = () => {
@@ -21,6 +23,7 @@ const Quotes: NextPage = () => {
     const [initialValue, setInitialValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [searchResult, setSearchResult] = useState<any>({});
+    const router = useRouter();
 
     interface JwtPayload {
         issuer: string;
@@ -73,9 +76,16 @@ const Quotes: NextPage = () => {
         }
     }
 
+    const handleWriteNewQuote = (e:any) => {
+        e.preventDefault();
+        
+        router.push("/newquote");
+    }
 
 
     return (
+        <>
+        <Seo title="Quotes" description="Find out famous quotes from movie." url="https://movie-qr.vercel.app/quotes"/>
         <main css={MainArea}>
             <h1 className="text-hide">Quotes page</h1>
             <section css={FilterBy}>
@@ -96,6 +106,7 @@ const Quotes: NextPage = () => {
                 }
             </section>
         </main>
+        </>
     )
 }
 

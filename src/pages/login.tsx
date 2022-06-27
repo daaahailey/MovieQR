@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { jsx, css } from '@emotion/react';
 import { Common } from "../styles/common";
 import { magic } from '../../lib/magic-client';
+import { Seo } from '../components/Seo';
 
 const Login = () => {
     const [userMessage, setUserMessage] = useState("");
@@ -80,9 +81,7 @@ const Login = () => {
 
 
     return <>
-                <Head>
-                    <title>Movie QR Sign In</title>
-                </Head>
+                <Seo title="Sign In" description="Sign In to Movie QR" url="http://localhost:3000/login"/>
                 <main css={StyledMain}>
                     <section css={SignInContainer}>
                         <h1 css={SignInText}>Sign In</h1>
