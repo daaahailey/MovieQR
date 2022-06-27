@@ -48,7 +48,7 @@
 
 ## CRUD - Write quote / Edit quote / Delete quote (from movie detail page)
 ![movie-qr_create](https://user-images.githubusercontent.com/56154510/176020127-627e4346-e036-4096-a8df-0bd32bccdc57.gif)
-![movie-qr_update](https://user-images.githubusercontent.com/56154510/176020240-4a9b6519-525f-4ae5-bf90-e7aebc9a60e3.gif)
+![movie-qr_update_](https://user-images.githubusercontent.com/56154510/176021595-0aa88894-88d0-4751-a69d-1fb1eb4f664e.gif)
 ![movie-qr_delete](https://user-images.githubusercontent.com/56154510/176020386-5ea17a08-b349-4438-88d5-aee7e0e522fc.gif)
 
 ## Quote page / Load More / Search quote, etc
